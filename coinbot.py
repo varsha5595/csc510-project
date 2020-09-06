@@ -31,7 +31,7 @@ class CoinBot:
 
         text = "The result is {results}"
 
-        return {"type": "section", "text": {"type": "mrkdwn", "text": text}},
+        return { "type": "section", "text": { "type": "plain_text", "text": "This is a plain text section block." }}
 
     # Craft and return the entire message payload as a dictionary.
     def get_message_payload(self):

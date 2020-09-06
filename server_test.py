@@ -1,6 +1,10 @@
+import slack
 from slack import WebClient
 from coinbot import CoinBot
 import os
+
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
 # Create a slack client
 slack_web_client = WebClient(token = "")
