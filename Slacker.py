@@ -1,6 +1,5 @@
 import slack
 from slack import WebClient
-from coinbot import CoinBot
 import os
 
 import ssl
