@@ -8,11 +8,17 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 # Create a slack client
 slack_web_client = WebClient(token = "")
-# Get a new CoinBot
-coin_bot = CoinBot("#postman")
+
+# Slack Channel to post the message
+channel = "postman"
 
 # Get the onboarding message payload
-message = coin_bot.get_message_payload()
+message = {
+            "channel": channel,
+            "blocks": [
+                { "type": "section", "text": { "type": "plain_text", "text": "Sending Differences in Json"}}
+            ],
+        }
 
 # Post the onboarding message in Slack
 slack_web_client.chat_postMessage(**message)
