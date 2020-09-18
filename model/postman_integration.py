@@ -19,7 +19,7 @@ def get_postman_collections(connection):
 
 def regex(value):
     regexes = ["(?<='key': )[^,||}]*", "(?<='value': )[^,||}]*", "(?<=delete: \[)[^]]+", "(?<=insert: \[)[^]]+"]
-    return [re.findall(regex,value) for regex in regexes] 
+    return [re.findall(regex, value) for regex in regexes]
 
 
 def get_selected_collection(collection_id, connection):
@@ -35,13 +35,11 @@ def get_selected_collection(collection_id, connection):
 
     with open("../data/collections/" + collection_id + ".txt", "r+") as f:
         old_value = diff(data, json.load(f))
-        body_old = re.findall("(?<='body': )[^,||}]*", re.sub('\s+', '', old_value))
         print(old_value)
         f.close()
 
     with open("../data/collections/" + collection_id + ".txt", "r+") as f:
         new_value = diff(json.load(f), data)
-        body_new = re.sub('\s+', '', new_value)
         print(new_value)
         f.close()
 
@@ -49,8 +47,11 @@ def get_selected_collection(collection_id, connection):
         json.dump(data, f)
         f.close()
 
-    print([regex(value) for value in [diff(body_old,body_new), diff(body_new,body_old), old_value, new_value]])
-
+    changes = [regex(str(value)) for value in [old_value, new_value]]
+    print(f"Keys in old call{changes[0][0]}")
+    print(f"Keys in new call{changes[1][0]}")
+    print(f"pairs inserted in new call{changes[1][3]}")
+    print(f"Row deleted from old call{changes[0][2]}")
 
 def main():
     postman_connection = http.client.HTTPSConnection("api.getpostman.com")
