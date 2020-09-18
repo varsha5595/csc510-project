@@ -5,6 +5,11 @@ import os
 import mimetypes
 import re
 
+import slack
+from slack import WebClient
+import os
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
 def get_postman_collections(connection):
     boundary = ''
@@ -48,10 +53,10 @@ def get_selected_collection(collection_id, connection):
         f.close()
 
     changes = [regex(str(value)) for value in [old_value, new_value]]
-    print(f"Keys in old call{changes[0][0]}")
-    print(f"Keys in new call{changes[1][0]}")
-    print(f"pairs inserted in new call{changes[1][3]}")
-    print(f"Row deleted from old call{changes[0][2]}")
+    print("Keys in old call: ", changes[0][0])
+    print("Keys in new call: ", changes[1][0])
+    print("pairs inserted in new call: ", changes[1][3])
+    print("Row deleted from old call: ", changes[0][2])
 
 def main():
     postman_connection = http.client.HTTPSConnection("api.getpostman.com")
@@ -61,3 +66,21 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+    # Create a slack client
+    slack_web_client = WebClient(token = "")
+
+    # Slack Channel to post the message
+    channel = "postman"
+
+    # Get the onboarding message payload
+    message = {
+                "channel": channel,
+                "blocks": [
+                    { "type": "section", "text": { "type": "plain_text", "text": "Sending Differences in Json"}}
+                ],
+            }
+
+    # Post the onboarding message in Slack
+    slack_web_client.chat_postMessage(**message)
+
