@@ -4,11 +4,11 @@ import json
 import os
 import mimetypes
 import re
-
+import time
 import slack
 from slack import WebClient
-import os
 import ssl
+
 ssl._create_default_https_context = ssl._create_unverified_context
 
 def get_postman_collections(connection):
@@ -22,6 +22,7 @@ def get_postman_collections(connection):
     res = connection.getresponse()
     data = res.read()
 
+    
 def regex(value):
     regexes = ["(?<='key': )[^,||}]*", "(?<='value': )[^,||}]*", "(?<=delete: \[)[^]]+", "(?<=insert: \[)[^]]+"]
     return [re.findall(regex, value) for regex in regexes]
@@ -53,20 +54,19 @@ def get_selected_collection(collection_id, connection):
         f.close()
 
     changes = [regex(str(value)) for value in [old_value, new_value]]
-    print("Keys in old call: ", changes[0][0])
-    print("Keys in new call: ", changes[1][0])
-    print("pairs inserted in new call: ", changes[1][3])
-    print("Row deleted from old call: ", changes[0][2])
+    keys_old = "Keys in old call: " + ' '.join(changes[0][0])
+    keys_new = "Keys in new call: " + ' '.join(changes[1][0])
+    ins = "pairs inserted in new call: " + ' '.join(changes[1][3])
+    dels = "Row deleted from old call: " + ' '.join(changes[0][2])
+    
+    return keys_old + "\n" + keys_new + "\n" + ins + "\n" + dels
+
 
 def main():
     postman_connection = http.client.HTTPSConnection("api.getpostman.com")
     get_postman_collections(postman_connection)
-    get_selected_collection("", postman_connection)
-
-
-if __name__ == '__main__':
-    main()
-
+    colls = get_selected_collection("", postman_connection)
+    
     # Create a slack client
     slack_web_client = WebClient(token = "")
 
@@ -77,10 +77,15 @@ if __name__ == '__main__':
     message = {
                 "channel": channel,
                 "blocks": [
-                    { "type": "section", "text": { "type": "plain_text", "text": "Sending Differences in Json"}}
+                    { "type": "section", "text": { "type": "plain_text", "text": colls}}
                 ],
             }
 
     # Post the onboarding message in Slack
     slack_web_client.chat_postMessage(**message)
 
+    
+if __name__ == '__main__':
+    while True:
+        main()
+        time.sleep(3600)

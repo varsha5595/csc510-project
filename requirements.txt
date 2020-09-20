@@ -1,0 +1,2 @@
+slackclient==2.9.0
+jsondiff==1.2.0
