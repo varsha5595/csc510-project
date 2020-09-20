@@ -4,11 +4,11 @@ import json
 import os
 import mimetypes
 import re
-
+import time
 import slack
 from slack import WebClient
-import os
 import ssl
+
 ssl._create_default_https_context = ssl._create_unverified_context
 
 def get_postman_collections(connection):
@@ -22,6 +22,7 @@ def get_postman_collections(connection):
     res = connection.getresponse()
     data = res.read()
 
+    
 def regex(value):
     regexes = ["(?<='key': )[^,||}]*", "(?<='value': )[^,||}]*", "(?<=delete: \[)[^]]+", "(?<=insert: \[)[^]]+"]
     return [re.findall(regex, value) for regex in regexes]
@@ -60,6 +61,7 @@ def get_selected_collection(collection_id, connection):
     
     return keys_old + "\n" + keys_new + "\n" + ins + "\n" + dels
 
+
 def main():
     postman_connection = http.client.HTTPSConnection("api.getpostman.com")
     get_postman_collections(postman_connection)
@@ -82,8 +84,11 @@ def main():
     # Post the onboarding message in Slack
     slack_web_client.chat_postMessage(**message)
 
+    
 if __name__ == '__main__':
-    main()
+    while True:
+        main()
+        time.sleep(3600)
 
     
 
