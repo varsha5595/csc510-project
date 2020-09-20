@@ -9,6 +9,7 @@ Software Engineering Project for CSC 510 Fall 20
 
 Sync Ends is an automated bridge to sync service owners and service consumers. Every team has a single postman collection that they use to test their APIs and share it across in their documentations. The backend team has to register their service on our application and we take care of the rest. Everytime there is a change in the way the api is called, we parse the changes and inform the consumers. This way all the team members are informed about the changes and know exactly what to edit in their product. The [Slack](https://slack.com/) framework lets you concentrate on the `core` functionality you want to build without worrying about integration overheads.
 
+[![Watch the video](https://github.com/varsha5595/csc510-project/blob/master/etc/thumbnail.PNG)](https://youtu.be/SeNdRiI1axA)
 
 ## Features
 |Feature|Description  |
