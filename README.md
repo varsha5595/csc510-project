@@ -1,11 +1,10 @@
-# <img src="./resources/benten.png" height="42" width="42"/> Sync Ends Slack Bot
+# <img src="./etc/bot.png" height="42" width="42"/> Sync Ends
 
-## End development overheads (out of the box `slack-bot` support for `Github` and `Postman`)
+## End development overheads
 
 Software Engineering Project for CSC 510 Fall 20
 
 [![Support Slack](https://img.shields.io/badge/support-slack-red.svg)](https://join.slack.com/t/seng20/shared_invite/zt-hmikwiec-KDQVndRqN5DvGEFql0ehIw)
-[![License](https://img.shields.io/github/license/intuit/benten.svg)](https://github.com/varsha5595/csc510-project)
 
 Sync Ends is an automated bridge to sync service owners and service consumers. Every team has a single postman collection that they use to test their APIs and share it across in their documentations. The backend team has to register their service on our application and we take care of the rest. Everytime there is a change in the way the api is called, we parse the changes and inform the consumers. This way all the team members are informed about the changes and know exactly what to edit in their product. The [Slack](https://slack.com/) framework lets you concentrate on the `core` functionality you want to build without worrying about integration overheads.
 
