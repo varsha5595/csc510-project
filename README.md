@@ -26,6 +26,10 @@ Sync Ends is an automated bridge to sync service owners and service consumers. E
 |API history and change logs  |```Tracking the list of changes all the way from V1```  |
 | | |
 
+## Setup
+
+You can either create a new Postman collection or import an existing one.
+
 # Start Sync Ends
 ```sh
 python3 server.py
