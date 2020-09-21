@@ -2,7 +2,7 @@
 
 ## End development overheads
 
-Software Engineering Project for CSC 510 Fall 20
+Software Engineering Project for CSC 510
 
 [![Support Slack](https://img.shields.io/badge/support-slack-red.svg)](https://join.slack.com/t/seng20/shared_invite/zt-hmikwiec-KDQVndRqN5DvGEFql0ehIw)
 
