@@ -10,6 +10,9 @@ Sync Ends is an automated bridge to sync service owners and service consumers. E
 
 [![Watch the video](https://github.com/varsha5595/csc510-project/blob/master/etc/thumbnail.PNG)](https://youtu.be/SeNdRiI1axA)
 
+# Architecture Diagram
+<img src="./etc/architecture.PNG" height="500" width="800"/>
+
 ## Features
 |Feature|Description  |
 |--|--|
@@ -20,7 +23,6 @@ Sync Ends is an automated bridge to sync service owners and service consumers. E
 |Testing  |```Polling service to test API uptime```  |
 |API history and change logs  |```Tracking the list of changes all the way from V1```  |
 | | |
-
 
 # Start Sync Ends
 ```sh
