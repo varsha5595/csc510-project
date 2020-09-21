@@ -1,11 +1,10 @@
 import unittest
 from unittest.mock import patch
 import http.client
-import sys
-sys.path.insert(1, "../src/")
-from sync_ends_service import get_postman_collections
-from sync_ends_service import get_selected_collection
-from sync_ends_service import regex
+
+from src.sync_ends_service import get_postman_collections
+from src.sync_ends_service import get_selected_collection
+from src.sync_ends_service import regex
 
 
 class Test(unittest.TestCase):
