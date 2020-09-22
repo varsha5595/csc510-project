@@ -8,7 +8,7 @@ Software Engineering Project for CSC 510
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 ![GitHub contributors](https://img.shields.io/github/contributors/varsha5595/csc510-project)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
-[![DOI](https://zenodo.org/badge/292436508.svg)](https://zenodo.org/badge/latestdoi/292436508)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4042286.svg)](https://doi.org/10.5281/zenodo.4042286)
 
 Sync Ends is an automated bridge to sync service owners and service consumers. Every team has a single postman collection that they use to test their APIs and share it across in their documentations. The backend team has to register their service on our application and we take care of the rest. Everytime there is a change in the way the api is called, we parse the changes and inform the consumers. This way all the team members are informed about the changes and know exactly what to edit in their product. The [Slack](https://slack.com/) framework lets you concentrate on the `core` functionality you want to build without worrying about integration overheads.
 
