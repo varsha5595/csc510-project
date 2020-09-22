@@ -63,6 +63,9 @@ Now that team is created, let us create a slack bot
 6. Save the integration
 
 # Execution
+
+In line #133 of src/sync_ends_service.py, replace `<slackbot token>` with your bot token after bot creation: [Creating Slack Bot](https://github.com/varsha5595/csc510-project/wiki)
+
 ```
 cd src
 python3 sync_ends_service.py

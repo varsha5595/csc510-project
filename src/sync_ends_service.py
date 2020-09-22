@@ -124,16 +124,13 @@ def main():
                 break
         
         selected_collection = all_collections['collections'][int(collection_choice) - 1]
-
-        print("\nAlmost there, let's link the Slack bot to our service!")
-        slack_token = input("Enter the API token for the Slack bot: ")
         
         while True:
             # Get the changes that need to be sent to slack
             changes_detected = get_selected_collection(selected_collection['uid'], postman_connection, api_key)
             
-            # Create a slack client
-            slack_web_client = WebClient(token = slack_token)
+            # Create a slack client - ADD SlackBot token here
+            slack_web_client = WebClient(token = "") 
 
             # Slack Channel to post the message
             channel = "postman"
