@@ -2,27 +2,23 @@
 import http.client
 import json
 import os
-import mimetypes
 import re
 import time
 import ssl
-import sys
 
 # Third party imports
-import jsondiff
 from jsondiff import diff
-import slack
 from slack import WebClient
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
 
 def get_postman_collections(connection, api_key):
-    '''
+    """
     Input: Postman connection object, Postman API key of the user
     Description: To fetch all the collections present in the user's Postman account
     Returns all the collections in the user's Postman account
-    '''
+    """
     boundary = ''
     payload = ''
     headers = {
@@ -38,19 +34,20 @@ def get_postman_collections(connection, api_key):
 
 
 def regex(value):
-    '''
-    TODO 
-    '''
+    """
+    From the detected changes object, we check if there have been any change to the keys and values.
+    We then check if there are any new deletions or insertions using regular expressions on the parsed object.
+    """
     change_detection_regex = ["(?<='key': )[^,||}]*", "(?<='value': )[^,||}]*", "(?<=delete: \[)[^]]+", "(?<=insert: \[)[^]]+"]
     return [re.findall(regex, value) for regex in change_detection_regex]
 
 
 def get_selected_collection(collection_id, connection, api_key):
-    '''
+    """
     Input: Postman connection object, UUID of the collection chosen by the user, Postman API key of the user
     Description: To fetch details about all the APIs present in a specfic collection and to detect changes if any
     Returns the changes detected in the API schema
-    '''
+    """
     boundary = ''
     payload = ''
     headers = {
@@ -80,7 +77,7 @@ def get_selected_collection(collection_id, connection, api_key):
             new_value = diff(json.load(f), data)
             f.close()
 
-        # TODO
+        # A list of changes in the existing API are determined
         changes_detected = [regex(str(value)) for value in [old_value, new_value]]
 
         # When changes are detected, the .txt file is updated according to the new API schema
@@ -132,7 +129,7 @@ def main():
         slack_token = input("Enter the API token for the Slack bot: ")
         
         while True:
-            # TODO
+            # Get the changes that need to be sent to slack
             changes_detected = get_selected_collection(selected_collection['uid'], postman_connection, api_key)
             
             # Create a slack client
