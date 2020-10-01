@@ -70,3 +70,19 @@ class SyncEnd:
                     "\t" + "Request Method: " + end_point.method + "\n\n"
         return title + output
 
+    def start(self):
+
+        # get the current configuration of the schema
+        new_collection_schema = self.get_collection_schema()
+
+        # compute the difference with the previous schema
+        difference = self.compute_difference(new_collection_schema)
+
+        # post the difference to the slack
+        self.post_data_to_slack(difference)
+
+        # store new schema to the file
+        # TODO: add method to write the current schema to file
+
+        # wait fpr the trigger interval time period
+        time.sleep(self.trigger_interval)
