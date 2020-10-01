@@ -43,6 +43,24 @@ class SyncEnd:
         collection_schema_response = connection.getresponse()
         return json.loads(collection_schema_response.read())
 
+    def post_data_to_slack(self, data):
+        
+        slack_web_client = WebClient(
+            token="xoxb-1402730973745-1375362971159-nYAbxKiu34jjEvlWMzN02rgm"
+            )
+        for x in data:
+            if x != None:
+                message = {
+                    "channel": self.slack_channel,
+                    "blocks": [
+                        {
+                            "type": "section",
+                            "text": {"type": "plain_text", "text": x},
+                        }
+                    ],
+                }
+                slack_web_client.chat_postMessage(**message)
+
     def get_selected_collection(collection_id, connection, api_key):
         """
         Input: Postman connection object, UUID of the collection chosen by the user, Postman API key of the user
