@@ -46,7 +46,8 @@ class SyncEnd:
     def post_data_to_slack(self, data):
         
         slack_web_client = WebClient(
-            token="xoxb-1402730973745-1375362971159-nYAbxKiu34jjEvlWMzN02rgm"
+            # Add the slack access token here
+            token="xxxxxxxx"
             )
         for x in data:
             if x != None:
