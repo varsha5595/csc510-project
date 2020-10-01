@@ -8,3 +8,6 @@ class Collection:
 
     def get_end_points(self):
         return self.end_points
+    
+    def remove_end_point(self, end_point):
+        self.end_points.remove(end_point)
