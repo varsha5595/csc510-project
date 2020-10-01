@@ -70,6 +70,39 @@ class SyncEnd:
                     "\t" + "Request Method: " + end_point.method + "\n\n"
         return title + output
 
+    def compute_difference(self, new_collection_schema):
+
+        filepath = "./data/" + self.collection_id + ".txt"
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        if not os.path.exists(filepath):
+            with open(filepath, "w") as file:
+                # file.write("{\"item\":[]}")
+                file.write(json.dumps(new_collection_schema.get('collection')))
+
+        file = open(filepath, "r")
+        old_collection_schema = json.load(file)
+
+        # read the data from file and convrt it to collection object
+        old_schema_obj = Collection(old_collection_schema)
+        new_collection_obj = Collection(new_collection_schema.get('collection'))
+        common_end_points = []
+        for new_end_point in new_collection_obj.get_end_points():
+            for old_end_point in old_schema_obj.get_end_points():
+                if(new_end_point.id == old_end_point.id):
+                    common_end_points.append((new_end_point, old_end_point))
+                    old_schema_obj.remove_end_point(old_end_point)
+                    new_collection_obj.remove_end_point(new_end_point)
+
+        newly_added_end_point = self.get_newly_added_message(new_collection_obj.get_end_points())
+
+        # TODO: deleted_end_points = self.get_delete_message(old_schema_obj.get_end_points())
+
+        # TODO: updated_end_point = self.get_updated_end_point_message(common_end_points)
+
+        # TODO: message = [newly_added_end_point, deleted_end_points, updated_end_point]
+
+        return [newly_added_end_point]  # TODO: return message variable
+
     def start(self):
 
         # get the current configuration of the schema
