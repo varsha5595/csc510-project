@@ -23,24 +23,25 @@ class SyncEnd:
         self.slack_channel = slack_channel
         self.collection_id = 0
 
-    def get_postman_collections(connection, api_key):
-        """
-        Input: Postman connection object, Postman API key of the user
-        Description: To fetch all the collections present in the user's Postman account
-        Returns all the collections in the user's Postman account
-        """
-        boundary = ''
-        payload = ''
+    def get_collection_schema(self):
+
+        boundary = ""
+        payload = ""
         headers = {
-            'X-Api-Key': api_key,
-            'Content-type': 'multipart/form-data; boundary={}'.format(boundary)
+            "X-Api-Key": self.api_key,
+            "Content-type": "multipart/form-data; boundary={}".format(boundary),
         }
+        connection = http.client.HTTPSConnection("api.getpostman.com")
         connection.request("GET", "/collections", payload, headers)
         response = connection.getresponse()
-        if response.status == 200:
-            return response
-        else:
-            raise Exception("Exited with status code " + str(response.status) + '. '+ str(json.loads(response.read())['error']['message']))
+        collections = json.loads(response.read())
+        collection = list(filter(lambda x: self.collection_name == x['name'], collections.get('collections')))
+        if(len(collection) == 0):
+            raise NameError("Invalid collection name !!!")
+        self.collection_id = collection[0]["uid"]
+        connection.request("GET", "/collections/" + self.collection_id , payload, headers)
+        collection_schema_response = connection.getresponse()
+        return json.loads(collection_schema_response.read())
 
 
     def regex(value):
