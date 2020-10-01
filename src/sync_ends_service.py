@@ -61,61 +61,6 @@ class SyncEnd:
                 }
                 slack_web_client.chat_postMessage(**message)
 
-    def get_selected_collection(collection_id, connection, api_key):
-        """
-        Input: Postman connection object, UUID of the collection chosen by the user, Postman API key of the user
-        Description: To fetch details about all the APIs present in a specfic collection and to detect changes if any
-        Returns the changes detected in the API schema
-        """
-        boundary = ''
-        payload = ''
-        headers = {
-            'X-Api-Key': api_key,
-            'Content-type': 'multipart/form-data; boundary={}'.format(boundary)
-        }
-        connection.request("GET", "/collections/" + collection_id, payload, headers)
-        response = connection.getresponse()
-        if response.status == 200:
-            data = json.loads(response.read())
-
-            # For each collection, a separate text file is created to store the details related to the collection
-            filepath = "./data/" + collection_id + ".txt"
-            os.makedirs(os.path.dirname(filepath), exist_ok=True)
-            if not os.path.exists(filepath):
-                with open(filepath, "w") as f:
-                    f.write("{}")
-                    f.close()
-            
-            # Difference between the data received as part of the current API call and the data that previously existed in the .txt file
-            # The difference is computed twice to detect changes w.r.t to addition as well as deletion of key value pairs
-            with open(filepath, "r+") as f:
-                old_value = diff(data, json.load(f))
-                f.close()
-
-            with open(filepath, "r+") as f:
-                new_value = diff(json.load(f), data)
-                f.close()
-
-            # A list of changes in the existing API are determined
-            changes_detected = [regex(str(value)) for value in [old_value, new_value]]
-
-            # When changes are detected, the .txt file is updated according to the new API schema
-            if changes_detected:
-                with open(filepath, "w+") as f:
-                    json.dump(data, f)
-                    f.close()
-            
-            # Formatting the changes detected to make it user-friendly
-            keys_old = "Old name of the query paramter: " + ' '.join(changes_detected[0][0])
-            keys_new = "Updated name of the query parameter: " + ' '.join(changes_detected[1][0])
-            keys_inserted = "Name of the query parameter newly added: " + ' '.join(changes_detected[1][3])
-            keys_deleted = "Name of the query paramter that is deleted " + ' '.join(changes_detected[0][2])
-
-            return keys_old + "\n" + keys_new + "\n" + keys_inserted + "\n" + keys_deleted
-        else:
-            raise Exception("Exited with status code " + str(response.status) + '. '+ str(json.loads(response.read())['error']['message']))
-
-
     def main():
         try:
             postman_connection = http.client.HTTPSConnection("api.getpostman.com")
