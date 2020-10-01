@@ -43,16 +43,6 @@ class SyncEnd:
         collection_schema_response = connection.getresponse()
         return json.loads(collection_schema_response.read())
 
-
-    def regex(value):
-        """
-        From the detected changes object, we check if there have been any change to the keys and values.
-        We then check if there are any new deletions or insertions using regular expressions on the parsed object.
-        """
-        change_detection_regex = ["(?<='key': )[^,||}]*", "(?<='value': )[^,||}]*", "(?<=delete: \[)[^]]+", "(?<=insert: \[)[^]]+"]
-        return [re.findall(regex, value) for regex in change_detection_regex]
-
-
     def get_selected_collection(collection_id, connection, api_key):
         """
         Input: Postman connection object, UUID of the collection chosen by the user, Postman API key of the user
