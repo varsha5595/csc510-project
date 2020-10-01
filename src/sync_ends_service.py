@@ -60,7 +60,15 @@ class SyncEnd:
                     ],
                 }
                 slack_web_client.chat_postMessage(**message)
-
+    
+    def get_newly_added_message(self, end_point_list):
+        title = "Following end points are newly added in the collection\n\n"
+        output = ""
+        for i, end_point in enumerate(end_point_list):
+            output = output + "\t" + str(i+1) + ")  " + end_point.name + "\n" +\
+                    "\t" + "URL: " + end_point.url + "\n" +\
+                    "\t" + "Request Method: " + end_point.method + "\n\n"
+        return title + output
     def main():
         try:
             postman_connection = http.client.HTTPSConnection("api.getpostman.com")
