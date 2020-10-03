@@ -9,6 +9,7 @@ import ssl
 # Third party imports
 from jsondiff import diff
 from slack import WebClient
+from src.collection import Collection
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -47,7 +48,7 @@ class SyncEnd:
         
         slack_web_client = WebClient(
             # Add the slack access token here
-            token="xxxxxxxx"
+            token="xoxb-1402730973745-1375362971159-U4NPtm4GUG0NhFtt1mRHTUJS"
             )
         for x in data:
             if x != None:
@@ -69,6 +70,19 @@ class SyncEnd:
             output = output + "\t" + str(i+1) + ")  " + end_point.name + "\n" +\
                     "\t" + "URL: " + end_point.url + "\n" +\
                     "\t" + "Request Method: " + end_point.method + "\n\n"
+        if output == "":
+            return None
+        return title + output
+
+    def get_delete_message(self, end_point_list):
+        title = "Following end points are deleted from the collection\n\n"
+        output = ""
+        for i, end_point in enumerate(end_point_list):
+            output = output + "\t" + str(i+1) + ")  " + "EndPoint Name: " + end_point.name + "\n" +\
+                    "\t" + "URL: " + end_point.url + "\n" +\
+                    "\t" + "Request Method: " + end_point.method + "\n\n"
+        if output == "":
+            return None
         return title + output
 
     def compute_difference(self, new_collection_schema):
@@ -96,13 +110,13 @@ class SyncEnd:
 
         newly_added_end_point = self.get_newly_added_message(new_collection_obj.get_end_points())
 
-        # TODO: deleted_end_points = self.get_delete_message(old_schema_obj.get_end_points())
+        deleted_end_points = self.get_delete_message(old_schema_obj.get_end_points())
 
         # TODO: updated_end_point = self.get_updated_end_point_message(common_end_points)
 
-        # TODO: message = [newly_added_end_point, deleted_end_points, updated_end_point]
+        message = [newly_added_end_point, deleted_end_points]
 
-        return [newly_added_end_point]  # TODO: return message variable
+        return message
 
     def start(self):
 
