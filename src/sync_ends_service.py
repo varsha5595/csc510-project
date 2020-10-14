@@ -48,7 +48,7 @@ class SyncEnd:
         
         slack_web_client = WebClient(
             # Add the slack access token here
-            token="xoxb-1402730973745-1375362971159-U4NPtm4GUG0NhFtt1mRHTUJS"
+            token="xoxb-1452781555504-1435109897092-A5jPmIDroJTcKDEQ23pXC2P3"
             )
         for x in data:
             if x != None:
@@ -62,7 +62,7 @@ class SyncEnd:
                     ],
                 }
                 slack_web_client.chat_postMessage(**message)
-    
+
     def get_newly_added_message(self, end_point_list):
         title = "Following end points are newly added in the collection\n\n"
         output = ""
