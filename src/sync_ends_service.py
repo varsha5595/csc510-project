@@ -45,13 +45,13 @@ class SyncEnd:
         return json.loads(collection_schema_response.read())
 
     def post_data_to_slack(self, data):
-        
+
         slack_web_client = WebClient(
             # Add the slack access token here
-            token="xoxb-1402730973745-1375362971159-U4NPtm4GUG0NhFtt1mRHTUJS"
+            token=""
             )
         for x in data:
-            if x != None:
+            if x != None and len(x) > 0:
                 message = {
                     "channel": self.slack_channel,
                     "blocks": [
@@ -85,6 +85,37 @@ class SyncEnd:
             return None
         return title + output
 
+    def get_updated_end_point_message(self, common_end_points):
+        title = "Following is the list of change in the existing end points:"
+        difference = ""
+        for end_point_tuple in common_end_points:
+            difference = ""
+            new_end_point = end_point_tuple[0]
+            old_end_point = end_point_tuple[1]
+            
+            # compute change in name
+            if new_end_point.name != old_end_point.name:
+                difference += "\tNew name: " + new_end_point.name + " " + "Old name: " + old_end_point.name + "\n"
+            
+            if new_end_point.url != old_end_point.url:
+                difference += "\tNew URL: " + new_end_point.url + " " + "Old URL: " + old_end_point.url + "\n"
+
+            # compute change in authentication
+            if new_end_point.authentication != old_end_point.authentication:
+                if  new_end_point.authentication == None:
+                    difference += "\tNew Authentication: None"
+                else:
+                    difference += "\tNew Authentication: Key :" + new_end_point.authentication['apikey'][1]['value'] + ", Value : " +  new_end_point.authentication['apikey'][0]['value'] + "\n"            
+
+            # Compute change in the HTTP request type
+            if new_end_point.method != old_end_point.method:
+                difference += "\t New HTTP method: " + new_end_point.method + " " + "Old HTTP method: " + old_end_point.method + "\n"
+
+        if difference == "":
+            return None
+
+        return title + difference
+
     def compute_difference(self, new_collection_schema):
 
         filepath = "./data/" + self.collection_id + ".txt"
@@ -112,11 +143,17 @@ class SyncEnd:
 
         deleted_end_points = self.get_delete_message(old_schema_obj.get_end_points())
 
-        # TODO: updated_end_point = self.get_updated_end_point_message(common_end_points)
+        updated_end_point = self.get_updated_end_point_message(common_end_points)
 
-        message = [newly_added_end_point, deleted_end_points]
+        message = [newly_added_end_point, deleted_end_points, updated_end_point]
 
         return message
+
+    def store_file(self, new_collection):
+
+        filepath = "./data/" + self.collection_id + ".txt"
+        with open(filepath, "w") as file:
+            file.write(json.dumps(new_collection.get('collection')))
 
     def start(self):
 
@@ -130,7 +167,6 @@ class SyncEnd:
         self.post_data_to_slack(difference)
 
         # store new schema to the file
-        # TODO: add method to write the current schema to file
-
-        # wait fpr the trigger interval time period
-        time.sleep(self.trigger_interval)
+        self.store_file(new_collection_schema)
+        
+        # time.sleep(self.trigger_interval)
