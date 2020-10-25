@@ -38,4 +38,3 @@ class Parser:
             args.slack_channel,
             args.slack_token,
         )
-

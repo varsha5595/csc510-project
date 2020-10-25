@@ -14,7 +14,12 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 class SyncEnd:
     def __init__(
-        self, api_key, collection_name, trigger_interval, slack_channel, slack_token
+        self,
+        api_key,
+        collection_name,
+        trigger_interval,
+        slack_channel,
+        slack_token,
     ):
 
         self.api_key = api_key
@@ -248,5 +253,5 @@ class SyncEnd:
 
             # store new schema to the file
             self.store_file(new_collection_schema)
-            
+
             time.sleep(self.trigger_interval)
