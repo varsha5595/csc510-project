@@ -2,153 +2,235 @@
 import http.client
 import json
 import os
-import re
 import time
 import ssl
 
 # Third party imports
-from jsondiff import diff
 from slack import WebClient
+from src.collection import Collection
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
 
-def get_postman_collections(connection, api_key):
-    """
-    Input: Postman connection object, Postman API key of the user
-    Description: To fetch all the collections present in the user's Postman account
-    Returns all the collections in the user's Postman account
-    """
-    boundary = ''
-    payload = ''
-    headers = {
-        'X-Api-Key': api_key,
-        'Content-type': 'multipart/form-data; boundary={}'.format(boundary)
-    }
-    connection.request("GET", "/collections", payload, headers)
-    response = connection.getresponse()
-    if response.status == 200:
-        return response
-    else:
-        raise Exception("Exited with status code " + str(response.status) + '. '+ str(json.loads(response.read())['error']['message']))
+class SyncEnd:
+    def __init__(self, api_key, collection_name, trigger_interval, slack_channel, slack_token):
 
+        self.api_key = api_key
+        self.collection_name = collection_name
+        self.trigger_interval = trigger_interval
+        self.slack_channel = slack_channel
+        self.slack_token = slack_token
+        self.collection_id = 0
 
-def regex(value):
-    """
-    From the detected changes object, we check if there have been any change to the keys and values.
-    We then check if there are any new deletions or insertions using regular expressions on the parsed object.
-    """
-    change_detection_regex = ["(?<='key': )[^,||}]*", "(?<='value': )[^,||}]*", "(?<=delete: \[)[^]]+", "(?<=insert: \[)[^]]+"]
-    return [re.findall(regex, value) for regex in change_detection_regex]
+    def get_collection_schema(self):
 
+        boundary = ""
+        payload = ""
+        headers = {
+            "X-Api-Key": self.api_key,
+            "Content-type": "multipart/form-data; boundary={}".format(boundary)
+        }
+        connection = http.client.HTTPSConnection("api.getpostman.com")
+        connection.request("GET", "/collections", payload, headers)
+        response = connection.getresponse()
+        collections = json.loads(response.read())
+        collection = list(
+            filter(
+                lambda x: self.collection_name == x["name"],
+                collections.get("collections"),
+            )
+        )
+        if len(collection) == 0:
+            raise NameError("Invalid collection name !!!")
+        self.collection_id = collection[0]["uid"]
+        connection.request(
+            "GET", "/collections/" + self.collection_id, payload, headers
+        )
+        collection_schema_response = connection.getresponse()
+        return json.loads(collection_schema_response.read())
 
-def get_selected_collection(collection_id, connection, api_key):
-    """
-    Input: Postman connection object, UUID of the collection chosen by the user, Postman API key of the user
-    Description: To fetch details about all the APIs present in a specfic collection and to detect changes if any
-    Returns the changes detected in the API schema
-    """
-    boundary = ''
-    payload = ''
-    headers = {
-        'X-Api-Key': api_key,
-        'Content-type': 'multipart/form-data; boundary={}'.format(boundary)
-    }
-    connection.request("GET", "/collections/" + collection_id, payload, headers)
-    response = connection.getresponse()
-    if response.status == 200:
-        data = json.loads(response.read())
+    def post_data_to_slack(self, data):
 
-        # For each collection, a separate text file is created to store the details related to the collection
-        filepath = "./data/" + collection_id + ".txt"
+        slack_web_client = WebClient(
+            # Add the slack access token here
+            token=self.slack_token
+        )
+
+        for x in data:
+            if x != None and len(x) > 0:
+                message = {
+                    "channel": self.slack_channel,
+                    "blocks": [
+                        {
+                            "type": "section",
+                            "text": {"type": "plain_text", "text": x},
+                        }
+                    ],
+                }
+                slack_web_client.chat_postMessage(**message)
+
+    def get_newly_added_message(self, end_point_list):
+        title = "Following end points are newly added in the collection\n\n"
+        output = ""
+        for i, end_point in enumerate(end_point_list):
+            output = (
+                output
+                + "\t"
+                + str(i + 1)
+                + ")  "
+                + end_point.name
+                + "\n"
+                + "\t"
+                + "URL: "
+                + end_point.url
+                + "\n"
+                + "\t"
+                + "Request Method: "
+                + end_point.method
+                + "\n\n"
+            )
+        if output == "":
+            return None
+        return title + output
+
+    def get_delete_message(self, end_point_list):
+        title = "Following end points are deleted from the collection\n\n"
+        output = ""
+        for i, end_point in enumerate(end_point_list):
+            output = (
+                output
+                + "\t"
+                + str(i + 1)
+                + ")  "
+                + "EndPoint Name: "
+                + end_point.name
+                + "\n"
+                + "\t"
+                + "URL: "
+                + end_point.url
+                + "\n"
+                + "\t"
+                + "Request Method: "
+                + end_point.method
+                + "\n\n"
+            )
+        if output == "":
+            return None
+        return title + output
+
+    def get_updated_end_point_message(self, common_end_points):
+        title = "Following is the list of change in the existing end points:\n\n"
+        difference = ""
+        for end_point_tuple in common_end_points:
+            difference = ""
+            new_end_point = end_point_tuple[0]
+            old_end_point = end_point_tuple[1]
+
+            # compute change in name
+            if new_end_point.name != old_end_point.name:
+                difference += (
+                    "\tNew name: "
+                    + new_end_point.name
+                    + " "
+                    + "Old name: "
+                    + old_end_point.name
+                    + "\n"
+                )
+
+            if new_end_point.url != old_end_point.url:
+                difference += (
+                    "\tNew URL: "
+                    + new_end_point.url
+                    + " "
+                    + "Old URL: "
+                    + old_end_point.url
+                    + "\n"
+                )
+
+            # compute change in authentication
+            if new_end_point.authentication != old_end_point.authentication:
+                if new_end_point.authentication == None:
+                    difference += "\tNew Authentication: None"
+                else:
+                    difference += (
+                        "\tNew Authentication: Key :"
+                        + new_end_point.authentication["apikey"][1]["value"]
+                        + ", Value : "
+                        + new_end_point.authentication["apikey"][0]["value"]
+                        + "\n"
+                    )
+
+            # Compute change in the HTTP request type
+            if new_end_point.method != old_end_point.method:
+                difference += (
+                    "\t New HTTP method: "
+                    + new_end_point.method
+                    + " "
+                    + "Old HTTP method: "
+                    + old_end_point.method
+                    + "\n"
+                )
+
+        if difference == "":
+            return None
+
+        return title + difference
+
+    def compute_difference(self, new_collection_schema):
+
+        filepath = "./data/" + self.collection_id + ".txt"
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         if not os.path.exists(filepath):
-            with open(filepath, "w") as f:
-                f.write("{}")
-                f.close()
-        
-        # Difference between the data received as part of the current API call and the data that previously existed in the .txt file
-        # The difference is computed twice to detect changes w.r.t to addition as well as deletion of key value pairs
-        with open(filepath, "r+") as f:
-            old_value = diff(data, json.load(f))
-            f.close()
+            with open(filepath, "w") as file:
+                # file.write("{\"item\":[]}")
+                file.write(json.dumps(new_collection_schema.get("collection")))
 
-        with open(filepath, "r+") as f:
-            new_value = diff(json.load(f), data)
-            f.close()
+        file = open(filepath, "r")
+        old_collection_schema = json.load(file)
 
-        # A list of changes in the existing API are determined
-        changes_detected = [regex(str(value)) for value in [old_value, new_value]]
+        # read the data from file and convrt it to collection object
+        old_schema_obj = Collection(old_collection_schema)
+        new_collection_obj = Collection(new_collection_schema.get("collection"))
+        common_end_points = []
+        for new_end_point in new_collection_obj.get_end_points():
+            for old_end_point in old_schema_obj.get_end_points():
+                if new_end_point.id == old_end_point.id:
+                    common_end_points.append((new_end_point, old_end_point))
+                    old_schema_obj.remove_end_point(old_end_point)
+                    new_collection_obj.remove_end_point(new_end_point)
 
-        # When changes are detected, the .txt file is updated according to the new API schema
-        if changes_detected:
-            with open(filepath, "w+") as f:
-                json.dump(data, f)
-                f.close()
-        
-        # Formatting the changes detected to make it user-friendly
-        keys_old = "Old name of the query paramter: " + ' '.join(changes_detected[0][0])
-        keys_new = "Updated name of the query parameter: " + ' '.join(changes_detected[1][0])
-        keys_inserted = "Name of the query parameter newly added: " + ' '.join(changes_detected[1][3])
-        keys_deleted = "Name of the query paramter that is deleted " + ' '.join(changes_detected[0][2])
+        newly_added_end_point = self.get_newly_added_message(
+            new_collection_obj.get_end_points()
+        )
 
-        return keys_old + "\n" + keys_new + "\n" + keys_inserted + "\n" + keys_deleted
-    else:
-        raise Exception("Exited with status code " + str(response.status) + '. '+ str(json.loads(response.read())['error']['message']))
+        deleted_end_points = self.get_delete_message(old_schema_obj.get_end_points())
 
+        updated_end_point = self.get_updated_end_point_message(common_end_points)
 
-def main():
-    try:
-        postman_connection = http.client.HTTPSConnection("api.getpostman.com")
+        message = [newly_added_end_point, deleted_end_points, updated_end_point]
 
-        print("\nWelcome to Sync Ends! End your development overheads today!")
-        print("-----------------------------------------------------------")
+        return message
 
-        # The Postman API key is required to access all the postman collections in a user's account
-        print("\nLet's begin by linking your Postman account with our service!")
-        api_key = input("Enter the API key for you Postman account: ")
+    def store_file(self, new_collection):
 
-        # To get the collections present in a user's Postman account
-        collections_response = get_postman_collections(postman_connection, api_key)
-        all_collections = json.loads(collections_response.read())
-        
+        filepath = "./data/" + self.collection_id + ".txt"
+        with open(filepath, "w") as file:
+            file.write(json.dumps(new_collection.get("collection")))
+
+    def start(self):
+
         while True:
-            print("\nChoose a collection you would like to integrate:")
 
-            # User selects a specfic collection to be linked to the sync ends service
-            for index, collection in enumerate(all_collections['collections'], 1):
-                print(str(index) + '. ' + str(collection['name']))
-            collection_choice = input("\nEnter your choice: ")
+            # get the current configuration of the schema
+            new_collection_schema = self.get_collection_schema()
 
-            if 1 <= int(collection_choice) <= len(all_collections['collections']):
-                break
-        
-        selected_collection = all_collections['collections'][int(collection_choice) - 1]
-        
-        while True:
-            # Get the changes that need to be sent to slack
-            changes_detected = get_selected_collection(selected_collection['uid'], postman_connection, api_key)
+            # compute the difference with the previous schema
+            difference = self.compute_difference(new_collection_schema)
+
+            # post the difference to the slack
+            self.post_data_to_slack(difference)
+
+            # store new schema to the file
+            self.store_file(new_collection_schema)
             
-            # Create a slack client - ADD SlackBot token here
-            slack_web_client = WebClient(token = "") 
-
-            # Slack Channel to post the message
-            channel = "postman"
-
-            # Get the onboarding message payload
-            message = {
-                        "channel": channel,
-                        "blocks": [
-                            { "type": "section", "text": { "type": "plain_text", "text": changes_detected}}
-                        ],
-                    }
-
-            # Post the onboarding message in Slack
-            slack_web_client.chat_postMessage(**message)
-            time.sleep(3600)
-    except Exception as e:
-        print(e)
-
-    
-if __name__ == '__main__':
-    main()
+            time.sleep(self.trigger_interval)

@@ -2,9 +2,15 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.vscode/
+src/data/
+*.DS_Store
 
 # C extensions
 *.so
+
+# Postman Collection Files
+*.postman_collection.json
 
 # Distribution / packaging
 .Python
