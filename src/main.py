@@ -14,10 +14,12 @@ def main():
         api_key,
         trigger_interval,
         slack_channel,
+        slack_token,
     ) = parser.get_argumenets()
     sync_end = SyncEnd(
-        api_key, collection_name, trigger_interval, slack_channel
+        api_key, collection_name, trigger_interval, slack_channel, slack_token
     )
+
     try:
         sync_end.start()
     except Exception as e:

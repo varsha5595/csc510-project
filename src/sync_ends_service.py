@@ -14,13 +14,14 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 class SyncEnd:
     def __init__(
-        self, api_key, collection_name, trigger_interval, slack_channel
+        self, api_key, collection_name, trigger_interval, slack_channel, slack_token
     ):
 
         self.api_key = api_key
         self.collection_name = collection_name
         self.trigger_interval = trigger_interval
         self.slack_channel = slack_channel
+        self.slack_token = slack_token
         self.collection_id = 0
 
     def get_collection_schema(self):
@@ -56,7 +57,7 @@ class SyncEnd:
 
         slack_web_client = WebClient(
             # Add the slack access token here
-            token="xoxb-1402730973745-1375362971159-WnMjf08DHn1YBgi8lWKDrs4w"
+            token=self.slack_token
         )
 
         for x in data:
@@ -247,5 +248,5 @@ class SyncEnd:
 
             # store new schema to the file
             self.store_file(new_collection_schema)
-
+            
             time.sleep(self.trigger_interval)
