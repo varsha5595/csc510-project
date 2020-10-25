@@ -54,6 +54,7 @@ class SyncEnd:
             # Add the slack access token here
             token="xoxb-1402730973745-1375362971159-WnMjf08DHn1YBgi8lWKDrs4w"
         )
+
         for x in data:
             if x != None and len(x) > 0:
                 message = {
