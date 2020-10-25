@@ -13,7 +13,14 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 
 class SyncEnd:
-    def __init__(self, api_key, collection_name, trigger_interval, slack_channel, slack_token):
+    def __init__(
+        self,
+        api_key,
+        collection_name,
+        trigger_interval,
+        slack_channel,
+        slack_token,
+    ):
 
         self.api_key = api_key
         self.collection_name = collection_name
@@ -28,7 +35,9 @@ class SyncEnd:
         payload = ""
         headers = {
             "X-Api-Key": self.api_key,
-            "Content-type": "multipart/form-data; boundary={}".format(boundary)
+            "Content-type": "multipart/form-data; boundary={}".format(
+                boundary
+            ),
         }
         connection = http.client.HTTPSConnection("api.getpostman.com")
         connection.request("GET", "/collections", payload, headers)
@@ -57,7 +66,7 @@ class SyncEnd:
         )
 
         for x in data:
-            if x != None and len(x) > 0:
+            if x is not None and len(x) > 0:
                 message = {
                     "channel": self.slack_channel,
                     "blocks": [
@@ -119,7 +128,9 @@ class SyncEnd:
         return title + output
 
     def get_updated_end_point_message(self, common_end_points):
-        title = "Following is the list of change in the existing end points:\n\n"
+        title = (
+            "Following is the list of change in the existing end points:\n\n"
+        )
         difference = ""
         for end_point_tuple in common_end_points:
             difference = ""
@@ -149,7 +160,7 @@ class SyncEnd:
 
             # compute change in authentication
             if new_end_point.authentication != old_end_point.authentication:
-                if new_end_point.authentication == None:
+                if new_end_point.authentication is None:
                     difference += "\tNew Authentication: None"
                 else:
                     difference += (
@@ -190,7 +201,9 @@ class SyncEnd:
 
         # read the data from file and convrt it to collection object
         old_schema_obj = Collection(old_collection_schema)
-        new_collection_obj = Collection(new_collection_schema.get("collection"))
+        new_collection_obj = Collection(
+            new_collection_schema.get("collection")
+        )
         common_end_points = []
         for new_end_point in new_collection_obj.get_end_points():
             for old_end_point in old_schema_obj.get_end_points():
@@ -203,11 +216,19 @@ class SyncEnd:
             new_collection_obj.get_end_points()
         )
 
-        deleted_end_points = self.get_delete_message(old_schema_obj.get_end_points())
+        deleted_end_points = self.get_delete_message(
+            old_schema_obj.get_end_points()
+        )
 
-        updated_end_point = self.get_updated_end_point_message(common_end_points)
+        updated_end_point = self.get_updated_end_point_message(
+            common_end_points
+        )
 
-        message = [newly_added_end_point, deleted_end_points, updated_end_point]
+        message = [
+            newly_added_end_point,
+            deleted_end_points,
+            updated_end_point,
+        ]
 
         return message
 
@@ -232,5 +253,5 @@ class SyncEnd:
 
             # store new schema to the file
             self.store_file(new_collection_schema)
-            
+
             time.sleep(self.trigger_interval)
