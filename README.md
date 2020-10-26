@@ -70,13 +70,6 @@ In line #133 of src/sync_ends_service.py, replace `<slackbot token>` with your b
 cd src
 python3 sync_ends_service.py
 ```
-## Authors
-
-* Adithya Raghu Ganesh
-* Meghana Ravindra Vasist
-* Shivaprakash Balasubramanian
-* Surbhi Jha
-* Varsha Anantha Ramu Sharma
 
 ## License
 
