@@ -132,6 +132,7 @@ collection
                 + "\t"
                 + str(i + 1)
                 + ")  "
+                + "EndPoint Name: "
                 + end_point.name
                 + "\n"
                 + "\t"
