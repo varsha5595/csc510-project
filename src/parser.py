@@ -18,7 +18,9 @@ class Parser:
 
     def __init__(self):
         parser = argparse.ArgumentParser()
-        parser.add_argument("--collection_name", required=True, dest="collection_name")  # noqa: E501
+        parser.add_argument(
+            "--collection_name", required=True, dest="collection_name"
+        )  # noqa: E501
         parser.add_argument("--api_key", required=True, dest="key")
         parser.add_argument(
             "--slack_channel",
