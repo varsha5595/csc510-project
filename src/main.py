@@ -10,8 +10,10 @@ def main():
     """
     A method which is the main entry point for the CLI.
 
-    This method calls the Parser() class to parse command line arguments and then instantiates the SyncEnd() class with input arguments.
-    It then calls the start() method which is the interface with Postman and Slack.
+    This method calls the Parser() class to parse command line arguments and \
+    then instantiates the SyncEnd() class with input arguments.
+    It then calls the start() method which is the interface with Postman \
+    and Slack.
     """
 
     # get the arguments from command line
@@ -22,7 +24,7 @@ def main():
         trigger_interval,
         slack_channel,
         slack_token,
-    ) = parser.get_argumenets()
+    ) = parser.get_arguments()
     sync_end = SyncEnd(
         api_key, collection_name, trigger_interval, slack_channel, slack_token
     )

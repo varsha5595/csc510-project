@@ -38,8 +38,10 @@ def main():
     &#34;&#34;&#34;
     A method which is the main entry point for the CLI.
 
-    This method calls the Parser() class to parse command line arguments and then instantiates the SyncEnd() class with input arguments.
-    It then calls the start() method which is the interface with Postman and Slack.
+    This method calls the Parser() class to parse command line arguments and \
+    then instantiates the SyncEnd() class with input arguments.
+    It then calls the start() method which is the interface with Postman \
+    and Slack.
     &#34;&#34;&#34;
 
     # get the arguments from command line
@@ -50,7 +52,7 @@ def main():
         trigger_interval,
         slack_channel,
         slack_token,
-    ) = parser.get_argumenets()
+    ) = parser.get_arguments()
     sync_end = SyncEnd(
         api_key, collection_name, trigger_interval, slack_channel, slack_token
     )
@@ -76,8 +78,10 @@ if __name__ == &#34;__main__&#34;:
 </code></dt>
 <dd>
 <div class="desc"><p>A method which is the main entry point for the CLI.</p>
-<p>This method calls the Parser() class to parse command line arguments and then instantiates the SyncEnd() class with input arguments.
-It then calls the start() method which is the interface with Postman and Slack.</p></div>
+<p>This method calls the Parser() class to parse command line arguments and
+then instantiates the SyncEnd() class with input arguments.
+It then calls the start() method which is the interface with Postman
+and Slack.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -86,8 +90,10 @@ It then calls the start() method which is the interface with Postman and Slack.<
     &#34;&#34;&#34;
     A method which is the main entry point for the CLI.
 
-    This method calls the Parser() class to parse command line arguments and then instantiates the SyncEnd() class with input arguments.
-    It then calls the start() method which is the interface with Postman and Slack.
+    This method calls the Parser() class to parse command line arguments and \
+    then instantiates the SyncEnd() class with input arguments.
+    It then calls the start() method which is the interface with Postman \
+    and Slack.
     &#34;&#34;&#34;
 
     # get the arguments from command line
@@ -98,7 +104,7 @@ It then calls the start() method which is the interface with Postman and Slack.<
         trigger_interval,
         slack_channel,
         slack_token,
-    ) = parser.get_argumenets()
+    ) = parser.get_arguments()
     sync_end = SyncEnd(
         api_key, collection_name, trigger_interval, slack_channel, slack_token
     )

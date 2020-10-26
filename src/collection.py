@@ -7,7 +7,8 @@ class Collection:
 
     Attributes
     ----------
-        end_points : List of EndPoints (APIs) that are to be tested via Postman collection  # noqa: E501
+        end_points : List of EndPoints (APIs) that are to be tested via \
+Postman collection
     """
 
     def __init__(self, collection_json):
