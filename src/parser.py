@@ -1,4 +1,5 @@
 import argparse
+import json
 
 
 class Parser:
@@ -19,22 +20,16 @@ class Parser:
     def __init__(self):
         parser = argparse.ArgumentParser()
         parser.add_argument(
-            "--collection_name", required=True, dest="collection_name"
-        )  # noqa: E501
-        parser.add_argument("--api_key", required=True, dest="key")
-        parser.add_argument(
-            "--slack_channel",
-            required=False,
-            dest="slack_channel",
-            default="general",
+            "--config_file",
+            required=True,
+            dest="config_file",
+            default="sync-ends-config.json",
         )
-        parser.add_argument(
-            "--trigger_interval",
-            required=False,
-            dest="trigger_interval",
-            default=10,
-        )
-        parser.add_argument("--slack_token", required=True, dest="slack_token")
+        self.collection_name = ""
+        self.postman_api_key = ""
+        self.trigger_interval = 10
+        self.slack_channel = "general"
+        self.slack_token = ""
         self.parser = parser
 
     def get_arguments(self):
@@ -42,10 +37,46 @@ class Parser:
         Return all arguments required to execute CLI
         """
         args = self.parser.parse_args()
+        config = None
+        with open(args.config_file, "r") as f:
+            config = json.load(f)
+
+        if "collections" in config:
+            if len(config["collections"]) > 0:
+                collection = config["collections"][0]
+                if "collection_name" in collection:
+                    self.collection_name = collection["collection_name"]
+                else:
+                    raise AttributeError(
+                        "'collection_name' not present in 'collections'!"
+                    )
+                self.slack_channel = collection["slack_channel"]
+            else:
+                raise AttributeError(
+                    "No 'collections' details found in config_file!"
+                )
+        else:
+            raise AttributeError("'collections' not present in config_file!")
+
+        if "postman_api_key" in config:
+            self.postman_api_key = config["postman_api_key"]
+        else:
+            raise AttributeError(
+                "'postman_api_key' not present in config_file!"
+            )
+
+        if "trigger_interval" in config:
+            self.trigger_interval = config["trigger_interval"]
+
+        if "slack_token" in config:
+            self.slack_token = config["slack_token"]
+        else:
+            raise AttributeError("'slack_token' not present in config_file!")
+
         return (
-            args.collection_name,
-            args.key,
-            args.trigger_interval,
-            args.slack_channel,
-            args.slack_token,
+            self.collection_name,
+            self.postman_api_key,
+            self.trigger_interval,
+            self.slack_channel,
+            self.slack_token,
         )
