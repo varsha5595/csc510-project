@@ -64,7 +64,18 @@ Now that team is created, let us create a slack bot
 
 ## How to use it
 ### Installation
+```
 pip install sync-ends
+```
+
+### Usage
+1. Run following command with required parameters.
+```
+syncends  --collection_name "COLLECTION_NAME_HERE" --api_key "POSTMAN_API_KEY_HERE" --slack_token "SLACK_TOKEN_HERE"
+```
+2. Here collection name is the name of postman collection.
+3. Here postman api is the api key fetched from setup section of postman after registering your service.
+4. Here slack token is the token obtained from slack for receiving slack messages.
 
 # Execution
 
