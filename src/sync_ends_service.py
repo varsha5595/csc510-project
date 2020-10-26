@@ -54,7 +54,9 @@ APIs schemas
         payload = ""
         headers = {
             "X-Api-Key": self.api_key,
-            "Content-type": "multipart/form-data; boundary={}".format(boundary),  # noqa: E501
+            "Content-type": "multipart/form-data; boundary={}".format(
+                boundary
+            ),  # noqa: E501
         }
 
         # create a HTTPS connection object
@@ -300,9 +302,13 @@ schema fetched through the Postman API
             new_collection_obj.get_end_points()
         )
 
-        deleted_end_points = self.get_delete_message(old_schema_obj.get_end_points())  # noqa: E501
+        deleted_end_points = self.get_delete_message(
+            old_schema_obj.get_end_points()
+        )  # noqa: E501
 
-        updated_end_point = self.get_updated_end_point_message(common_end_points)  # noqa: E501
+        updated_end_point = self.get_updated_end_point_message(
+            common_end_points
+        )  # noqa: E501
 
         message = [
             newly_added_end_point,
