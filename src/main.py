@@ -26,6 +26,7 @@ def main():
     sync_end = SyncEnd(
         api_key, collection_name, trigger_interval, slack_channel, slack_token
     )
+
     try:
         sync_end.start()
     except Exception as e:

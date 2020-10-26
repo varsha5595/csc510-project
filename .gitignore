@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 .vscode/
 src/data/
+*.DS_Store
 
 # C extensions
 *.so
