@@ -14,6 +14,7 @@ class TestParser(unittest.TestCase):
         )
 
         self.end_point_list = []
+        self.common_end_point = []
         endpoint1 = Mock()
         endpoint1.id = "385f7848-62db-4435-b7cf-820c3e7e5097"
         endpoint1.name = "Endpoint 1"
@@ -27,11 +28,12 @@ class TestParser(unittest.TestCase):
         endpoint2.id = "3234dt48-62db-4435-b7cf-820c3e7e5097"
         endpoint2.name = "Endpoint 2"
         endpoint2.authentication = None
-        endpoint2.method = "POST"
+        endpoint2.method = "GET"
         endpoint2.header = []
         endpoint2.url = "http://127.0.0.1:5003/endpoint?ep_id=2"
         endpoint2.query_parameters = [{"key": "ep_id", "value": "2"}]
         self.end_point_list.append(endpoint2)
+        self.common_end_point.append((endpoint1, endpoint2))
 
     def test_get_newly_added_message(self):
 
@@ -63,7 +65,7 @@ class TestParser(unittest.TestCase):
             + "\n"
             + "\t"
             + "Request Method: "
-            + "POST"
+            + "GET"
             + "\n\n"
         )
         result = self.sync_end.get_newly_added_message(self.end_point_list)
@@ -97,7 +99,7 @@ class TestParser(unittest.TestCase):
             + "\n"
             + "\t"
             + "Request Method: "
-            + "POST"
+            + "GET"
             + "\n\n"
         )
         result = self.sync_end.get_delete_message(self.end_point_list)
@@ -111,6 +113,32 @@ class TestParser(unittest.TestCase):
             response = self.sync_end.post_data_to_slack(data)
 
             self.assertEqual(response, 3)
+
+    def test_get_updated_end_point_message(self):
+        title = "Following is the list of change in the existing end points ::\n\n"  # noqa: E501
+        difference = (
+                    "\tNew name: "
+                    + "Endpoint 1"
+                    + " "
+                    + "\nOld name: "
+                    + "Endpoint 2"
+                    + "\n"
+                    + "\tNew URL: "
+                    + "http://127.0.0.1:5002/endpoint?ep_id=1"
+                    + " "
+                    + "\nOld URL: "
+                    + "http://127.0.0.1:5003/endpoint?ep_id=2"
+                    + "\n"
+                    + "\t New HTTP method: "
+                    + "POST"
+                    + " "
+                    + "\nOld HTTP method: "
+                    + "GET"
+                    + "\n"
+                )
+
+        result = self.sync_end.get_updated_end_point_message(self.common_end_point)  # noqa: E501
+        self.assertEqual(result, title + difference)
 
 
 if __name__ == "__main__":
