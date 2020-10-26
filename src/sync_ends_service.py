@@ -9,6 +9,7 @@ from os.path import abspath, dirname, join
 # Third party imports
 from slack import WebClient
 from src.collection import Collection
+from slack.errors import SlackApiError
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -96,23 +97,33 @@ APIs schemas
             data : list of strings pertaining to APIs added, deleted and \
 updated
         """
-        slack_web_client = WebClient(
-            # Add the slack access token here
-            token=self.slack_token
-        )
+        try:
+            slack_web_client = WebClient(
+                # Add the slack access token here
+                token=self.slack_token
+            )
 
-        for x in data:
-            if x is not None and len(x) > 0:
-                message = {
-                    "channel": self.slack_channel,
-                    "blocks": [
-                        {
-                            "type": "section",
-                            "text": {"type": "plain_text", "text": x},
-                        }
-                    ],
-                }
-                slack_web_client.chat_postMessage(**message)
+            response_true_cnt = 0
+            for x in data:
+                if x is not None and len(x) > 0:
+                    message = {
+                        "channel": self.slack_channel,
+                        "blocks": [
+                            {
+                                "type": "section",
+                                "text": {"type": "plain_text", "text": x},
+                            }
+                        ],
+                    }
+                    slack_web_client.chat_postMessage(**message)
+                    response = slack_web_client.chat_postMessage(**message)
+
+                    if response:
+                        response_true_cnt += 1
+        except SlackApiError as e:
+            return e
+
+        return response_true_cnt
 
     def get_newly_added_message(self, end_point_list):
         """
