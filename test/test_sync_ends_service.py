@@ -1,6 +1,6 @@
 import sys
 import unittest
-from unittest.mock import Mock
+from unittest.mock import Mock, MagicMock, patch
 from os.path import dirname, abspath
 
 sys.path.append(dirname(dirname(abspath(__file__))))
@@ -12,6 +12,7 @@ class TestParser(unittest.TestCase):
         self.sync_end = SyncEnd(
             "SAM-Key-123fg", "test server", 9, "sample channel", "123ff"
         )
+        
         self.end_point_list = []
         endpoint1 = Mock()
         endpoint1.id = "385f7848-62db-4435-b7cf-820c3e7e5097"
@@ -21,6 +22,7 @@ class TestParser(unittest.TestCase):
         endpoint1.header = []
         endpoint1.url = "http://127.0.0.1:5002/endpoint?ep_id=1"
         endpoint1.query_parameters = [{"key": "ep_id", "value": "1"}]
+        
         self.end_point_list.append(endpoint1)
         endpoint2 = Mock()
         endpoint2.id = "3234dt48-62db-4435-b7cf-820c3e7e5097"
@@ -66,8 +68,6 @@ class TestParser(unittest.TestCase):
             + "\n\n"
         )
         result = self.sync_end.get_newly_added_message(self.end_point_list)
-        print("actual:", result)
-        print("expected", title + output)
         self.assertEqual(result, title + output)
 
     def test_get_delete_message(self):
@@ -102,9 +102,16 @@ class TestParser(unittest.TestCase):
             + "\n\n"
         )
         result = self.sync_end.get_delete_message(self.end_point_list)
-        print("actual:", result)
-        print("expected", title + output)
         self.assertEqual(result, title + output)
+
+    def test_post_data_to_slack(self):
+        with patch("slack.WebClient.chat_postMessage") as mock_slack:
+            mock_slack.return_value = True
+
+            data = ["New", "Delete", "Update"]
+            response = self.sync_end.post_data_to_slack(data)
+
+            self.assertEqual(response, 3)
 
 
 if __name__ == "__main__":
