@@ -116,7 +116,6 @@ class TestParser(unittest.TestCase):
 
             self.assertEqual(response, 3)
 
-
     def test_get_updated_end_point_message(self):
         title = "Following is the list of change in the existing end points ::\n\n"  # noqa: E501
         difference = (
@@ -160,7 +159,6 @@ class TestParser(unittest.TestCase):
         self.assertEqual(
             str(collection_schema["collection"]), lst[0].replace('"', "'")
         )
-
 
 
 if __name__ == "__main__":
