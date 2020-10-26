@@ -2,12 +2,21 @@ import sys
 
 sys.path.append("..")
 
-from src.sync_ends_service import SyncEnd  # noqa: 402
-from src.parser import Parser  # noqa: 402
+from src.sync_ends_service import SyncEnd  # noqa: E402
+from src.parser import Parser  # noqa: E402
 
 
 def main():
-    # get the arguments from commadn line
+    """
+    A method which is the main entry point for the CLI.
+
+    This method calls the Parser() class to parse command line arguments and \
+    then instantiates the SyncEnd() class with input arguments.
+    It then calls the start() method which is the interface of \
+    the CLI with Postman and Slack.
+    """
+
+    # get the arguments from command line
     parser = Parser()
     (
         collection_name,
@@ -15,7 +24,7 @@ def main():
         trigger_interval,
         slack_channel,
         slack_token,
-    ) = parser.get_argumenets()
+    ) = parser.get_arguments()
     sync_end = SyncEnd(
         api_key, collection_name, trigger_interval, slack_channel, slack_token
     )

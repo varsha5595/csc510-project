@@ -3,16 +3,22 @@ import argparse
 
 class Parser:
     """
-    The design of the CLI is
-    $ SyncEnd --api_key <key> --collection_name <name of collection>
-    --trigger_interval <time in second>
+    A class to represent the parser object which parses the command \
+        line input arguments.
+
+    Attributes
+    ----------
+        parser : Instance of Parser class, needed to fetch CLI arguments
+
+    The design of the CLI is:
+    $ SyncEnd --api_key <key> --collection_name <name of collection> \
+    --slack_channel <name_of_slack_channel> --trigger_interval \
+    <time in second> --slack_token <slack_token>
     """
 
     def __init__(self):
         parser = argparse.ArgumentParser()
-        parser.add_argument(
-            "--collection_name", required=True, dest="collection_name"
-        )
+        parser.add_argument("--collection_name", required=True, dest="collection_name")  # noqa: E501
         parser.add_argument("--api_key", required=True, dest="key")
         parser.add_argument(
             "--slack_channel",
@@ -29,7 +35,10 @@ class Parser:
         parser.add_argument("--slack_token", required=True, dest="slack_token")
         self.parser = parser
 
-    def get_argumenets(self):
+    def get_arguments(self):
+        """
+        Return all arguments required to execute CLI
+        """
         args = self.parser.parse_args()
         return (
             args.collection_name,
