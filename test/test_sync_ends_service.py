@@ -1,8 +1,7 @@
 import sys
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, mock_open
 from os.path import dirname, abspath
-import os
 
 sys.path.append(dirname(dirname(abspath(__file__))))
 from src.sync_ends_service import SyncEnd  # noqa: E402
@@ -119,7 +118,7 @@ class TestParser(unittest.TestCase):
     def test_get_updated_end_point_message(self):
         title = "Following is the list of change in the existing end points ::\n\n"  # noqa: E501
         difference = (
-                    "\tNew name: "
+                    "\tNew name: "  # noqa: E126
                     + "Endpoint 1"
                     + " "
                     + "\nOld name: "
@@ -137,7 +136,7 @@ class TestParser(unittest.TestCase):
                     + "\nOld HTTP method: "
                     + "GET"
                     + "\n"
-                )
+        )
 
         result = self.sync_end.get_updated_end_point_message(self.common_end_point)  # noqa: E501
         self.assertEqual(result, title + difference)
@@ -148,17 +147,17 @@ class TestParser(unittest.TestCase):
         }
 
         self.sync_end.collection_id = "custom_id"
-        self.sync_end.store_file(collection_schema)
 
-        with open("src/data/custom_id.txt") as f:
-            lst = f.readlines()
+        with patch("src.sync_ends_service.open", mock_open()) as mocked_file:
+            self.sync_end.store_file(collection_schema)
 
-        os.remove("src/data/custom_id.txt")
-
-        lst = [ele.strip() for ele in lst]
-        self.assertEqual(
-            str(collection_schema["collection"]), lst[0].replace('"', "'")
-        )
+            file_path = (
+                dirname(dirname(abspath(__file__))) + "/src/data/custom_id.txt"
+            )
+            mocked_file.assert_called_once_with(file_path, "w")
+            mocked_file().write.assert_called_once_with(
+                str(collection_schema["collection"]).replace("'", '"')
+            )
 
 
 if __name__ == "__main__":
