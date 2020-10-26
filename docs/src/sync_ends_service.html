@@ -41,8 +41,30 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 
 class SyncEnd:
-    def __init__(self, api_key, collection_name, trigger_interval, slack_channel, slack_token):
+    &#34;&#34;&#34;
+    A class to represent the SyncEnd object in the code. This object contains \
+    the methods that serve as the interface for the \
+    package with Postman and Slack.
 
+    Attributes
+    ----------
+        api_key : API key for Postman to fetch collections
+        collection_name : Postman collection name from which to fetch APIs&#39; \
+schema
+        trigger_interval : interval (in seconds) post which to again fetch \
+APIs schemas
+        slack_channel : Slack channel name where the message will be sent
+        slack_token : Slack Bot token to authorize the sending of message
+        collection_id : ID of Postman collection
+    &#34;&#34;&#34;
+    def __init__(
+        self,
+        api_key,
+        collection_name,
+        trigger_interval,
+        slack_channel,
+        slack_token,
+    ):
         self.api_key = api_key
         self.collection_name = collection_name
         self.trigger_interval = trigger_interval
@@ -51,13 +73,20 @@ class SyncEnd:
         self.collection_id = 0
 
     def get_collection_schema(self):
+        &#34;&#34;&#34;
+        Fetches the APIs schemas from the Postman collection
+        &#34;&#34;&#34;
 
         boundary = &#34;&#34;
         payload = &#34;&#34;
         headers = {
             &#34;X-Api-Key&#34;: self.api_key,
-            &#34;Content-type&#34;: &#34;multipart/form-data; boundary={}&#34;.format(boundary)
+            &#34;Content-type&#34;: &#34;multipart/form-data; boundary={}&#34;.format(
+                boundary
+            ),
         }
+
+        # create a HTTPS connection object
         connection = http.client.HTTPSConnection(&#34;api.getpostman.com&#34;)
         connection.request(&#34;GET&#34;, &#34;/collections&#34;, payload, headers)
         response = connection.getresponse()
@@ -68,24 +97,35 @@ class SyncEnd:
                 collections.get(&#34;collections&#34;),
             )
         )
+
+        # if collection is empty, it is an invalid connection
         if len(collection) == 0:
             raise NameError(&#34;Invalid collection name !!!&#34;)
+
         self.collection_id = collection[0][&#34;uid&#34;]
         connection.request(
             &#34;GET&#34;, &#34;/collections/&#34; + self.collection_id, payload, headers
         )
+
+        # fetch the response and load the API schema as a JSON
         collection_schema_response = connection.getresponse()
         return json.loads(collection_schema_response.read())
 
     def post_data_to_slack(self, data):
+        &#34;&#34;&#34;
+        Posts the messages for APIs added, deleted and updated based on the input data
 
+        Inputs
+        ----------
+            data : list of strings pertaining to APIs added, deleted and updated
+        &#34;&#34;&#34;
         slack_web_client = WebClient(
             # Add the slack access token here
             token=self.slack_token
         )
 
         for x in data:
-            if x != None and len(x) &gt; 0:
+            if x is not None and len(x) &gt; 0:
                 message = {
                     &#34;channel&#34;: self.slack_channel,
                     &#34;blocks&#34;: [
@@ -98,7 +138,16 @@ class SyncEnd:
                 slack_web_client.chat_postMessage(**message)
 
     def get_newly_added_message(self, end_point_list):
-        title = &#34;Following end points are newly added in the collection\n\n&#34;
+        &#34;&#34;&#34;
+        Returns the message string for each API end point added to the \
+        collection
+
+        Inputs
+        ----------
+            end_point_list : list of endpoints which are newly added to the \
+collection
+        &#34;&#34;&#34;
+        title = &#34;Following end points are newly added in the collection :: \n\n&#34;
         output = &#34;&#34;
         for i, end_point in enumerate(end_point_list):
             output = (
@@ -122,7 +171,16 @@ class SyncEnd:
         return title + output
 
     def get_delete_message(self, end_point_list):
-        title = &#34;Following end points are deleted from the collection\n\n&#34;
+        &#34;&#34;&#34;
+        Returns the message string for each API end point deleted from the \
+        collection
+
+        Inputs
+        ----------
+            end_point_list : list of endpoints which are deleted from the \
+collection
+        &#34;&#34;&#34;
+        title = &#34;Following end points are deleted from the collection :: \n\n&#34;
         output = &#34;&#34;
         for i, end_point in enumerate(end_point_list):
             output = (
@@ -147,7 +205,18 @@ class SyncEnd:
         return title + output
 
     def get_updated_end_point_message(self, common_end_points):
-        title = &#34;Following is the list of change in the existing end points:\n\n&#34;
+        &#34;&#34;&#34;
+        Returns the message string for each API end point updated in the \
+        collection
+
+        Inputs
+        ----------
+            common_end_points : list of endpoints (APIs) which are modified \
+in the collection
+        &#34;&#34;&#34;
+        title = (
+            &#34;Following is the list of change in the existing end points ::\n\n&#34;
+        )
         difference = &#34;&#34;
         for end_point_tuple in common_end_points:
             difference = &#34;&#34;
@@ -160,7 +229,7 @@ class SyncEnd:
                     &#34;\tNew name: &#34;
                     + new_end_point.name
                     + &#34; &#34;
-                    + &#34;Old name: &#34;
+                    + &#34;\nOld name: &#34;
                     + old_end_point.name
                     + &#34;\n&#34;
                 )
@@ -170,14 +239,14 @@ class SyncEnd:
                     &#34;\tNew URL: &#34;
                     + new_end_point.url
                     + &#34; &#34;
-                    + &#34;Old URL: &#34;
+                    + &#34;\nOld URL: &#34;
                     + old_end_point.url
                     + &#34;\n&#34;
                 )
 
             # compute change in authentication
             if new_end_point.authentication != old_end_point.authentication:
-                if new_end_point.authentication == None:
+                if new_end_point.authentication is None:
                     difference += &#34;\tNew Authentication: None&#34;
                 else:
                     difference += (
@@ -194,7 +263,7 @@ class SyncEnd:
                     &#34;\t New HTTP method: &#34;
                     + new_end_point.method
                     + &#34; &#34;
-                    + &#34;Old HTTP method: &#34;
+                    + &#34;\nOld HTTP method: &#34;
                     + old_end_point.method
                     + &#34;\n&#34;
                 )
@@ -205,7 +274,19 @@ class SyncEnd:
         return title + difference
 
     def compute_difference(self, new_collection_schema):
+        &#34;&#34;&#34;
+        Computes the difference between the new and the old collection \
+        schema. The old collection schema is stored as a file in the \
+        data/ directory.
 
+        Inputs
+        ----------
+            new_collection_schema : dictionary representing the collection \
+schema fetched through the Postman API
+        &#34;&#34;&#34;
+
+        # specify the filepath for the collection schema, create the file if \
+        # not already present
         filepath = &#34;./data/&#34; + self.collection_id + &#34;.txt&#34;
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         if not os.path.exists(filepath):
@@ -213,40 +294,79 @@ class SyncEnd:
                 # file.write(&#34;{\&#34;item\&#34;:[]}&#34;)
                 file.write(json.dumps(new_collection_schema.get(&#34;collection&#34;)))
 
+        # the old (previous) collection schema is stored as a file in data/
         file = open(filepath, &#34;r&#34;)
         old_collection_schema = json.load(file)
 
-        # read the data from file and convrt it to collection object
+        # read the data from file and convert it to collection object
         old_schema_obj = Collection(old_collection_schema)
-        new_collection_obj = Collection(new_collection_schema.get(&#34;collection&#34;))
+        new_collection_obj = Collection(
+            new_collection_schema.get(&#34;collection&#34;)
+        )
+
+        # iterate over each new endpoint(API) in the collection and compare
+        # with old endpoint
         common_end_points = []
         for new_end_point in new_collection_obj.get_end_points():
             for old_end_point in old_schema_obj.get_end_points():
+
+                # if same id endpoint in both old and new schemas, add it
+                # to common_end_points, remove it from old endpoints
+                # and new endpoints
                 if new_end_point.id == old_end_point.id:
+                    # if same id ,
+                    # append it to common_end_points list
                     common_end_points.append((new_end_point, old_end_point))
                     old_schema_obj.remove_end_point(old_end_point)
                     new_collection_obj.remove_end_point(new_end_point)
+
+        # at the end of above for loop, the 3 objects store the following information:  # noqa: E501
+        # old_schema_obj - only those endpoints which are now deleted from the collection  # noqa: E501
+        # new_collection_obj - only those endpoints which have been added to the collection  # noqa: E501
+        # common_end_points - only those endpoints which are common b/w old and new collection schemas  # noqa: E501
 
         newly_added_end_point = self.get_newly_added_message(
             new_collection_obj.get_end_points()
         )
 
-        deleted_end_points = self.get_delete_message(old_schema_obj.get_end_points())
+        deleted_end_points = self.get_delete_message(
+            old_schema_obj.get_end_points()
+        )
 
-        updated_end_point = self.get_updated_end_point_message(common_end_points)
+        updated_end_point = self.get_updated_end_point_message(
+            common_end_points
+        )
 
-        message = [newly_added_end_point, deleted_end_points, updated_end_point]
+        message = [
+            newly_added_end_point,
+            deleted_end_points,
+            updated_end_point,
+        ]
 
         return message
 
     def store_file(self, new_collection):
+        &#34;&#34;&#34;
+        Stores the collection schema as a txt file in data/ directory. This \
+        will be used to fetch the schema in compute_difference().
 
+        Inputs
+        ----------
+            new_collection : collection schema to be saved in the file
+        &#34;&#34;&#34;
         filepath = &#34;./data/&#34; + self.collection_id + &#34;.txt&#34;
         with open(filepath, &#34;w&#34;) as file:
             file.write(json.dumps(new_collection.get(&#34;collection&#34;)))
 
     def start(self):
-
+        &#34;&#34;&#34;
+        Main driver function which is called from main.py to run CLI. \
+        This function fetches the new collection schema through Postman API.
+        Then, it computes the difference with old schema and posts the \
+        relevant messages to Slack channel.
+        Finally, it overwrites the new schema fetched through the API in the \
+        file.
+        &#34;&#34;&#34;
         while True:
 
             # get the current configuration of the schema
@@ -278,14 +398,46 @@ class SyncEnd:
 <span>(</span><span>api_key, collection_name, trigger_interval, slack_channel, slack_token)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>A class to represent the SyncEnd object in the code. This object contains
+the methods that serve as the interface for the
+package with Postman and Slack.</p>
+<h2 id="attributes">Attributes</h2>
+<pre><code>api_key : API key for Postman to fetch collections
+collection_name : Postman collection name from which to fetch APIs' schema
+trigger_interval : interval (in seconds) post which to again fetch APIs schemas
+slack_channel : Slack channel name where the message will be sent
+slack_token : Slack Bot token to authorize the sending of message
+collection_id : ID of Postman collection
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class SyncEnd:
-    def __init__(self, api_key, collection_name, trigger_interval, slack_channel, slack_token):
+    &#34;&#34;&#34;
+    A class to represent the SyncEnd object in the code. This object contains \
+    the methods that serve as the interface for the \
+    package with Postman and Slack.
 
+    Attributes
+    ----------
+        api_key : API key for Postman to fetch collections
+        collection_name : Postman collection name from which to fetch APIs&#39; \
+schema
+        trigger_interval : interval (in seconds) post which to again fetch \
+APIs schemas
+        slack_channel : Slack channel name where the message will be sent
+        slack_token : Slack Bot token to authorize the sending of message
+        collection_id : ID of Postman collection
+    &#34;&#34;&#34;
+    def __init__(
+        self,
+        api_key,
+        collection_name,
+        trigger_interval,
+        slack_channel,
+        slack_token,
+    ):
         self.api_key = api_key
         self.collection_name = collection_name
         self.trigger_interval = trigger_interval
@@ -294,13 +446,20 @@ class SyncEnd:
         self.collection_id = 0
 
     def get_collection_schema(self):
+        &#34;&#34;&#34;
+        Fetches the APIs schemas from the Postman collection
+        &#34;&#34;&#34;
 
         boundary = &#34;&#34;
         payload = &#34;&#34;
         headers = {
             &#34;X-Api-Key&#34;: self.api_key,
-            &#34;Content-type&#34;: &#34;multipart/form-data; boundary={}&#34;.format(boundary)
+            &#34;Content-type&#34;: &#34;multipart/form-data; boundary={}&#34;.format(
+                boundary
+            ),
         }
+
+        # create a HTTPS connection object
         connection = http.client.HTTPSConnection(&#34;api.getpostman.com&#34;)
         connection.request(&#34;GET&#34;, &#34;/collections&#34;, payload, headers)
         response = connection.getresponse()
@@ -311,24 +470,35 @@ class SyncEnd:
                 collections.get(&#34;collections&#34;),
             )
         )
+
+        # if collection is empty, it is an invalid connection
         if len(collection) == 0:
             raise NameError(&#34;Invalid collection name !!!&#34;)
+
         self.collection_id = collection[0][&#34;uid&#34;]
         connection.request(
             &#34;GET&#34;, &#34;/collections/&#34; + self.collection_id, payload, headers
         )
+
+        # fetch the response and load the API schema as a JSON
         collection_schema_response = connection.getresponse()
         return json.loads(collection_schema_response.read())
 
     def post_data_to_slack(self, data):
+        &#34;&#34;&#34;
+        Posts the messages for APIs added, deleted and updated based on the input data
 
+        Inputs
+        ----------
+            data : list of strings pertaining to APIs added, deleted and updated
+        &#34;&#34;&#34;
         slack_web_client = WebClient(
             # Add the slack access token here
             token=self.slack_token
         )
 
         for x in data:
-            if x != None and len(x) &gt; 0:
+            if x is not None and len(x) &gt; 0:
                 message = {
                     &#34;channel&#34;: self.slack_channel,
                     &#34;blocks&#34;: [
@@ -341,7 +511,16 @@ class SyncEnd:
                 slack_web_client.chat_postMessage(**message)
 
     def get_newly_added_message(self, end_point_list):
-        title = &#34;Following end points are newly added in the collection\n\n&#34;
+        &#34;&#34;&#34;
+        Returns the message string for each API end point added to the \
+        collection
+
+        Inputs
+        ----------
+            end_point_list : list of endpoints which are newly added to the \
+collection
+        &#34;&#34;&#34;
+        title = &#34;Following end points are newly added in the collection :: \n\n&#34;
         output = &#34;&#34;
         for i, end_point in enumerate(end_point_list):
             output = (
@@ -365,7 +544,16 @@ class SyncEnd:
         return title + output
 
     def get_delete_message(self, end_point_list):
-        title = &#34;Following end points are deleted from the collection\n\n&#34;
+        &#34;&#34;&#34;
+        Returns the message string for each API end point deleted from the \
+        collection
+
+        Inputs
+        ----------
+            end_point_list : list of endpoints which are deleted from the \
+collection
+        &#34;&#34;&#34;
+        title = &#34;Following end points are deleted from the collection :: \n\n&#34;
         output = &#34;&#34;
         for i, end_point in enumerate(end_point_list):
             output = (
@@ -390,7 +578,18 @@ class SyncEnd:
         return title + output
 
     def get_updated_end_point_message(self, common_end_points):
-        title = &#34;Following is the list of change in the existing end points:\n\n&#34;
+        &#34;&#34;&#34;
+        Returns the message string for each API end point updated in the \
+        collection
+
+        Inputs
+        ----------
+            common_end_points : list of endpoints (APIs) which are modified \
+in the collection
+        &#34;&#34;&#34;
+        title = (
+            &#34;Following is the list of change in the existing end points ::\n\n&#34;
+        )
         difference = &#34;&#34;
         for end_point_tuple in common_end_points:
             difference = &#34;&#34;
@@ -403,7 +602,7 @@ class SyncEnd:
                     &#34;\tNew name: &#34;
                     + new_end_point.name
                     + &#34; &#34;
-                    + &#34;Old name: &#34;
+                    + &#34;\nOld name: &#34;
                     + old_end_point.name
                     + &#34;\n&#34;
                 )
@@ -413,14 +612,14 @@ class SyncEnd:
                     &#34;\tNew URL: &#34;
                     + new_end_point.url
                     + &#34; &#34;
-                    + &#34;Old URL: &#34;
+                    + &#34;\nOld URL: &#34;
                     + old_end_point.url
                     + &#34;\n&#34;
                 )
 
             # compute change in authentication
             if new_end_point.authentication != old_end_point.authentication:
-                if new_end_point.authentication == None:
+                if new_end_point.authentication is None:
                     difference += &#34;\tNew Authentication: None&#34;
                 else:
                     difference += (
@@ -437,7 +636,7 @@ class SyncEnd:
                     &#34;\t New HTTP method: &#34;
                     + new_end_point.method
                     + &#34; &#34;
-                    + &#34;Old HTTP method: &#34;
+                    + &#34;\nOld HTTP method: &#34;
                     + old_end_point.method
                     + &#34;\n&#34;
                 )
@@ -448,7 +647,19 @@ class SyncEnd:
         return title + difference
 
     def compute_difference(self, new_collection_schema):
+        &#34;&#34;&#34;
+        Computes the difference between the new and the old collection \
+        schema. The old collection schema is stored as a file in the \
+        data/ directory.
 
+        Inputs
+        ----------
+            new_collection_schema : dictionary representing the collection \
+schema fetched through the Postman API
+        &#34;&#34;&#34;
+
+        # specify the filepath for the collection schema, create the file if \
+        # not already present
         filepath = &#34;./data/&#34; + self.collection_id + &#34;.txt&#34;
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         if not os.path.exists(filepath):
@@ -456,40 +667,79 @@ class SyncEnd:
                 # file.write(&#34;{\&#34;item\&#34;:[]}&#34;)
                 file.write(json.dumps(new_collection_schema.get(&#34;collection&#34;)))
 
+        # the old (previous) collection schema is stored as a file in data/
         file = open(filepath, &#34;r&#34;)
         old_collection_schema = json.load(file)
 
-        # read the data from file and convrt it to collection object
+        # read the data from file and convert it to collection object
         old_schema_obj = Collection(old_collection_schema)
-        new_collection_obj = Collection(new_collection_schema.get(&#34;collection&#34;))
+        new_collection_obj = Collection(
+            new_collection_schema.get(&#34;collection&#34;)
+        )
+
+        # iterate over each new endpoint(API) in the collection and compare
+        # with old endpoint
         common_end_points = []
         for new_end_point in new_collection_obj.get_end_points():
             for old_end_point in old_schema_obj.get_end_points():
+
+                # if same id endpoint in both old and new schemas, add it
+                # to common_end_points, remove it from old endpoints
+                # and new endpoints
                 if new_end_point.id == old_end_point.id:
+                    # if same id ,
+                    # append it to common_end_points list
                     common_end_points.append((new_end_point, old_end_point))
                     old_schema_obj.remove_end_point(old_end_point)
                     new_collection_obj.remove_end_point(new_end_point)
+
+        # at the end of above for loop, the 3 objects store the following information:  # noqa: E501
+        # old_schema_obj - only those endpoints which are now deleted from the collection  # noqa: E501
+        # new_collection_obj - only those endpoints which have been added to the collection  # noqa: E501
+        # common_end_points - only those endpoints which are common b/w old and new collection schemas  # noqa: E501
 
         newly_added_end_point = self.get_newly_added_message(
             new_collection_obj.get_end_points()
         )
 
-        deleted_end_points = self.get_delete_message(old_schema_obj.get_end_points())
+        deleted_end_points = self.get_delete_message(
+            old_schema_obj.get_end_points()
+        )
 
-        updated_end_point = self.get_updated_end_point_message(common_end_points)
+        updated_end_point = self.get_updated_end_point_message(
+            common_end_points
+        )
 
-        message = [newly_added_end_point, deleted_end_points, updated_end_point]
+        message = [
+            newly_added_end_point,
+            deleted_end_points,
+            updated_end_point,
+        ]
 
         return message
 
     def store_file(self, new_collection):
+        &#34;&#34;&#34;
+        Stores the collection schema as a txt file in data/ directory. This \
+        will be used to fetch the schema in compute_difference().
 
+        Inputs
+        ----------
+            new_collection : collection schema to be saved in the file
+        &#34;&#34;&#34;
         filepath = &#34;./data/&#34; + self.collection_id + &#34;.txt&#34;
         with open(filepath, &#34;w&#34;) as file:
             file.write(json.dumps(new_collection.get(&#34;collection&#34;)))
 
     def start(self):
-
+        &#34;&#34;&#34;
+        Main driver function which is called from main.py to run CLI. \
+        This function fetches the new collection schema through Postman API.
+        Then, it computes the difference with old schema and posts the \
+        relevant messages to Slack channel.
+        Finally, it overwrites the new schema fetched through the API in the \
+        file.
+        &#34;&#34;&#34;
         while True:
 
             # get the current configuration of the schema
@@ -512,64 +762,113 @@ class SyncEnd:
 <span>def <span class="ident">compute_difference</span></span>(<span>self, new_collection_schema)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Computes the difference between the new and the old collection
+schema. The old collection schema is stored as a file in the
+data/ directory.</p>
+<h2 id="inputs">Inputs</h2>
+<pre><code>new_collection_schema : dictionary representing the collection schema fetched through the Postman API
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def compute_difference(self, new_collection_schema):
+<pre><code class="python">    def compute_difference(self, new_collection_schema):
+        &#34;&#34;&#34;
+        Computes the difference between the new and the old collection \
+        schema. The old collection schema is stored as a file in the \
+        data/ directory.
 
-    filepath = &#34;./data/&#34; + self.collection_id + &#34;.txt&#34;
-    os.makedirs(os.path.dirname(filepath), exist_ok=True)
-    if not os.path.exists(filepath):
-        with open(filepath, &#34;w&#34;) as file:
-            # file.write(&#34;{\&#34;item\&#34;:[]}&#34;)
-            file.write(json.dumps(new_collection_schema.get(&#34;collection&#34;)))
+        Inputs
+        ----------
+            new_collection_schema : dictionary representing the collection \
+schema fetched through the Postman API
+        &#34;&#34;&#34;
 
-    file = open(filepath, &#34;r&#34;)
-    old_collection_schema = json.load(file)
+        # specify the filepath for the collection schema, create the file if \
+        # not already present
+        filepath = &#34;./data/&#34; + self.collection_id + &#34;.txt&#34;
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        if not os.path.exists(filepath):
+            with open(filepath, &#34;w&#34;) as file:
+                # file.write(&#34;{\&#34;item\&#34;:[]}&#34;)
+                file.write(json.dumps(new_collection_schema.get(&#34;collection&#34;)))
 
-    # read the data from file and convrt it to collection object
-    old_schema_obj = Collection(old_collection_schema)
-    new_collection_obj = Collection(new_collection_schema.get(&#34;collection&#34;))
-    common_end_points = []
-    for new_end_point in new_collection_obj.get_end_points():
-        for old_end_point in old_schema_obj.get_end_points():
-            if new_end_point.id == old_end_point.id:
-                common_end_points.append((new_end_point, old_end_point))
-                old_schema_obj.remove_end_point(old_end_point)
-                new_collection_obj.remove_end_point(new_end_point)
+        # the old (previous) collection schema is stored as a file in data/
+        file = open(filepath, &#34;r&#34;)
+        old_collection_schema = json.load(file)
 
-    newly_added_end_point = self.get_newly_added_message(
-        new_collection_obj.get_end_points()
-    )
+        # read the data from file and convert it to collection object
+        old_schema_obj = Collection(old_collection_schema)
+        new_collection_obj = Collection(
+            new_collection_schema.get(&#34;collection&#34;)
+        )
 
-    deleted_end_points = self.get_delete_message(old_schema_obj.get_end_points())
+        # iterate over each new endpoint(API) in the collection and compare
+        # with old endpoint
+        common_end_points = []
+        for new_end_point in new_collection_obj.get_end_points():
+            for old_end_point in old_schema_obj.get_end_points():
 
-    updated_end_point = self.get_updated_end_point_message(common_end_points)
+                # if same id endpoint in both old and new schemas, add it
+                # to common_end_points, remove it from old endpoints
+                # and new endpoints
+                if new_end_point.id == old_end_point.id:
+                    # if same id ,
+                    # append it to common_end_points list
+                    common_end_points.append((new_end_point, old_end_point))
+                    old_schema_obj.remove_end_point(old_end_point)
+                    new_collection_obj.remove_end_point(new_end_point)
 
-    message = [newly_added_end_point, deleted_end_points, updated_end_point]
+        # at the end of above for loop, the 3 objects store the following information:  # noqa: E501
+        # old_schema_obj - only those endpoints which are now deleted from the collection  # noqa: E501
+        # new_collection_obj - only those endpoints which have been added to the collection  # noqa: E501
+        # common_end_points - only those endpoints which are common b/w old and new collection schemas  # noqa: E501
 
-    return message</code></pre>
+        newly_added_end_point = self.get_newly_added_message(
+            new_collection_obj.get_end_points()
+        )
+
+        deleted_end_points = self.get_delete_message(
+            old_schema_obj.get_end_points()
+        )
+
+        updated_end_point = self.get_updated_end_point_message(
+            common_end_points
+        )
+
+        message = [
+            newly_added_end_point,
+            deleted_end_points,
+            updated_end_point,
+        ]
+
+        return message</code></pre>
 </details>
 </dd>
 <dt id="src.sync_ends_service.SyncEnd.get_collection_schema"><code class="name flex">
 <span>def <span class="ident">get_collection_schema</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Fetches the APIs schemas from the Postman collection</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_collection_schema(self):
+    &#34;&#34;&#34;
+    Fetches the APIs schemas from the Postman collection
+    &#34;&#34;&#34;
 
     boundary = &#34;&#34;
     payload = &#34;&#34;
     headers = {
         &#34;X-Api-Key&#34;: self.api_key,
-        &#34;Content-type&#34;: &#34;multipart/form-data; boundary={}&#34;.format(boundary)
+        &#34;Content-type&#34;: &#34;multipart/form-data; boundary={}&#34;.format(
+            boundary
+        ),
     }
+
+    # create a HTTPS connection object
     connection = http.client.HTTPSConnection(&#34;api.getpostman.com&#34;)
     connection.request(&#34;GET&#34;, &#34;/collections&#34;, payload, headers)
     response = connection.getresponse()
@@ -580,12 +879,17 @@ class SyncEnd:
             collections.get(&#34;collections&#34;),
         )
     )
+
+    # if collection is empty, it is an invalid connection
     if len(collection) == 0:
         raise NameError(&#34;Invalid collection name !!!&#34;)
+
     self.collection_id = collection[0][&#34;uid&#34;]
     connection.request(
         &#34;GET&#34;, &#34;/collections/&#34; + self.collection_id, payload, headers
     )
+
+    # fetch the response and load the API schema as a JSON
     collection_schema_response = connection.getresponse()
     return json.loads(collection_schema_response.read())</code></pre>
 </details>
@@ -594,157 +898,207 @@ class SyncEnd:
 <span>def <span class="ident">get_delete_message</span></span>(<span>self, end_point_list)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Returns the message string for each API end point deleted from the
+collection</p>
+<h2 id="inputs">Inputs</h2>
+<pre><code>end_point_list : list of endpoints which are deleted from the collection
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_delete_message(self, end_point_list):
-    title = &#34;Following end points are deleted from the collection\n\n&#34;
-    output = &#34;&#34;
-    for i, end_point in enumerate(end_point_list):
-        output = (
-            output
-            + &#34;\t&#34;
-            + str(i + 1)
-            + &#34;)  &#34;
-            + &#34;EndPoint Name: &#34;
-            + end_point.name
-            + &#34;\n&#34;
-            + &#34;\t&#34;
-            + &#34;URL: &#34;
-            + end_point.url
-            + &#34;\n&#34;
-            + &#34;\t&#34;
-            + &#34;Request Method: &#34;
-            + end_point.method
-            + &#34;\n\n&#34;
-        )
-    if output == &#34;&#34;:
-        return None
-    return title + output</code></pre>
+<pre><code class="python">    def get_delete_message(self, end_point_list):
+        &#34;&#34;&#34;
+        Returns the message string for each API end point deleted from the \
+        collection
+
+        Inputs
+        ----------
+            end_point_list : list of endpoints which are deleted from the \
+collection
+        &#34;&#34;&#34;
+        title = &#34;Following end points are deleted from the collection :: \n\n&#34;
+        output = &#34;&#34;
+        for i, end_point in enumerate(end_point_list):
+            output = (
+                output
+                + &#34;\t&#34;
+                + str(i + 1)
+                + &#34;)  &#34;
+                + &#34;EndPoint Name: &#34;
+                + end_point.name
+                + &#34;\n&#34;
+                + &#34;\t&#34;
+                + &#34;URL: &#34;
+                + end_point.url
+                + &#34;\n&#34;
+                + &#34;\t&#34;
+                + &#34;Request Method: &#34;
+                + end_point.method
+                + &#34;\n\n&#34;
+            )
+        if output == &#34;&#34;:
+            return None
+        return title + output</code></pre>
 </details>
 </dd>
 <dt id="src.sync_ends_service.SyncEnd.get_newly_added_message"><code class="name flex">
 <span>def <span class="ident">get_newly_added_message</span></span>(<span>self, end_point_list)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Returns the message string for each API end point added to the
+collection</p>
+<h2 id="inputs">Inputs</h2>
+<pre><code>end_point_list : list of endpoints which are newly added to the collection
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_newly_added_message(self, end_point_list):
-    title = &#34;Following end points are newly added in the collection\n\n&#34;
-    output = &#34;&#34;
-    for i, end_point in enumerate(end_point_list):
-        output = (
-            output
-            + &#34;\t&#34;
-            + str(i + 1)
-            + &#34;)  &#34;
-            + end_point.name
-            + &#34;\n&#34;
-            + &#34;\t&#34;
-            + &#34;URL: &#34;
-            + end_point.url
-            + &#34;\n&#34;
-            + &#34;\t&#34;
-            + &#34;Request Method: &#34;
-            + end_point.method
-            + &#34;\n\n&#34;
-        )
-    if output == &#34;&#34;:
-        return None
-    return title + output</code></pre>
+<pre><code class="python">    def get_newly_added_message(self, end_point_list):
+        &#34;&#34;&#34;
+        Returns the message string for each API end point added to the \
+        collection
+
+        Inputs
+        ----------
+            end_point_list : list of endpoints which are newly added to the \
+collection
+        &#34;&#34;&#34;
+        title = &#34;Following end points are newly added in the collection :: \n\n&#34;
+        output = &#34;&#34;
+        for i, end_point in enumerate(end_point_list):
+            output = (
+                output
+                + &#34;\t&#34;
+                + str(i + 1)
+                + &#34;)  &#34;
+                + end_point.name
+                + &#34;\n&#34;
+                + &#34;\t&#34;
+                + &#34;URL: &#34;
+                + end_point.url
+                + &#34;\n&#34;
+                + &#34;\t&#34;
+                + &#34;Request Method: &#34;
+                + end_point.method
+                + &#34;\n\n&#34;
+            )
+        if output == &#34;&#34;:
+            return None
+        return title + output</code></pre>
 </details>
 </dd>
 <dt id="src.sync_ends_service.SyncEnd.get_updated_end_point_message"><code class="name flex">
 <span>def <span class="ident">get_updated_end_point_message</span></span>(<span>self, common_end_points)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Returns the message string for each API end point updated in the
+collection</p>
+<h2 id="inputs">Inputs</h2>
+<pre><code>common_end_points : list of endpoints (APIs) which are modified in the collection
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_updated_end_point_message(self, common_end_points):
-    title = &#34;Following is the list of change in the existing end points:\n\n&#34;
-    difference = &#34;&#34;
-    for end_point_tuple in common_end_points:
+<pre><code class="python">    def get_updated_end_point_message(self, common_end_points):
+        &#34;&#34;&#34;
+        Returns the message string for each API end point updated in the \
+        collection
+
+        Inputs
+        ----------
+            common_end_points : list of endpoints (APIs) which are modified \
+in the collection
+        &#34;&#34;&#34;
+        title = (
+            &#34;Following is the list of change in the existing end points ::\n\n&#34;
+        )
         difference = &#34;&#34;
-        new_end_point = end_point_tuple[0]
-        old_end_point = end_point_tuple[1]
+        for end_point_tuple in common_end_points:
+            difference = &#34;&#34;
+            new_end_point = end_point_tuple[0]
+            old_end_point = end_point_tuple[1]
 
-        # compute change in name
-        if new_end_point.name != old_end_point.name:
-            difference += (
-                &#34;\tNew name: &#34;
-                + new_end_point.name
-                + &#34; &#34;
-                + &#34;Old name: &#34;
-                + old_end_point.name
-                + &#34;\n&#34;
-            )
-
-        if new_end_point.url != old_end_point.url:
-            difference += (
-                &#34;\tNew URL: &#34;
-                + new_end_point.url
-                + &#34; &#34;
-                + &#34;Old URL: &#34;
-                + old_end_point.url
-                + &#34;\n&#34;
-            )
-
-        # compute change in authentication
-        if new_end_point.authentication != old_end_point.authentication:
-            if new_end_point.authentication == None:
-                difference += &#34;\tNew Authentication: None&#34;
-            else:
+            # compute change in name
+            if new_end_point.name != old_end_point.name:
                 difference += (
-                    &#34;\tNew Authentication: Key :&#34;
-                    + new_end_point.authentication[&#34;apikey&#34;][1][&#34;value&#34;]
-                    + &#34;, Value : &#34;
-                    + new_end_point.authentication[&#34;apikey&#34;][0][&#34;value&#34;]
+                    &#34;\tNew name: &#34;
+                    + new_end_point.name
+                    + &#34; &#34;
+                    + &#34;\nOld name: &#34;
+                    + old_end_point.name
                     + &#34;\n&#34;
                 )
 
-        # Compute change in the HTTP request type
-        if new_end_point.method != old_end_point.method:
-            difference += (
-                &#34;\t New HTTP method: &#34;
-                + new_end_point.method
-                + &#34; &#34;
-                + &#34;Old HTTP method: &#34;
-                + old_end_point.method
-                + &#34;\n&#34;
-            )
+            if new_end_point.url != old_end_point.url:
+                difference += (
+                    &#34;\tNew URL: &#34;
+                    + new_end_point.url
+                    + &#34; &#34;
+                    + &#34;\nOld URL: &#34;
+                    + old_end_point.url
+                    + &#34;\n&#34;
+                )
 
-    if difference == &#34;&#34;:
-        return None
+            # compute change in authentication
+            if new_end_point.authentication != old_end_point.authentication:
+                if new_end_point.authentication is None:
+                    difference += &#34;\tNew Authentication: None&#34;
+                else:
+                    difference += (
+                        &#34;\tNew Authentication: Key :&#34;
+                        + new_end_point.authentication[&#34;apikey&#34;][1][&#34;value&#34;]
+                        + &#34;, Value : &#34;
+                        + new_end_point.authentication[&#34;apikey&#34;][0][&#34;value&#34;]
+                        + &#34;\n&#34;
+                    )
 
-    return title + difference</code></pre>
+            # Compute change in the HTTP request type
+            if new_end_point.method != old_end_point.method:
+                difference += (
+                    &#34;\t New HTTP method: &#34;
+                    + new_end_point.method
+                    + &#34; &#34;
+                    + &#34;\nOld HTTP method: &#34;
+                    + old_end_point.method
+                    + &#34;\n&#34;
+                )
+
+        if difference == &#34;&#34;:
+            return None
+
+        return title + difference</code></pre>
 </details>
 </dd>
 <dt id="src.sync_ends_service.SyncEnd.post_data_to_slack"><code class="name flex">
 <span>def <span class="ident">post_data_to_slack</span></span>(<span>self, data)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Posts the messages for APIs added, deleted and updated based on the input data</p>
+<h2 id="inputs">Inputs</h2>
+<pre><code>data : list of strings pertaining to APIs added, deleted and updated
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def post_data_to_slack(self, data):
+    &#34;&#34;&#34;
+    Posts the messages for APIs added, deleted and updated based on the input data
 
+    Inputs
+    ----------
+        data : list of strings pertaining to APIs added, deleted and updated
+    &#34;&#34;&#34;
     slack_web_client = WebClient(
         # Add the slack access token here
         token=self.slack_token
     )
 
     for x in data:
-        if x != None and len(x) &gt; 0:
+        if x is not None and len(x) &gt; 0:
             message = {
                 &#34;channel&#34;: self.slack_channel,
                 &#34;blocks&#34;: [
@@ -761,13 +1115,25 @@ class SyncEnd:
 <span>def <span class="ident">start</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Main driver function which is called from main.py to run CLI.
+This function fetches the new collection schema through Postman API.
+Then, it computes the difference with old schema and posts the
+relevant messages to Slack channel.
+Finally, it overwrites the new schema fetched through the API in the
+file.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def start(self):
-
+    &#34;&#34;&#34;
+    Main driver function which is called from main.py to run CLI. \
+    This function fetches the new collection schema through Postman API.
+    Then, it computes the difference with old schema and posts the \
+    relevant messages to Slack channel.
+    Finally, it overwrites the new schema fetched through the API in the \
+    file.
+    &#34;&#34;&#34;
     while True:
 
         # get the current configuration of the schema
@@ -789,13 +1155,24 @@ class SyncEnd:
 <span>def <span class="ident">store_file</span></span>(<span>self, new_collection)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Stores the collection schema as a txt file in data/ directory. This
+will be used to fetch the schema in compute_difference().</p>
+<h2 id="inputs">Inputs</h2>
+<pre><code>new_collection : collection schema to be saved in the file
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def store_file(self, new_collection):
+    &#34;&#34;&#34;
+    Stores the collection schema as a txt file in data/ directory. This \
+    will be used to fetch the schema in compute_difference().
 
+    Inputs
+    ----------
+        new_collection : collection schema to be saved in the file
+    &#34;&#34;&#34;
     filepath = &#34;./data/&#34; + self.collection_id + &#34;.txt&#34;
     with open(filepath, &#34;w&#34;) as file:
         file.write(json.dumps(new_collection.get(&#34;collection&#34;)))</code></pre>

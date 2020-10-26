@@ -12,8 +12,8 @@ def main():
 
     This method calls the Parser() class to parse command line arguments and \
     then instantiates the SyncEnd() class with input arguments.
-    It then calls the start() method which is the interface with Postman \
-    and Slack.
+    It then calls the start() method which is the interface of \
+    the CLI with Postman and Slack.
     """
 
     # get the arguments from command line

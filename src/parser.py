@@ -14,7 +14,6 @@ class Parser:
     $ SyncEnd --api_key <key> --collection_name <name of collection> \
     --slack_channel <name_of_slack_channel> --trigger_interval \
     <time in second> --slack_token <slack_token>
-
     """
 
     def __init__(self):

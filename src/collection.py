@@ -22,6 +22,13 @@ Postman collection
 
     def remove_end_point(self, end_point):
         """
-        Removes the end point from the list of endpoints in the Collection object  # noqa: E501
+        Removes the end point from the list of endpoints in the \
+        Collection object
+
+        Inputs
+        ----------
+            end_point - EndPoint object to be deleted from the Postman \
+collection
+
         """
         self.end_points.remove(end_point)
