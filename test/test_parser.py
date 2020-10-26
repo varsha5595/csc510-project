@@ -31,7 +31,6 @@ class TestParser(unittest.TestCase):
             slack_channel,
             slack_token,
         ) = self.parser.get_arguments()
-        # print(args)
         self.assertEqual(collection_name, "test server")
         self.assertEqual(api_key, "SAM-Key-123fg")
         self.assertEqual(trigger_interval, 9)
