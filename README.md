@@ -82,6 +82,10 @@ trigger_interval - the interval at which postman api changes are checked.
 slack_channel - is the channel in slack where messages are received.
 ```
 
+## Congratulations
+### **You just saved yourself from unwanted crashes**
+<img src="https://media.tenor.com/images/73cca45a93f91944b2c9fdd4b05c3c53/tenor.gif"/>
+
 # Execution
 
 In line #133 of src/sync_ends_service.py, replace `<slackbot token>` with your bot token after bot creation: [Creating Slack Bot](https://github.com/varsha5595/csc510-project/wiki)
