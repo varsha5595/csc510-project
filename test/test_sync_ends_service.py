@@ -43,7 +43,7 @@ class TestParser(unittest.TestCase):
             "\t"
             + str(1)
             + ")  "
-            + "Endpoint 1"
+            + "EndPoint Name: Endpoint 1"
             + "\n"
             + "\t"
             + "URL: "
@@ -56,7 +56,7 @@ class TestParser(unittest.TestCase):
             + "\t"
             + str(2)
             + ")  "
-            + "Endpoint 2"
+            + "EndPoint Name: Endpoint 2"
             + "\n"
             + "\t"
             + "URL: "
