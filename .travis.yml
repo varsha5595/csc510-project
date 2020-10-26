@@ -8,3 +8,4 @@ install:
 script:
   - python -m pytest
   - python -m pytest --flake8
+  - python -m pytest --cov
