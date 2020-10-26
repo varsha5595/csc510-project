@@ -69,7 +69,7 @@ class TestCollection(unittest.TestCase):
 
         endpoint = self.collection.get_end_points()[0]
         self.collection.remove_end_point(endpoint)
-        self.assertEqual(len(self.collection.end_points), 1)
+        self.assertEqual(len(self.collection.end_points), 0)
 
 
 if __name__ == "__main__":
