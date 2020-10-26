@@ -73,11 +73,14 @@ pip install sync-ends
 ```
 syncends  --collection_name "COLLECTION_NAME_HERE" --api_key "POSTMAN_API_KEY_HERE" --slack_token "SLACK_TOKEN_HERE" --trigger_interval 10 --slack_channel "general"
 ```
-2. Here ```collection_name``` is the name of postman collection.
-3. Here ```api_key``` is the api key fetched from setup section of postman after registering your service.
-4. Here ```slack_token``` is the token obtained from slack for receiving slack messages.
-5. Here ```trigger_interval``` is the interval at which postman api changes are checked.
-6. Here ```slack_channel``` is the channel in slack where messages are received.
+
+```
+collection_name - name of postman collection
+api_key - the api key fetched from setup section of postman after registering your service.
+slack_token - the token obtained from slack for receiving slack messages.
+trigger_interval - the interval at which postman api changes are checked.
+slack_channel - is the channel in slack where messages are received.
+```
 
 # Execution
 
