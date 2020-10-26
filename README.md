@@ -62,6 +62,10 @@ Now that team is created, let us create a slack bot
 5. In the Setup instruction page: `Copy and store the API Token`. Ex: xoxb-22672546-n1X9APk3D0tfksr81NJj6VAM
 6. Save the integration
 
+## How to use it
+### Installation
+pip install sync-ends
+
 # Execution
 
 In line #133 of src/sync_ends_service.py, replace `<slackbot token>` with your bot token after bot creation: [Creating Slack Bot](https://github.com/varsha5595/csc510-project/wiki)
