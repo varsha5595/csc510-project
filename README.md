@@ -1,4 +1,4 @@
-# <img src="./etc/bot.png" height="42" width="42"/> Sync Ends
+# <img src="./images/bot.png" height="42" width="42"/> Sync Ends
 
 ## End development overheads
 
@@ -12,10 +12,10 @@ Software Engineering Project for CSC 510
 
 Sync Ends is an automated bridge to sync service owners and service consumers. Every team has a single postman collection that they use to test their APIs and share it across in their documentations. The backend team has to register their service on our application and we take care of the rest. Everytime there is a change in the way the api is called, we parse the changes and inform the consumers. This way all the team members are informed about the changes and know exactly what to edit in their product. The [Slack](https://slack.com/) framework lets you concentrate on the `core` functionality you want to build without worrying about integration overheads.
 
-[![Watch the video](https://github.com/jaymodi98/csc510-project/blob/master/etc/Screenshot%20at%20Oct%2022%2011-48-05%20copy.png)](https://www.youtube.com/watch?v=1Pd3Enj13m8)
+[![Watch the video](./images/screenshotpromo.png)](https://www.youtube.com/watch?v=1Pd3Enj13m8)
 
 # Architecture Diagram
-<img src="./etc/architecture.PNG" height="500" width="800"/>
+<img src="./images/architecture.PNG" height="500" width="800"/>
 
 ## Features
 |Feature|Description  |

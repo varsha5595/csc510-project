@@ -28,7 +28,9 @@ class TestEndPoint(unittest.TestCase):
         pass
 
     def test_get_id(self):
-        self.assertEqual(self.endPoint.get_id(), "385f7848-62db-4435-b7cf-820c3e7e5097")  # noqa: E501
+        self.assertEqual(
+            self.endPoint.get_id(), "385f7848-62db-4435-b7cf-820c3e7e5097"
+        )  # noqa: E501
 
     def test_get_name(self):
         self.assertEqual(self.endPoint.get_name(), "Get employee details")
@@ -49,7 +51,8 @@ class TestEndPoint(unittest.TestCase):
 
     def test_get_query_parameters(self):
         self.assertEqual(
-            self.endPoint.get_query_parameters(), [{"key": "emp_id", "value": "1"}]
+            self.endPoint.get_query_parameters(),
+            [{"key": "emp_id", "value": "1"}],
         )
 
 

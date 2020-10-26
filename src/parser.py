@@ -14,17 +14,26 @@ class Parser:
     $ SyncEnd --api_key <key> --collection_name <name of collection> \
     --slack_channel <name_of_slack_channel> --trigger_interval \
     <time in second> --slack_token <slack_token>
+
     """
 
     def __init__(self):
         parser = argparse.ArgumentParser()
-        parser.add_argument("--collection_name", required=True, dest="collection_name")  # noqa: E501
+        parser.add_argument(
+            "--collection_name", required=True, dest="collection_name"
+        )
         parser.add_argument("--api_key", required=True, dest="key")
         parser.add_argument(
-            "--slack_channel", required=False, dest="slack_channel", default="general"  # noqa: E501
+            "--slack_channel",
+            required=False,
+            dest="slack_channel",
+            default="general",
         )
         parser.add_argument(
-            "--trigger_interval", required=False, dest="trigger_interval", default=10
+            "--trigger_interval",
+            required=False,
+            dest="trigger_interval",
+            default=10,
         )
         parser.add_argument("--slack_token", required=True, dest="slack_token")
         self.parser = parser
