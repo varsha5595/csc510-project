@@ -12,9 +12,7 @@ class TestParser(unittest.TestCase):
         self.sync_end = SyncEnd(
             "SAM-Key-123fg", "test server", 9, "sample channel", "123ff"
         )
-
-    def test_get_newly_added_message(self):
-        end_point_list = []
+        self.end_point_list = []
         endpoint1 = Mock()
         endpoint1.id = "385f7848-62db-4435-b7cf-820c3e7e5097"
         endpoint1.name = "Endpoint 1"
@@ -23,7 +21,7 @@ class TestParser(unittest.TestCase):
         endpoint1.header = []
         endpoint1.url = "http://127.0.0.1:5002/endpoint?ep_id=1"
         endpoint1.query_parameters = [{"key": "ep_id", "value": "1"}]
-        end_point_list.append(endpoint1)
+        self.end_point_list.append(endpoint1)
         endpoint2 = Mock()
         endpoint2.id = "3234dt48-62db-4435-b7cf-820c3e7e5097"
         endpoint2.name = "Endpoint 2"
@@ -32,7 +30,10 @@ class TestParser(unittest.TestCase):
         endpoint2.header = []
         endpoint2.url = "http://127.0.0.1:5003/endpoint?ep_id=2"
         endpoint2.query_parameters = [{"key": "ep_id", "value": "2"}]
-        end_point_list.append(endpoint2)
+        self.end_point_list.append(endpoint2)
+
+    def test_get_newly_added_message(self):
+
         title = (
             "Following end points are newly added in the collection :: \n\n"
         )
@@ -64,7 +65,43 @@ class TestParser(unittest.TestCase):
             + "POST"
             + "\n\n"
         )
-        result = self.sync_end.get_newly_added_message(end_point_list)
+        result = self.sync_end.get_newly_added_message(self.end_point_list)
+        print("actual:", result)
+        print("expected", title + output)
+        self.assertEqual(result, title + output)
+
+    def test_get_delete_message(self):
+
+        title = "Following end points are deleted from the collection :: \n\n"
+        output = (
+            "\t"
+            + str(1)
+            + ")  "
+            + "EndPoint Name: Endpoint 1"
+            + "\n"
+            + "\t"
+            + "URL: "
+            + "http://127.0.0.1:5002/endpoint?ep_id=1"
+            + "\n"
+            + "\t"
+            + "Request Method: "
+            + "POST"
+            + "\n\n"
+            + "\t"
+            + str(2)
+            + ")  "
+            + "EndPoint Name: Endpoint 2"
+            + "\n"
+            + "\t"
+            + "URL: "
+            + "http://127.0.0.1:5003/endpoint?ep_id=2"
+            + "\n"
+            + "\t"
+            + "Request Method: "
+            + "POST"
+            + "\n\n"
+        )
+        result = self.sync_end.get_delete_message(self.end_point_list)
         print("actual:", result)
         print("expected", title + output)
         self.assertEqual(result, title + output)
