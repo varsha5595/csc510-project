@@ -27,7 +27,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     keywords=["python"],
     url="https://github.com/jaymodi98/csc510-project",
-    download_url = 'https://github.com/jaymodi98/Sync-Ends/archive/v2.1.0.tar.gz',
+    download_url="https://github.com/jaymodi98/Sync-Ends/archive/v2.1.0.tar.gz",  # noqa: E501
     packages=setuptools.find_packages(),
     packages_dir={"": "src"},
     classifiers=[
@@ -37,5 +37,5 @@ setuptools.setup(
     ],
     install_requires=get_requirements("requirements.txt"),
     include_package_data=True,
-    python_requires='>=3.6',
+    python_requires=">=3.6",
 )
