@@ -29,6 +29,7 @@ APIs schemas
         slack_token : Slack Bot token to authorize the sending of message
         collection_id : ID of Postman collection
     """
+
     def __init__(
         self,
         api_key,
@@ -53,9 +54,7 @@ APIs schemas
         payload = ""
         headers = {
             "X-Api-Key": self.api_key,
-            "Content-type": "multipart/form-data; boundary={}".format(
-                boundary
-            ),
+            "Content-type": "multipart/form-data; boundary={}".format(boundary),
         }
 
         # create a HTTPS connection object
@@ -119,7 +118,7 @@ APIs schemas
             end_point_list : list of endpoints which are newly added to the \
 collection
         """
-        title = "Following end points are newly added in the collection :: \n\n"
+        title = "Following end points are newly added in the collection :: \n\n"  # noqa: E501
         output = ""
         for i, end_point in enumerate(end_point_list):
             output = (
@@ -186,9 +185,7 @@ collection
             common_end_points : list of endpoints (APIs) which are modified \
 in the collection
         """
-        title = (
-            "Following is the list of change in the existing end points ::\n\n"
-        )
+        title = "Following is the list of change in the existing end points ::\n\n"  # noqa: E501
         difference = ""
         for end_point_tuple in common_end_points:
             difference = ""
@@ -274,7 +271,7 @@ schema fetched through the Postman API
         old_schema_obj = Collection(old_collection_schema)
         new_collection_obj = Collection(
             new_collection_schema.get("collection")
-        )
+        )  # noqa: E501
 
         # iterate over each new endpoint(API) in the collection and compare
         # with old endpoint
@@ -301,13 +298,9 @@ schema fetched through the Postman API
             new_collection_obj.get_end_points()
         )
 
-        deleted_end_points = self.get_delete_message(
-            old_schema_obj.get_end_points()
-        )
+        deleted_end_points = self.get_delete_message(old_schema_obj.get_end_points())  # noqa: E501
 
-        updated_end_point = self.get_updated_end_point_message(
-            common_end_points
-        )
+        updated_end_point = self.get_updated_end_point_message(common_end_points)  # noqa: E501
 
         message = [
             newly_added_end_point,
