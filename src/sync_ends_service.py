@@ -4,6 +4,7 @@ import json
 import os
 import time
 import ssl
+from os.path import abspath, dirname, join
 
 # Third party imports
 from slack import WebClient
@@ -44,6 +45,7 @@ APIs schemas
         self.slack_channel = slack_channel
         self.slack_token = slack_token
         self.collection_id = 0
+        self.data_folder_path = join(dirname(abspath(__file__)), "data")
 
     def get_collection_schema(self):
         """
@@ -258,7 +260,7 @@ schema fetched through the Postman API
 
         # specify the filepath for the collection schema, create the file if \
         # not already present
-        filepath = "./data/" + self.collection_id + ".txt"
+        filepath = join(self.data_folder_path, self.collection_id + ".txt")
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         if not os.path.exists(filepath):
             with open(filepath, "w") as file:
@@ -321,7 +323,7 @@ schema fetched through the Postman API
         ----------
             new_collection : collection schema to be saved in the file
         """
-        filepath = "./data/" + self.collection_id + ".txt"
+        filepath = join(self.data_folder_path, self.collection_id + ".txt")
         with open(filepath, "w") as file:
             file.write(json.dumps(new_collection.get("collection")))
 
