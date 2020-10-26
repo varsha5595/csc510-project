@@ -1,6 +1,7 @@
 import sys
+from os.path import abspath, dirname
 
-sys.path.append("..")
+sys.path.append(dirname(dirname(abspath(__file__))))
 
 from src.sync_ends_service import SyncEnd  # noqa: E402
 from src.parser import Parser  # noqa: E402
