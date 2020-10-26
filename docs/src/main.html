@@ -30,15 +30,30 @@
 
 sys.path.append(&#34;..&#34;)
 
-from src.sync_ends_service import SyncEnd
-from src.parser import Parser
+from src.sync_ends_service import SyncEnd  # noqa: E402
+from src.parser import Parser  # noqa: E402
 
 
 def main():
-    # get the arguments from commadn line
+    &#34;&#34;&#34;
+    A method which is the main entry point for the CLI.
+
+    This method calls the Parser() class to parse command line arguments and then instantiates the SyncEnd() class with input arguments.
+    It then calls the start() method which is the interface with Postman and Slack.
+    &#34;&#34;&#34;
+
+    # get the arguments from command line
     parser = Parser()
-    collection_name, api_key, trigger_interval, slack_channel, slack_token = parser.get_argumenets()
-    sync_end = SyncEnd(api_key, collection_name, trigger_interval, slack_channel, slack_token)
+    (
+        collection_name,
+        api_key,
+        trigger_interval,
+        slack_channel,
+        slack_token,
+    ) = parser.get_argumenets()
+    sync_end = SyncEnd(
+        api_key, collection_name, trigger_interval, slack_channel, slack_token
+    )
     try:
         sync_end.start()
     except Exception as e:
@@ -60,16 +75,33 @@ if __name__ == &#34;__main__&#34;:
 <span>def <span class="ident">main</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>A method which is the main entry point for the CLI.</p>
+<p>This method calls the Parser() class to parse command line arguments and then instantiates the SyncEnd() class with input arguments.
+It then calls the start() method which is the interface with Postman and Slack.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def main():
-    # get the arguments from commadn line
+    &#34;&#34;&#34;
+    A method which is the main entry point for the CLI.
+
+    This method calls the Parser() class to parse command line arguments and then instantiates the SyncEnd() class with input arguments.
+    It then calls the start() method which is the interface with Postman and Slack.
+    &#34;&#34;&#34;
+
+    # get the arguments from command line
     parser = Parser()
-    collection_name, api_key, trigger_interval, slack_channel, slack_token = parser.get_argumenets()
-    sync_end = SyncEnd(api_key, collection_name, trigger_interval, slack_channel, slack_token)
+    (
+        collection_name,
+        api_key,
+        trigger_interval,
+        slack_channel,
+        slack_token,
+    ) = parser.get_argumenets()
+    sync_end = SyncEnd(
+        api_key, collection_name, trigger_interval, slack_channel, slack_token
+    )
     try:
         sync_end.start()
     except Exception as e:

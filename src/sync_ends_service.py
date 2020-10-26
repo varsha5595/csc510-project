@@ -232,5 +232,5 @@ class SyncEnd:
 
             # store new schema to the file
             self.store_file(new_collection_schema)
-            
+
             time.sleep(self.trigger_interval)
