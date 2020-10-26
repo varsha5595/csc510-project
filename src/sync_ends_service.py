@@ -54,7 +54,7 @@ APIs schemas
         payload = ""
         headers = {
             "X-Api-Key": self.api_key,
-            "Content-type": "multipart/form-data; boundary={}".format(boundary),
+            "Content-type": "multipart/form-data; boundary={}".format(boundary),  # noqa: E501
         }
 
         # create a HTTPS connection object
@@ -84,11 +84,13 @@ APIs schemas
 
     def post_data_to_slack(self, data):
         """
-        Posts the messages for APIs added, deleted and updated based on the input data
+        Posts the messages for APIs added, deleted and updated based on the \
+        input data
 
         Inputs
         ----------
-            data : list of strings pertaining to APIs added, deleted and updated
+            data : list of strings pertaining to APIs added, deleted and \
+updated
         """
         slack_web_client = WebClient(
             # Add the slack access token here

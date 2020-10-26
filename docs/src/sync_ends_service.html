@@ -57,6 +57,7 @@ APIs schemas
         slack_token : Slack Bot token to authorize the sending of message
         collection_id : ID of Postman collection
     &#34;&#34;&#34;
+
     def __init__(
         self,
         api_key,
@@ -81,9 +82,7 @@ APIs schemas
         payload = &#34;&#34;
         headers = {
             &#34;X-Api-Key&#34;: self.api_key,
-            &#34;Content-type&#34;: &#34;multipart/form-data; boundary={}&#34;.format(
-                boundary
-            ),
+            &#34;Content-type&#34;: &#34;multipart/form-data; boundary={}&#34;.format(boundary),  # noqa: E501
         }
 
         # create a HTTPS connection object
@@ -113,11 +112,13 @@ APIs schemas
 
     def post_data_to_slack(self, data):
         &#34;&#34;&#34;
-        Posts the messages for APIs added, deleted and updated based on the input data
+        Posts the messages for APIs added, deleted and updated based on the \
+        input data
 
         Inputs
         ----------
-            data : list of strings pertaining to APIs added, deleted and updated
+            data : list of strings pertaining to APIs added, deleted and \
+updated
         &#34;&#34;&#34;
         slack_web_client = WebClient(
             # Add the slack access token here
@@ -147,7 +148,7 @@ APIs schemas
             end_point_list : list of endpoints which are newly added to the \
 collection
         &#34;&#34;&#34;
-        title = &#34;Following end points are newly added in the collection :: \n\n&#34;
+        title = &#34;Following end points are newly added in the collection :: \n\n&#34;  # noqa: E501
         output = &#34;&#34;
         for i, end_point in enumerate(end_point_list):
             output = (
@@ -214,9 +215,7 @@ collection
             common_end_points : list of endpoints (APIs) which are modified \
 in the collection
         &#34;&#34;&#34;
-        title = (
-            &#34;Following is the list of change in the existing end points ::\n\n&#34;
-        )
+        title = &#34;Following is the list of change in the existing end points ::\n\n&#34;  # noqa: E501
         difference = &#34;&#34;
         for end_point_tuple in common_end_points:
             difference = &#34;&#34;
@@ -302,7 +301,7 @@ schema fetched through the Postman API
         old_schema_obj = Collection(old_collection_schema)
         new_collection_obj = Collection(
             new_collection_schema.get(&#34;collection&#34;)
-        )
+        )  # noqa: E501
 
         # iterate over each new endpoint(API) in the collection and compare
         # with old endpoint
@@ -329,13 +328,9 @@ schema fetched through the Postman API
             new_collection_obj.get_end_points()
         )
 
-        deleted_end_points = self.get_delete_message(
-            old_schema_obj.get_end_points()
-        )
+        deleted_end_points = self.get_delete_message(old_schema_obj.get_end_points())  # noqa: E501
 
-        updated_end_point = self.get_updated_end_point_message(
-            common_end_points
-        )
+        updated_end_point = self.get_updated_end_point_message(common_end_points)  # noqa: E501
 
         message = [
             newly_added_end_point,
@@ -430,6 +425,7 @@ APIs schemas
         slack_token : Slack Bot token to authorize the sending of message
         collection_id : ID of Postman collection
     &#34;&#34;&#34;
+
     def __init__(
         self,
         api_key,
@@ -454,9 +450,7 @@ APIs schemas
         payload = &#34;&#34;
         headers = {
             &#34;X-Api-Key&#34;: self.api_key,
-            &#34;Content-type&#34;: &#34;multipart/form-data; boundary={}&#34;.format(
-                boundary
-            ),
+            &#34;Content-type&#34;: &#34;multipart/form-data; boundary={}&#34;.format(boundary),  # noqa: E501
         }
 
         # create a HTTPS connection object
@@ -486,11 +480,13 @@ APIs schemas
 
     def post_data_to_slack(self, data):
         &#34;&#34;&#34;
-        Posts the messages for APIs added, deleted and updated based on the input data
+        Posts the messages for APIs added, deleted and updated based on the \
+        input data
 
         Inputs
         ----------
-            data : list of strings pertaining to APIs added, deleted and updated
+            data : list of strings pertaining to APIs added, deleted and \
+updated
         &#34;&#34;&#34;
         slack_web_client = WebClient(
             # Add the slack access token here
@@ -520,7 +516,7 @@ APIs schemas
             end_point_list : list of endpoints which are newly added to the \
 collection
         &#34;&#34;&#34;
-        title = &#34;Following end points are newly added in the collection :: \n\n&#34;
+        title = &#34;Following end points are newly added in the collection :: \n\n&#34;  # noqa: E501
         output = &#34;&#34;
         for i, end_point in enumerate(end_point_list):
             output = (
@@ -587,9 +583,7 @@ collection
             common_end_points : list of endpoints (APIs) which are modified \
 in the collection
         &#34;&#34;&#34;
-        title = (
-            &#34;Following is the list of change in the existing end points ::\n\n&#34;
-        )
+        title = &#34;Following is the list of change in the existing end points ::\n\n&#34;  # noqa: E501
         difference = &#34;&#34;
         for end_point_tuple in common_end_points:
             difference = &#34;&#34;
@@ -675,7 +669,7 @@ schema fetched through the Postman API
         old_schema_obj = Collection(old_collection_schema)
         new_collection_obj = Collection(
             new_collection_schema.get(&#34;collection&#34;)
-        )
+        )  # noqa: E501
 
         # iterate over each new endpoint(API) in the collection and compare
         # with old endpoint
@@ -702,13 +696,9 @@ schema fetched through the Postman API
             new_collection_obj.get_end_points()
         )
 
-        deleted_end_points = self.get_delete_message(
-            old_schema_obj.get_end_points()
-        )
+        deleted_end_points = self.get_delete_message(old_schema_obj.get_end_points())  # noqa: E501
 
-        updated_end_point = self.get_updated_end_point_message(
-            common_end_points
-        )
+        updated_end_point = self.get_updated_end_point_message(common_end_points)  # noqa: E501
 
         message = [
             newly_added_end_point,
@@ -801,7 +791,7 @@ schema fetched through the Postman API
         old_schema_obj = Collection(old_collection_schema)
         new_collection_obj = Collection(
             new_collection_schema.get(&#34;collection&#34;)
-        )
+        )  # noqa: E501
 
         # iterate over each new endpoint(API) in the collection and compare
         # with old endpoint
@@ -828,13 +818,9 @@ schema fetched through the Postman API
             new_collection_obj.get_end_points()
         )
 
-        deleted_end_points = self.get_delete_message(
-            old_schema_obj.get_end_points()
-        )
+        deleted_end_points = self.get_delete_message(old_schema_obj.get_end_points())  # noqa: E501
 
-        updated_end_point = self.get_updated_end_point_message(
-            common_end_points
-        )
+        updated_end_point = self.get_updated_end_point_message(common_end_points)  # noqa: E501
 
         message = [
             newly_added_end_point,
@@ -863,9 +849,7 @@ schema fetched through the Postman API
     payload = &#34;&#34;
     headers = {
         &#34;X-Api-Key&#34;: self.api_key,
-        &#34;Content-type&#34;: &#34;multipart/form-data; boundary={}&#34;.format(
-            boundary
-        ),
+        &#34;Content-type&#34;: &#34;multipart/form-data; boundary={}&#34;.format(boundary),  # noqa: E501
     }
 
     # create a HTTPS connection object
@@ -965,7 +949,7 @@ collection</p>
             end_point_list : list of endpoints which are newly added to the \
 collection
         &#34;&#34;&#34;
-        title = &#34;Following end points are newly added in the collection :: \n\n&#34;
+        title = &#34;Following end points are newly added in the collection :: \n\n&#34;  # noqa: E501
         output = &#34;&#34;
         for i, end_point in enumerate(end_point_list):
             output = (
@@ -1012,9 +996,7 @@ collection</p>
             common_end_points : list of endpoints (APIs) which are modified \
 in the collection
         &#34;&#34;&#34;
-        title = (
-            &#34;Following is the list of change in the existing end points ::\n\n&#34;
-        )
+        title = &#34;Following is the list of change in the existing end points ::\n\n&#34;  # noqa: E501
         difference = &#34;&#34;
         for end_point_tuple in common_end_points:
             difference = &#34;&#34;
@@ -1076,7 +1058,8 @@ in the collection
 <span>def <span class="ident">post_data_to_slack</span></span>(<span>self, data)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Posts the messages for APIs added, deleted and updated based on the input data</p>
+<div class="desc"><p>Posts the messages for APIs added, deleted and updated based on the
+input data</p>
 <h2 id="inputs">Inputs</h2>
 <pre><code>data : list of strings pertaining to APIs added, deleted and updated
 </code></pre></div>
@@ -1084,31 +1067,33 @@ in the collection
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def post_data_to_slack(self, data):
-    &#34;&#34;&#34;
-    Posts the messages for APIs added, deleted and updated based on the input data
+<pre><code class="python">    def post_data_to_slack(self, data):
+        &#34;&#34;&#34;
+        Posts the messages for APIs added, deleted and updated based on the \
+        input data
 
-    Inputs
-    ----------
-        data : list of strings pertaining to APIs added, deleted and updated
-    &#34;&#34;&#34;
-    slack_web_client = WebClient(
-        # Add the slack access token here
-        token=self.slack_token
-    )
+        Inputs
+        ----------
+            data : list of strings pertaining to APIs added, deleted and \
+updated
+        &#34;&#34;&#34;
+        slack_web_client = WebClient(
+            # Add the slack access token here
+            token=self.slack_token
+        )
 
-    for x in data:
-        if x is not None and len(x) &gt; 0:
-            message = {
-                &#34;channel&#34;: self.slack_channel,
-                &#34;blocks&#34;: [
-                    {
-                        &#34;type&#34;: &#34;section&#34;,
-                        &#34;text&#34;: {&#34;type&#34;: &#34;plain_text&#34;, &#34;text&#34;: x},
-                    }
-                ],
-            }
-            slack_web_client.chat_postMessage(**message)</code></pre>
+        for x in data:
+            if x is not None and len(x) &gt; 0:
+                message = {
+                    &#34;channel&#34;: self.slack_channel,
+                    &#34;blocks&#34;: [
+                        {
+                            &#34;type&#34;: &#34;section&#34;,
+                            &#34;text&#34;: {&#34;type&#34;: &#34;plain_text&#34;, &#34;text&#34;: x},
+                        }
+                    ],
+                }
+                slack_web_client.chat_postMessage(**message)</code></pre>
 </details>
 </dd>
 <dt id="src.sync_ends_service.SyncEnd.start"><code class="name flex">

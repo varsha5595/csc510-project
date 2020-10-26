@@ -46,9 +46,7 @@ class Parser:
 
     def __init__(self):
         parser = argparse.ArgumentParser()
-        parser.add_argument(
-            &#34;--collection_name&#34;, required=True, dest=&#34;collection_name&#34;
-        )
+        parser.add_argument(&#34;--collection_name&#34;, required=True, dest=&#34;collection_name&#34;)  # noqa: E501
         parser.add_argument(&#34;--api_key&#34;, required=True, dest=&#34;key&#34;)
         parser.add_argument(
             &#34;--slack_channel&#34;,
@@ -122,9 +120,7 @@ $ SyncEnd &ndash;api_key <key> &ndash;collection_name <name of collection>
 
     def __init__(self):
         parser = argparse.ArgumentParser()
-        parser.add_argument(
-            &#34;--collection_name&#34;, required=True, dest=&#34;collection_name&#34;
-        )
+        parser.add_argument(&#34;--collection_name&#34;, required=True, dest=&#34;collection_name&#34;)  # noqa: E501
         parser.add_argument(&#34;--api_key&#34;, required=True, dest=&#34;key&#34;)
         parser.add_argument(
             &#34;--slack_channel&#34;,
