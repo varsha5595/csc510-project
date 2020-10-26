@@ -2,4 +2,4 @@
 source: src/
 
 [report]
-fail_under: 18
+fail_under: 80
