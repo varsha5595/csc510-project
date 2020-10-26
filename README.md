@@ -62,6 +62,30 @@ Now that team is created, let us create a slack bot
 5. In the Setup instruction page: `Copy and store the API Token`. Ex: xoxb-22672546-n1X9APk3D0tfksr81NJj6VAM
 6. Save the integration
 
+## How to use it
+### Installation
+```
+pip install sync-ends
+```
+
+### Usage
+1. Run following command with required parameters.
+```
+syncends  --collection_name "COLLECTION_NAME_HERE" --api_key "POSTMAN_API_KEY_HERE" --slack_token "SLACK_TOKEN_HERE" --trigger_interval 10 --slack_channel "general"
+```
+
+```
+collection_name - name of postman collection
+api_key - the api key fetched from setup section of postman after registering your service.
+slack_token - the token obtained from slack for receiving slack messages.
+trigger_interval - the interval at which postman api changes are checked.
+slack_channel - is the channel in slack where messages are received.
+```
+
+## Congratulations
+### **You just saved yourself from unwanted crashes**
+<img src="https://media.tenor.com/images/73cca45a93f91944b2c9fdd4b05c3c53/tenor.gif"/>
+
 # Execution
 
 In line #133 of src/sync_ends_service.py, replace `<slackbot token>` with your bot token after bot creation: [Creating Slack Bot](https://github.com/varsha5595/csc510-project/wiki)

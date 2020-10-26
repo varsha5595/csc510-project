@@ -3,3 +3,4 @@ source: src/
 
 [report]
 fail_under: 26
+show_missing: True
