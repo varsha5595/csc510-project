@@ -2,6 +2,7 @@ import sys
 import unittest
 from unittest.mock import Mock, patch
 from os.path import dirname, abspath
+import os
 
 sys.path.append(dirname(dirname(abspath(__file__))))
 from src.sync_ends_service import SyncEnd  # noqa: E402
@@ -23,6 +24,7 @@ class TestParser(unittest.TestCase):
         endpoint1.header = []
         endpoint1.url = "http://127.0.0.1:5002/endpoint?ep_id=1"
         endpoint1.query_parameters = [{"key": "ep_id", "value": "1"}]
+
         self.end_point_list.append(endpoint1)
         endpoint2 = Mock()
         endpoint2.id = "3234dt48-62db-4435-b7cf-820c3e7e5097"
@@ -114,6 +116,7 @@ class TestParser(unittest.TestCase):
 
             self.assertEqual(response, 3)
 
+
     def test_get_updated_end_point_message(self):
         title = "Following is the list of change in the existing end points ::\n\n"  # noqa: E501
         difference = (
@@ -139,6 +142,25 @@ class TestParser(unittest.TestCase):
 
         result = self.sync_end.get_updated_end_point_message(self.common_end_point)  # noqa: E501
         self.assertEqual(result, title + difference)
+
+    def test_store_file(self):
+        collection_schema = {
+            "collection": {"info": {"_postman_id": "0000f-0f"}}
+        }
+
+        self.sync_end.collection_id = "custom_id"
+        self.sync_end.store_file(collection_schema)
+
+        with open("src/data/custom_id.txt") as f:
+            lst = f.readlines()
+
+        os.remove("src/data/custom_id.txt")
+
+        lst = [ele.strip() for ele in lst]
+        self.assertEqual(
+            str(collection_schema["collection"]), lst[0].replace('"', "'")
+        )
+
 
 
 if __name__ == "__main__":
