@@ -278,8 +278,7 @@ schema fetched through the Postman API
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         if not os.path.exists(filepath):
             with open(filepath, "w") as file:
-                # file.write("{\"item\":[]}")
-                file.write(json.dumps(new_collection_schema.get("collection")))
+                file.write("{\"item\":[]}")
 
         # the old (previous) collection schema is stored as a file in data/
         file = open(filepath, "r")
@@ -294,6 +293,8 @@ schema fetched through the Postman API
         # iterate over each new endpoint(API) in the collection and compare
         # with old endpoint
         common_end_points = []
+        old_remove = []
+        new_remove = []
         for new_end_point in new_collection_obj.get_end_points():
             for old_end_point in old_schema_obj.get_end_points():
 
@@ -304,8 +305,14 @@ schema fetched through the Postman API
                     # if same id ,
                     # append it to common_end_points list
                     common_end_points.append((new_end_point, old_end_point))
-                    old_schema_obj.remove_end_point(old_end_point)
-                    new_collection_obj.remove_end_point(new_end_point)
+                    old_remove.append(old_end_point)
+                    new_remove.append(new_end_point)
+
+        for endpoint in old_remove:
+            old_schema_obj.remove_end_point(endpoint)
+
+        for endpoint in new_remove:
+            new_collection_obj.remove_end_point(endpoint)
 
         # at the end of above for loop, the 3 objects store the following information:  # noqa: E501
         # old_schema_obj - only those endpoints which are now deleted from the collection  # noqa: E501
