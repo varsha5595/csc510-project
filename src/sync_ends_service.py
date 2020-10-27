@@ -267,7 +267,7 @@ schema fetched through the Postman API
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         if not os.path.exists(filepath):
             with open(filepath, "w") as file:
-                file.write("{\"item\":[]}")
+                file.write('{"item":[]}')
 
         # the old (previous) collection schema is stored as a file in data/
         file = open(filepath, "r")

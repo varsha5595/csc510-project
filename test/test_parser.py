@@ -4,10 +4,10 @@ import unittest
 import json
 from os.path import dirname, abspath
 from copy import deepcopy
+from unittest.mock import patch, mock_open
 
 sys.path.append(dirname(dirname(abspath(__file__))))
 
-from unittest.mock import patch, mock_open  # noqa: E402
 from src.parser import Parser  # noqa: E402
 
 
