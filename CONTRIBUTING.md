@@ -36,3 +36,25 @@ Please follow these steps to have your contribution considered by the maintainer
 1. Follow the [styleguides](#styleguides)
 2. After you submit your pull request, verify that the build is passing and the tests are successful.
 While the prerequisites above must be satisfied prior to having your pull request reviewed, the reviewer(s) may ask you to complete additional design work, tests, or other changes before your pull request can be ultimately accepted.
+
+## Styleguides
+### Coding Style
+* Use tab based indentation
+* Make sure variables representing constants such as `DATA_FOLDER` and `FILE_PATH` should be capitalized.
+### Git Commit Messages
+* Use the present tense ("Add feature" not "Added feature")
+* Use short, crisp and clear commit messages. It's easier to understand for everyone.
+* Use the imperative mood ("Move cursor to..." not "Moves cursor to...")
+* Reference issues and pull requests liberally after the first line
+* When only changing documentation, include `[ci skip]` in the commit title
+* Consider starting the commit message with an applicable emoji:
+    * :art: `:art:` when improving the format/structure of the code
+    * :racehorse: `:racehorse:` when improving performance
+    * :memo: `:memo:` when writing docs
+    * :penguin: `:penguin:` when fixing something on Linux
+    * :apple: `:apple:` when fixing something on macOS
+    * :checkered_flag: `:checkered_flag:` when fixing something on Windows
+    * :bug: `:bug:` when fixing a bug
+    * :fire: `:fire:` when removing code or files
+    * :green_heart: `:green_heart:` when fixing the CI build
+    * :white_check_mark: `:white_check_mark:` when adding tests
