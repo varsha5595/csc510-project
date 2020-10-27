@@ -8,7 +8,7 @@ install:
   - pip install codecov
 # command to run tests
 script:
-  - python -m pytest --flake8 --cov
+  - python -m pytest --flake8
   - coverage run -m pytest -q test/
 after_success:
   - bash <(curl -s https://codecov.io/bash) -t a8f5c2fb-f071-46ce-9437-cb3bd9a43220
