@@ -62,6 +62,11 @@ Now that team is created, let us create a slack bot
 5. In the Setup instruction page: `Copy and store the API Token`. Ex: xoxb-22672546-n1X9APk3D0tfksr81NJj6VAM
 6. Save the integration
 
+## Pattern Used
+
+- We are using composite and layer pattern in the code. The Parser module parse the user input and pass the parsed data to underlying layers. The sync end service accepts the data from parser layer and send the notification to slack.
+- The Collection object use the composition pattern where a collection contains multiple end points and each end point has attributes like URL, method type, name, etc.
+
 ## Why use it
 Sync ends is a state of the art technology which keeps your consumers updated with the changes to your API in realtime. Consider a user using multiple API's in thier system, In this ever changing world it is impossible for the consumer to be updated with each and every API change. Here is where sync ends comes into action. If API developers start using sync ends then the consumer will be updated in near real time with the API changes. This will make your API more robust and developers will love using such API's which provide such good support. So avoid crashes and shift to sync ends.
 
