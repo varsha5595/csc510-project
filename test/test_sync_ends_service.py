@@ -7,7 +7,7 @@ sys.path.append(dirname(dirname(abspath(__file__))))
 from src.sync_ends_service import SyncEnd  # noqa: E402
 
 
-class TestParser(unittest.TestCase):
+class TestSyncEndsService(unittest.TestCase):
     def setUp(self):
         self.sync_end = SyncEnd(
             "SAM-Key-123fg", "test server", 9, "sample channel", "123ff"
