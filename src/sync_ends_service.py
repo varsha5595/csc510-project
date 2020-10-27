@@ -115,7 +115,6 @@ updated
                             }
                         ],
                     }
-                    slack_web_client.chat_postMessage(**message)
                     response = slack_web_client.chat_postMessage(**message)
 
                     if response:
