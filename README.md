@@ -78,7 +78,10 @@ Sync ends is a state of the art technology which keeps your consumers updated wi
 This version of sync ends is highly usable as it can be simply downloaded through PyPi. It is a single package which satisfies all your needs with clean documentation. Using simple config file you can start the service from terminal through our CLI interface. All your API's from postman collection will be fetched and their changes will be reflected into your slack channel.
 
 <img src="https://github.com/jaymodi98/Sync-Ends/blob/master/src/meme.jpg" width=40% />
-```Transcript - API can change anytime```
+
+```Transcript(Hindi to English) - API can change anytime```
+*Reference : Meme From TV Series [Mirzapur](https://www.google.com/search?q=mirzapur)*
+
 
 ## How to use it
 ### Installation
