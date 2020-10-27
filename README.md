@@ -74,7 +74,8 @@ Now that team is created, let us create a slack bot
 Sync ends is a state of the art technology which keeps your consumers updated with the changes to your API in realtime. Consider a user using multiple API's in thier system, In this ever changing world it is impossible for the consumer to be updated with each and every API change. Here is where sync ends comes into action. If API developers start using sync ends then the consumer will be updated in near real time with the API changes. This will make your API more robust and developers will love using such API's which provide such good support. So avoid crashes and shift to sync ends.
 
 This version of sync ends is highly usable as it can be simply downloaded through PyPi. It is a single package which satisfies all your needs with clean documentation. Using simple config file you can start the service from terminal through our CLI interface. All your API's from postman collection will be fetched and their changes will be reflected into your slack channel.
-<img src="https://github.com/jaymodi98/Sync-Ends/blob/master/src/meme.jpg" />
+
+<img src="https://github.com/jaymodi98/Sync-Ends/blob/master/src/meme.jpg" width=40% />
 ```Transcript - API can change anytime```
 
 ## How to use it
