@@ -25,11 +25,10 @@ Sync Ends is an automated bridge to sync service owners and service consumers. E
 ## Features
 |Feature|Description  |
 |--|--|
-|1-step execution for service |```Simple 1-step CLI execution for Sync Ends service```|
+|1-step service execution |```Simple 1-step CLI execution for Sync Ends service```|
 |API Change Notification  |```Get notifications about changes made to the API in Postman along with detailed diff of changes```|
 |Track Postman collection | ```Ability to track a Postman collection and get notifications```|
 |Slack Bot Subscription   |``` Set frequency of notifications as well as customize Slack channel for updates``` |
-| | |
 
 ## Experiment Setup
 
@@ -55,26 +54,27 @@ Sync Ends is an automated bridge to sync service owners and service consumers. E
 
 
 #### 2b. Creating Slack bot
-1. Open your `<workspace-URL>/apps` (the one you created above). For example, ![https://test-visual.slack.com/apps](https://test-visual.slack.com/apps).
+1. Open your `<workspace-URL>/apps` (the one you created above). For example, [https://test-visual.slack.com/apps](https://test-visual.slack.com/apps).
 2. Search for bot in the search bar and select `Bots`.
 3. In the Bots landing page, click on `Add configuration`.
 4. Provide a Bot name. For example, `wolfpack-bot` and click on `Add Bot integration`.
 5. In the `Setup instruction` page: `Copy and store the API Token`. For example, the token may look something like this: `xoxb-22672546-n1X9APk3D0tfksr81NJj6VAM`.
 6. Save the Bot integration.
 
-## Known Patterns in the code
+## Patterns in the code
 
-- We are using composite and layer pattern in the code. The Parser module parse the user input and pass the parsed data to underlying layers. The sync end service accepts the data from parser layer and send the notification to slack.
-- The Collection object use the composite pattern where a collection contains multiple end points and each end point has attributes like URL, method type, name, etc.
+- We are using Composite and Layer pattern in the code. The Parser module parses the user input and passes the parsed data to the underlying layers. The `sync end service` accepts the data from the parser layer and sends the notification to Slack.
+- The Collection object uses the Composite pattern where a Collection contains multiple EndPoints and each End Point has attributes such as URL, method type, name, etc.
 
 ## What is Sync Ends?
 
-Please have a look at the point descriptions of each function/class through this ![documentation file](https://github.com/jaymodi98/Sync-Ends/blob/master/docs/src/index.html) generated via `pdoc3`. To view this documentation, clone the repository and then open the linked file in the browser.
+Please have a look at the point descriptions of each function/class through this [documentation file](https://github.com/jaymodi98/Sync-Ends/blob/master/docs/src/index.html) generated via `pdoc3`. To view this documentation, clone the repository and then open the linked file in the browser.
 
 ## Why use Sync Ends?
-Sync ends is a state of the art technology which keeps your consumers updated with the changes to your API in realtime. Consider a user using multiple API's in thier system, In this ever changing world it is impossible for the consumer to be updated with each and every API change. Here is where sync ends comes into action. If API developers start using sync ends then the consumer will be updated in near real time with the API changes. This will make your API more robust and developers will love using such API's which provide such good support. So avoid crashes and shift to sync ends.
+Sync ends is a productivity service that focuses on saving developer time by automating API changes to their consumers in real-time thus improving your team's productivity. 
+Consider an API consumer using multiple APIs in their system. In this ever-changing world, it is impossible for the consumer to be updated with each and every API change. This is the problem that Sync Ends service addresses. The service is easy to install and this reduces the communication overhead on side of the API devs. So avoid crashes and jump on the Sync Ends bandwagon! :)
 
-This version of sync ends is highly usable as it can be simply downloaded through PyPi. It is a single package which satisfies all your needs with clean documentation. Using simple config file you can start the service from terminal through our CLI interface. All your API's from postman collection will be fetched and their changes will be reflected into your slack channel.
+This version of sync ends is highly usable as it can be simply downloaded through PyPI. It is a single package which satisfies all your needs with clean documentation. Using  just a simple config file, you can start the service from terminal through our CLI interface. All your API's from the Postman collection will be fetched and their changes will be reflected as notifications in your slack channel.
 
 <img src="https://github.com/jaymodi98/Sync-Ends/blob/master/src/meme.jpg" width=40% />
 
