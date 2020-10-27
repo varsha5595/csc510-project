@@ -86,16 +86,32 @@ pip install sync-ends
 ### Usage
 1. Run following command with required parameters.
 ```
-syncends  --collection_name "COLLECTION_NAME_HERE" --api_key "POSTMAN_API_KEY_HERE" --slack_token "SLACK_TOKEN_HERE" --trigger_interval 10 --slack_channel "general"
+syncends  --config_file </path/to/your/local/config/file>
 ```
-
+What is `--config_file`?
 ```
-collection_name - name of postman collection
-api_key - the api key fetched from setup section of postman after registering your service.
-slack_token - the token obtained from slack for receiving slack messages.
-trigger_interval - the interval at which postman api changes are checked.
-slack_channel - is the channel in slack where messages are received.
+config_file - the configuration file used by application
 ```
+How to write the config_file? (format of the file file should be `.json`)
+```
+{
+    "postman_api_key": "<a>",
+    "slack_token": "<b>",
+    "trigger_interval": <c>,
+    "collections": [
+        {
+            "collection_name": "<d>",
+            "slack_channel": "<e>"
+        }
+    ]
+}
+```
+where,
+- `a`: postman api key generated using steps shown in setup
+- `b`: slack token generated using steps shown in setup
+- `c`: **[optional: default=10]** time (in seconds), after which application will check for api changes
+- `d`: collection name from postman collections
+- `e`: **[optional: default="general"]** slack channel in which notifications will be sent (must be a public channel)
 
 ## Congratulations
 ### **You just saved yourself from unwanted crashes**
