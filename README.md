@@ -72,7 +72,11 @@ Now that team is created, let us create a slack bot
 - We are using composite and layer pattern in the code. The Parser module parse the user input and pass the parsed data to underlying layers. The sync end service accepts the data from parser layer and send the notification to slack.
 - The Collection object use the composite pattern where a collection contains multiple end points and each end point has attributes like URL, method type, name, etc.
 
-## Why use it
+## What is Sync Ends?
+
+Please have a look at the point descriptions of each function/class through this ![documentation file](https://github.com/jaymodi98/Sync-Ends/blob/master/docs/src/index.html) generated via `pdoc3`. To view this documentation, clone the repository and then open the linked file in the browser.
+
+## Why use Sync Ends?
 Sync ends is a state of the art technology which keeps your consumers updated with the changes to your API in realtime. Consider a user using multiple API's in thier system, In this ever changing world it is impossible for the consumer to be updated with each and every API change. Here is where sync ends comes into action. If API developers start using sync ends then the consumer will be updated in near real time with the API changes. This will make your API more robust and developers will love using such API's which provide such good support. So avoid crashes and shift to sync ends.
 
 This version of sync ends is highly usable as it can be simply downloaded through PyPi. It is a single package which satisfies all your needs with clean documentation. Using simple config file you can start the service from terminal through our CLI interface. All your API's from postman collection will be fetched and their changes will be reflected into your slack channel.
@@ -84,7 +88,7 @@ This version of sync ends is highly usable as it can be simply downloaded throug
 *Reference : Meme From TV Series [Mirzapur](https://www.google.com/search?q=mirzapur)*
 
 
-## How to use it
+## How to use Sync Ends?
 ### Installation
 ```
 pip install sync-ends
@@ -123,15 +127,6 @@ where,
 ## Congratulations
 ### **You just saved yourself from unwanted crashes**
 <img src="https://media.tenor.com/images/73cca45a93f91944b2c9fdd4b05c3c53/tenor.gif"/>
-
-# Execution
-
-In line #133 of src/sync_ends_service.py, replace `<slackbot token>` with your bot token after bot creation: [Creating Slack Bot](https://github.com/varsha5595/csc510-project/wiki)
-
-```
-cd src
-python3 sync_ends_service.py
-```
 
 ## License
 
