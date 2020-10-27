@@ -111,14 +111,16 @@ In the absence of our service, the developer will have to manually notify change
 
 The primary idea for the experiment is to provide the participants(lab rats) with a clear setup for interaction with the service. As we mentioned, the experiment is planned to be run in pairs. As a result, the team picking up this project will simply have to configure a general Postman account with a single collection but multiple APIs. The developer half of the lab rats will interact with this Postman account where they will change APIs and our Sync Ends service will take care of the rest. For the tester half of lab rats, they will need to be added to a Slack channel along with configuring a Slack Bot which interacts with our Sync Ends service. We leave it upto the team picking up this project to define whether they will add all pairs of participants in a common Slack channel or make multiple Slack channels for different experiments. The same goes for the Postman Collection part. <br>
 
+The experiment will have two phases. (1) A pair of people NOT using our system and performing the experiment (2) The same pair of people now using our system and performing the experiment. This would ensure that the same group of people who experienced the absence can now, hopefully, understand the importance of the Sync Ends service and can benefit from it.
+
 To get an even better read on the effectiveness of the system, the roles of the developer and tester(API consumer) can be swapped and the experiment begin again so that both the lab rats can experience the halves and you can get a larger sample size to prove the validity of the observations.
 
-Rest Assured, the [Experimentation Setup](INSERT LINK HERE) section defines clear and precise steps to get done with the setup part. In our view and based on our own preliminary trial, it will be easier for the team to just make a `single Postman collection` from the sample collection schema provided and add lab rats to and remove them from a common Slack channel. However, the final say is left upto the team conducting this experiment.
+Rest Assured, the [Experimentation Setup](#experimentation-setup) section defines clear and precise steps to get done with the setup part. In our view and based on our own preliminary trial, it will be easier for the team to just make a `single Postman collection` from the sample collection schema provided and add lab rats to and remove them from a common Slack channel. However, the final say is left upto the team conducting this experiment.
 
 ### Experimentation SetUp
-As mentioned above, the team needs to setup 3 things for the experiment: (1) a Postman collection (2) a Slack channel (3) a [config json](INSERT LINK HERE).
+As mentioned above, the team needs to setup 3 things for the experiment: (1) a Postman collection (2) a Slack channel (3) a [config json](#how-to-write-the-config_file-format-of-the-file-should-be-json).
 
-The team will have to provide the `config json file` and a `Postman account` to each developer so that they can change the API schemas in the collection and the sync ends service which is run would parse the changes based on the `parameters in the config file`. The developer will only need to have Python installed as our package is hosted on PyPI and will be able to access [Web Postman](https://web.postman.co/workspaces). In the presence of our system, the developer won't have to be added to any Slack channels as that is handled by our service. However, in the absence of our system, the developer will need to have some way to communicate with API consumer, probably Slack and hence would need to be added the Slack channel where the API consumer is also added.
+The team will have to provide the `config json file` and a `Postman account` to each developer so that they can change the API schemas in the collection and the sync ends service which is run would parse the changes based on the `parameters in the config file`. The developer will only need to have Python installed as our package is hosted on PyPI and will be able to access [Web Postman](https://web.postman.co/build). In the presence of our system, the developer won't have to be added to any Slack channels as that is handled by our service. However, in the absence of our system, the developer will need to have some way to communicate with API consumer, probably Slack and hence would need to be added the Slack channel where the API consumer is also added.
 
 The API consumer(tester) will only need to be added to the `Slack channel` and the tester's job is to simply identify changes in APIs through Slack messages or otherwise.
 
@@ -130,7 +132,7 @@ The API consumer(tester) will only need to be added to the `Slack channel` and t
 
 #### Step 2 : Create a Slack workspace and integrate Slack bot
 
-##### 2a.Creating Slack team
+##### 2a. Creating Slack workspace
 1. Open https://slack.com/.
 2. Provide your email ID. Select `Create New workspace`.
 3. Check your email and enter the code to verify your email.
@@ -151,6 +153,17 @@ The API consumer(tester) will only need to be added to the `Slack channel` and t
 6. Save the Bot integration.
 
 ### Experimentation Process
+
+The experimentation process for developers consists of them performing roughly these tasks:
+* Adding a new API request to the collection
+* Deleting a API from the collection
+* Updating the name of an API
+* Updating the URL of an API
+* Updating the API method (GET, POST, etc.) of an API
+* Updating the authentication method in the API
+* Performing these steps quickly and in succession 
+
+The experimentation process for testers(API consumers) consists of them simply noting these changes in a spreadsheet that can be shared with them. Their primary job will be to note how the APIs changed in the presence and absence of our Sync Ends service.
 
 ### Experimentation Measures
 
