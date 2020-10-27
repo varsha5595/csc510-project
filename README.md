@@ -9,7 +9,6 @@ Software Engineering Project for CSC 510
 ![GitHub contributors](https://img.shields.io/github/contributors/varsha5595/csc510-project)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 [![DOI](https://zenodo.org/badge/300105279.svg)](https://zenodo.org/badge/latestdoi/300105279)
-[![codecov](https://codecov.io/gh/jaymodi98/Sync-Ends/branch/master/graph/badge.svg?token=DP2AWTXOXL)](undefined)
 
 Sync Ends is an automated bridge to sync service owners and service consumers. Every team has a single postman collection that they use to test their APIs and share it across in their documentations. The backend team has to register their service on our application and we take care of the rest. Everytime there is a change in the way the api is called, we parse the changes and inform the consumers. This way all the team members are informed about the changes and know exactly what to edit in their product. The [Slack](https://slack.com/) framework lets you concentrate on the `core` functionality you want to build without worrying about integration overheads.
 
@@ -66,7 +65,7 @@ Now that team is created, let us create a slack bot
 ## Pattern Used
 
 - We are using composite and layer pattern in the code. The Parser module parse the user input and pass the parsed data to underlying layers. The sync end service accepts the data from parser layer and send the notification to slack.
-- The Collection object use the composition pattern where a collection contains multiple end points and each end point has attributes like URL, method type, name, etc.
+- The Collection object use the composite pattern where a collection contains multiple end points and each end point has attributes like URL, method type, name, etc.
 
 ## Why use it
 Sync ends is a state of the art technology which keeps your consumers updated with the changes to your API in realtime. Consider a user using multiple API's in thier system, In this ever changing world it is impossible for the consumer to be updated with each and every API change. Here is where sync ends comes into action. If API developers start using sync ends then the consumer will be updated in near real time with the API changes. This will make your API more robust and developers will love using such API's which provide such good support. So avoid crashes and shift to sync ends.
