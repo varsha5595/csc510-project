@@ -15,3 +15,24 @@ Before creating bug reports, please check [this list](#before-submitting-a-bug-r
 > **Note:** If you find a **Closed** issue that seems like it is the same thing that you're experiencing, open a new issue and include a link to the original issue in the body of your new one.
 #### Before Submitting A Bug Report
 Check that the bug does not exists because of any issue in your local environment. You might be able to find the cause of the problem and fix things yourself. If the problem has been reported **and the issue is still open**, add a comment to the existing issue instead of opening a new one.
+
+#### How Do I Submit A (Good) Bug Report?
+Explain the problem and include details to help maintainers reproduce the problem:
+* **Use a clear and descriptive title** for the issue to identify the problem.
+* **Describe the exact steps which reproduce the problem** in as many details as possible. When listing steps, **don't just say what you did, but explain how you did it**. 
+* **Describe the behavior you observed after following the steps** and point out what exactly is the problem with that behavior.
+* **Explain which behavior you expected to see instead and why.**
+* **Include screenshots** that show the described steps and clearly demonstrate the problem.
+Include details about your configuration and environment:
+* **What's the name and version of the OS you're using**?
+* **Which packages do you have installed?** Check that issue is not present because of a local package.
+### Pull Requests
+The process described here has several goals:
+- Maintain the project's quality
+- Fix problems that are important to users
+- Engage the community in working toward the best possible Atom
+- Enable a sustainable system for project maintainers to review contributions
+Please follow these steps to have your contribution considered by the maintainers:
+1. Follow the [styleguides](#styleguides)
+2. After you submit your pull request, verify that the build is passing and the tests are successful.
+While the prerequisites above must be satisfied prior to having your pull request reviewed, the reviewer(s) may ask you to complete additional design work, tests, or other changes before your pull request can be ultimately accepted.
