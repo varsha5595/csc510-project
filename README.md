@@ -80,6 +80,7 @@ This version of sync ends is highly usable as it can be simply downloaded throug
 <img src="https://github.com/jaymodi98/Sync-Ends/blob/master/src/meme.jpg" width=40% />
 
 ```Transcript(Hindi to English) - API can change anytime```
+
 *Reference : Meme From TV Series [Mirzapur](https://www.google.com/search?q=mirzapur)*
 
 
