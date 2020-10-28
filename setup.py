@@ -19,7 +19,7 @@ def get_long_description(filename):
 
 setuptools.setup(
     name="sync-ends",
-    version="v2.1.2",
+    version="v2.1.3",
     author="Chintan Gandhi, Jay Modi, Suraj Patel, Omkar Kulkarni, Nirav Shah",
     author_email="cagandhi97@gmail.com",
     description="Sync Ends - End Development Overheads CSC 510 Project",
@@ -27,7 +27,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     keywords=["python"],
     url="https://github.com/jaymodi98/csc510-project",
-    download_url='https://github.com/jaymodi98/Sync-Ends/archive/v2.1.2.tar.gz',  # noqa: E501
+    download_url='https://github.com/jaymodi98/Sync-Ends/archive/v2.1.3.tar.gz',  # noqa: E501
     entry_points="""
     [console_scripts]
     syncends = src.main:main
