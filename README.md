@@ -85,7 +85,7 @@ This version of sync ends is highly usable as it can be simply downloaded throug
 ```
 pip install sync-ends
 ```
-The code is deployed as a python package on PyPI which is a single step installation process.
+The code is deployed as a [python package on PyPI](https://pypi.org/project/sync-ends/) which is a single step installation process.
 
 #### Usage
 
