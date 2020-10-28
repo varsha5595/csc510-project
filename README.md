@@ -19,6 +19,33 @@ Sync Ends is an automated bridge to sync service owners and service consumers. E
 
 [![Watch the video](https://github.com/jaymodi98/Sync-Ends/blob/master/images/screenshotpromo.png)](https://www.youtube.com/watch?v=1Pd3Enj13m8)
 
+## Table of Contents
+  * [Architecture Diagram](#architecture-diagram)
+  * [Features](#features)
+  * [Patterns in the code](#patterns-in-the-code)
+  * [Documentation](#documentation)
+    + [What is Sync Ends?](#what-is-sync-ends)
+    + [Why use Sync Ends?](#why-use-sync-ends)
+    + [How to use Sync Ends?](#how-to-use-sync-ends)
+      - [Installation](#installation)
+      - [Usage](#usage)
+        * [How to write the config_file? (format of the file should be `.json`)](#how-to-write-the-config_file-format-of-the-file-should-be-json)
+      - [What happens after this command is run?](#what-happens-after-this-command-is-run)
+  * [Experimentation Phase for Project 3](#experimentation-phase-for-project-3)
+    + [It vs Not It](#it-vs-not-it)
+    + [Idea for the Experimentation](#idea-for-the-experimentation)
+    + [Experimentation SetUp](#experimentation-setup)
+      - [Step 1 : Setup Postman](#step-1--setup-postman)
+      - [Step 2 : Create a Slack workspace and integrate Slack bot](#step-2--create-a-slack-workspace-and-integrate-slack-bot)
+        * [2a. Creating Slack workspace](#2a-creating-slack-workspace)
+        * [2b. Creating Slack bot](#2b-creating-slack-bot)
+    + [Experimentation Process](#experimentation-process)
+    + [Experimentation Measures](#experimentation-measures)
+      - [Quantitative measures](#quantitative-measures)
+      - [Qualitative measures](#qualitative-measures)
+  * [How to Contribute?](#how-to-contribute)
+  * [License](#license)
+
 ## Architecture Diagram
 <img src="https://github.com/jaymodi98/Sync-Ends/blob/master/images/architecture.PNG" height="500" width="800"/>
 
@@ -87,8 +114,8 @@ config_file - the configuration file used by the Sync Ends service
 }
 ```
 where,
-- `a`: postman api key generated using steps shown in [postman setup section](#step-1-:-setup-postman)
-- `b`: slack token generated using steps shown in [slack setup section](#step-2-:-create-a-slack-workspace-and-integrate-slack-bot)
+- `a`: postman api key generated using steps shown in [postman setup section](#step-1--setup-postman)
+- `b`: slack token generated using steps shown in [slack setup section](#step-2--create-a-slack-workspace-and-integrate-slack-bot)
 - `c`: **[optional: default=10]** time (in seconds), after which application will periodically check for api changes
 - `d`: collection name from postman collections
 - `e`: **[optional: default="general"]** slack channel in which notifications will be sent (must be a public channel)
@@ -117,10 +144,10 @@ In the absence of our service, the developer will have to manually notify change
 ### Idea for the Experimentation
 
 The primary idea for the experiment is to provide the participants(lab rats) with a clear setup for interaction with the service. As we mentioned, the experiment is planned to be run in pairs. As a result, the team picking up this project will simply need to configure following things:
-- A general Postman account with a single collection but multiple APIs. ([steps](#step-1-:-setup-postman))
+- A general Postman account with a single collection but multiple APIs. ([steps](#step-1--setup-postman))
     - The developer half of the lab rats will interact with this Postman account where they will change APIs and our Sync Ends service will take care of the rest. 
     - The login credentials and api key of the postman account will need to shared with the API Developers. So please create an account(s) keeping that in mind. 
-- A Slack channel along with configuring a Slack Bot which interacts with our Sync Ends service. ([steps](#step-2-:-create-a-slack-workspace-and-integrate-slack-bot))
+- A Slack channel along with configuring a Slack Bot which interacts with our Sync Ends service. ([steps](#step-2--create-a-slack-workspace-and-integrate-slack-bot))
     - For the tester half of lab rats, they will need to be added to this channel. 
 > We leave it upto the team picking up this project to define whether they will add all pairs of participants in a common Slack channel or make multiple Slack channels for different experiments. The same goes for the Postman Collection part. <br>
 
