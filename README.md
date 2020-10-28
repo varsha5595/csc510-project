@@ -19,7 +19,7 @@ Sync Ends is an automated bridge to sync service owners and service consumers. E
 
 [![Watch the video](https://github.com/jaymodi98/Sync-Ends/blob/master/images/screenshotpromo.png)](https://www.youtube.com/watch?v=1Pd3Enj13m8)
 
-# Architecture Diagram
+## Architecture Diagram
 <img src="https://github.com/jaymodi98/Sync-Ends/blob/master/images/architecture.PNG" height="500" width="800"/>
 
 ## Features
@@ -87,19 +87,26 @@ config_file - the configuration file used by the Sync Ends service
 }
 ```
 where,
-- `a`: postman api key generated using steps shown in setup
-- `b`: slack token generated using steps shown in setup
-- `c`: **[optional: default=10]** time (in seconds), after which application will check for api changes
+- `a`: postman api key generated using steps shown in [postman setup section](#step-1-:-setup-postman)
+- `b`: slack token generated using steps shown in [slack setup section](#step-2-:-create-a-slack-workspace-and-integrate-slack-bot)
+- `c`: **[optional: default=10]** time (in seconds), after which application will periodically check for api changes
 - `d`: collection name from postman collections
 - `e`: **[optional: default="general"]** slack channel in which notifications will be sent (must be a public channel)
 
+
 #### What happens after this command is run?
 
-This command is the entry point to a background process which fetches all the `Postman collections` using the `Postman API key` and posts a message through the `Slack bot token` configured in the `Slack channel` specified. The background service fetches the Postman collections every `trigger interval` seconds. This means that developer on changing the API in the Postman does not have to worry about notifying any API consumers of the change. That magic is done by our bot :)
+This command is the entry point to a background process which fetches all the `Postman collections` using the `Postman API key` and posts a message through the `Slack bot token` configured in the `Slack channel` specified. The background service fetches the Postman collections every `trigger interval` seconds. Since all of this happens **automatically** after running the CLI command, this means that developer on changing the API in the Postman does not have to worry about notifying any API consumers of the change. That magic is done by our bot :)
 
 ## Experimentation Phase for Project 3
+Each experiment will involve 2 subjets:
+  - One person will act as API Developer
+  - 2<sup>nd</sup> person will act as API Consumer. (Also referred to as API Tester at some places)
 
-In the experiment phase, we will be planning to evaluate the performance improvement of the API consumer (tester) in a rapidly developing environment. The experiment is planned to be run in pairs where one person will act as a developer and the other will act as an API consumer (tester). The job of the developer will be to change API schemas in Postman which mocks the behaviour that a change has been made in the serving of API in the actual codebase. The job of the tester will be to monitor these changes and note them down which mocks the behaviour that the API consumer is now aware that a change needs to be made in the codebase where this API is used.
+In the experiment phase, we will be planning to evaluate the performance improvement of the API consumer (tester) in a rapidly developing environment. The experiment is planned to be run in pairs where one person will act as a developer and the other will act as an API consumer (tester). 
+- The job of the developer will be to change API schemas in Postman which *mocks* the behaviour that a change has been made in the serving of API in the actual codebase. 
+- The job of the tester will be to monitor these changes and note them down which *mocks* the behaviour that the API consumer is now aware that a change needs to be made in the codebase where this API is used.
+
 
 ### It vs Not It
 
@@ -109,7 +116,13 @@ In the absence of our service, the developer will have to manually notify change
 
 ### Idea for the Experimentation
 
-The primary idea for the experiment is to provide the participants(lab rats) with a clear setup for interaction with the service. As we mentioned, the experiment is planned to be run in pairs. As a result, the team picking up this project will simply have to configure a general Postman account with a single collection but multiple APIs. The developer half of the lab rats will interact with this Postman account where they will change APIs and our Sync Ends service will take care of the rest. For the tester half of lab rats, they will need to be added to a Slack channel along with configuring a Slack Bot which interacts with our Sync Ends service. We leave it upto the team picking up this project to define whether they will add all pairs of participants in a common Slack channel or make multiple Slack channels for different experiments. The same goes for the Postman Collection part. <br>
+The primary idea for the experiment is to provide the participants(lab rats) with a clear setup for interaction with the service. As we mentioned, the experiment is planned to be run in pairs. As a result, the team picking up this project will simply need to configure following things:
+- A general Postman account with a single collection but multiple APIs. ([steps](#step-1-:-setup-postman))
+    - The developer half of the lab rats will interact with this Postman account where they will change APIs and our Sync Ends service will take care of the rest. 
+    - The login credentials and api key of the postman account will need to shared with the API Developers. So please create an account(s) keeping that in mind. 
+- A Slack channel along with configuring a Slack Bot which interacts with our Sync Ends service. ([steps](#step-2-:-create-a-slack-workspace-and-integrate-slack-bot))
+    - For the tester half of lab rats, they will need to be added to this channel. 
+> We leave it upto the team picking up this project to define whether they will add all pairs of participants in a common Slack channel or make multiple Slack channels for different experiments. The same goes for the Postman Collection part. <br>
 
 The experiment will have two phases. (1) A pair of people NOT using our system and performing the experiment (2) The same pair of people now using our system and performing the experiment. This would ensure that the same group of people who experienced the absence can now, hopefully, understand the importance of the Sync Ends service and can benefit from it.
 
@@ -120,13 +133,17 @@ Rest Assured, the [Experimentation Setup](#experimentation-setup) section define
 ### Experimentation SetUp
 As mentioned above, the team needs to setup 3 things for the experiment: (1) a Postman collection (2) a Slack channel (3) a [config json](#how-to-write-the-config_file-format-of-the-file-should-be-json).
 
-The team will have to provide the `config json file` and a `Postman account` to each developer so that they can change the API schemas in the collection and the sync ends service which is run would parse the changes based on the `parameters in the config file`. The developer will only need to have Python installed as our package is hosted on PyPI and will be able to access [Web Postman](https://web.postman.co/build). In the presence of our system, the developer won't have to be added to any Slack channels as that is handled by our service. However, in the absence of our system, the developer will need to have some way to communicate with API consumer, probably Slack and hence would need to be added the Slack channel where the API consumer is also added.
+The team will have to provide the `config json file` and a `Postman account` to each API developer so that they can:
+- change the API schemas in the collection 
+- and the sync ends service which is run would parse the changes based on the `parameters in the config file`. 
+
+The API developer will only need to have Python installed as our package is hosted on PyPI and will be able to access [Web Postman](https://web.postman.co/build). In the presence of our system, the developer won't have to be added to any Slack channels as that is handled by our service. However, in the absence of our system, the developer will need to have some way to communicate with API consumer, probably Slack and hence would need to be added the Slack channel where the API consumer is also added.
 
 The API consumer(tester) will only need to be added to the `Slack channel` and the tester's job is to simply identify changes in APIs through Slack messages or otherwise.
 
 #### Step 1 : Setup Postman
-1. Sign in to [Postman](https://identity.getpostman.com/login).
-2. If you do not have any pre-exiting collections on Postman, import this sample [collection](https://www.getpostman.com/collections/dfa93d217bf211237c8f).
+1. Sign in to [Postman](https://identity.getpostman.com/login). You can use your existing postman account but since you will need to share API key and login credentials with the API Developer, *we suggest creating a new account*.
+2. If you do not have any pre-exiting collections on Postman, import this [sample collection](https://www.postman.com/collections/e2cb1b9c870ee78fc20d).
 3. To integrate with the Sync Ends service, a Postman API key is required. Generate API key by visiting this [page](https://web.postman.co/settings/me/api-keys).
 4. Copy the generated API key. This is required during the time of execution of the service. Make sure you store it safely as you won't be able to view this any other time.
 
@@ -163,13 +180,29 @@ The experimentation process for developers consists of them performing roughly t
 * Updating the authentication method in the API
 * Performing these steps quickly and in succession 
 
-The experimentation process for testers(API consumers) consists of them simply noting these changes in a spreadsheet that can be shared with them. Their primary job will be to note how the APIs changed in the presence and absence of our Sync Ends service.
+The experimentation process for testers(API consumers) consists of them simply noting these changes in a spreadsheet that can be shared with them. Their primary job will be to note what changed in the APIs in the presence and absence of our Sync Ends service.
 
 ### Experimentation Measures
+Throught the experiments, the teams can take following quantitative and qualitative measures:
+
+#### Quantitative measures
+These measures can be used to compare the results between environment with and without Sync Ends.
+1. Number of APIs changed by the developer
+2. Number of APIs added by the developer
+3. Number of APIs deleted by the developer
+4. Time taken by API consumer (tester) to identify these change/addition/deletion (In presence of the Sync Ends system v/s Without the system)
+
+#### Qualitative measures
+Apart from quantitative measures, these qualititive measures can be taken to identify the performance of the system:
+1. How easy it is for API consumer to find the changes (In presence of the Sync Ends system v/s Without the system)
+2. Can the API consumer get occupied in his personal work and still get to know about the API changes quickly?
 
 ## Congratulations
 ### **You just saved yourself from unwanted crashes**
 <img src="https://media.tenor.com/images/73cca45a93f91944b2c9fdd4b05c3c53/tenor.gif"/>
+
+## How to Contribute?
+Please take a look at our [CONTRIBUTING.md](https://github.com/jaymodi98/Sync-Ends/blob/master/CONTRIBUTING.md) where we provide instructions on contributing to the repo and help us in enhancing the product.
 
 ## License
 
