@@ -135,5 +135,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# application specific files
-*config.json
+# # application specific files
+# *config.json

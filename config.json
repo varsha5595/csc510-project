@@ -1,0 +1,11 @@
+{
+    "postman_api_key": "PMAK-65074eee409b760f60d72eca-085975388cdf3ecd847940a08a95880c48",
+    "slack_token": "xoxb-5908148365410-5908052010499-8EvM0nOCYxWrvjNwSIJD7Lps",
+    "trigger_interval": 10,
+    "collections": [
+        {
+            "collection_name": "Mock data generation",
+            "slack_channel": "api-notifications"
+        }
+    ]
+}
