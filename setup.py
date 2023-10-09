@@ -6,13 +6,13 @@ project_dir = Path(__file__).parent
 
 
 def get_requirements(filename):
-    with open(filename) as f:
+    with open(filename, encoding="utf-8") as f:
         requirements = f.read().splitlines()
     return requirements
 
 
 def get_long_description(filename):
-    with open(filename, "r") as fh:
+    with open(filename, "r", encoding="utf-8") as fh:
         long_description = fh.read()
     return long_description
 

@@ -282,11 +282,11 @@ schema fetched through the Postman API
         filepath = join(self.data_folder_path, self.collection_id + ".txt")
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         if not os.path.exists(filepath):
-            with open(filepath, "w") as file:
+            with open(filepath, "w", encoding="utf-8") as file:
                 file.write('{"item":[]}')
 
         # the old (previous) collection schema is stored as a file in data/
-        file = open(filepath, "r")
+        file = open(filepath, "r", encoding="utf-8")
         old_collection_schema = json.load(file)
 
         # read the data from file and convert it to collection object
@@ -354,7 +354,7 @@ schema fetched through the Postman API
             new_collection : collection schema to be saved in the file
         """
         filepath = join(self.data_folder_path, self.collection_id + ".txt")
-        with open(filepath, "w") as file:
+        with open(filepath, "w", encoding="utf-8") as file:
             file.write(json.dumps(new_collection.get("collection")))
 
     def post_data_to_teams(self, difference):
@@ -367,7 +367,7 @@ schema fetched through the Postman API
                 headers = {
                     'Content-type': 'application/json'
                 }
-                response = requests.post(url, headers=headers, data=json.dumps(message))
+                requests.post(url, headers=headers, data=json.dumps(message),timeout=10)
                     
 
     def start(self):

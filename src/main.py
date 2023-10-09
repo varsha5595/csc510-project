@@ -23,13 +23,19 @@ def main():
         channel_type
     ) = parser.get_arguments()
     sync_end = SyncEnd(
-        api_key, collection_name, trigger_interval, slack_channel, slack_token, webhook, channel_type
+        api_key,
+        collection_name,
+        trigger_interval,
+        slack_channel,
+        slack_token,
+        webhook,
+        channel_type
     )
 
     try:
         sync_end.start()
-    except Exception as e:
-        print(e)
+    except Exception as excepion:
+        print(excepion)
 
 
 if __name__ == "__main__":

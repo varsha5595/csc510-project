@@ -38,7 +38,7 @@ class Parser:
         """
         args = self.parser.parse_args()
         config = None
-        with open(args.config_file, "r") as f:
+        with open(args.config_file, "r", encoding="utf-8") as f:
             config = json.load(f)
 
         if "collections" in config:
