@@ -4,12 +4,14 @@ import json
 import os
 import time
 import ssl
+import requests
 from os.path import abspath, dirname, join
 
 # Third party imports
 from slack import WebClient
 from src.collection import Collection
 from slack.errors import SlackApiError
+import pymsteams
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -39,12 +41,16 @@ APIs schemas
         trigger_interval,
         slack_channel,
         slack_token,
+        webhook,
+        channel_type,
     ):
         self.api_key = api_key
         self.collection_name = collection_name
         self.trigger_interval = trigger_interval
         self.slack_channel = slack_channel
         self.slack_token = slack_token
+        self.ms_teams_webhook = webhook
+        self.channel_type = channel_type
         self.collection_id = 0
         self.data_folder_path = join(dirname(abspath(__file__)), "data")
 
@@ -351,6 +357,19 @@ schema fetched through the Postman API
         with open(filepath, "w") as file:
             file.write(json.dumps(new_collection.get("collection")))
 
+    def post_data_to_teams(self, difference):
+        url = self.ms_teams_webhook  
+        for x in difference:
+            if x is not None and len(x) > 0:
+                message = {
+                    "text": x
+                }
+                headers = {
+                    'Content-type': 'application/json'
+                }
+                response = requests.post(url, headers=headers, data=json.dumps(message))
+                    
+
     def start(self):
         """
         Main driver function which is called from main.py to run CLI. \
@@ -368,8 +387,14 @@ schema fetched through the Postman API
             # compute the difference with the previous schema
             difference = self.compute_difference(new_collection_schema)
 
-            # post the difference to the slack
-            self.post_data_to_slack(difference)
+            # post the difference to the specified messaging platform
+            match self.channel_type:
+                case "slack":
+                    self.post_data_to_slack(difference)
+                case "teams":
+                    self.post_data_to_teams(difference)
+                case _:
+                    print("Please input a valid choice into the 'channel_type' field in your configuration file")
 
             # store new schema to the file
             self.store_file(new_collection_schema)

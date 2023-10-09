@@ -12,9 +12,7 @@ class Parser:
         parser : Instance of Parser class, needed to fetch CLI arguments
 
     The design of the CLI is:
-    $ SyncEnd --api_key <key> --collection_name <name of collection> \
-    --slack_channel <name_of_slack_channel> --trigger_interval \
-    <time in second> --slack_token <slack_token>
+    
     """
 
     def __init__(self):
@@ -30,6 +28,8 @@ class Parser:
         self.trigger_interval = 10
         self.slack_channel = "general"
         self.slack_token = ""
+        self.webhook = ""
+        self.channel_type = ""
         self.parser = parser
 
     def get_arguments(self):
@@ -65,6 +65,20 @@ class Parser:
                 "'postman_api_key' not present in config_file!"
             )
 
+        if "microsoft_teams_webhook" in config:
+            self.webhook = config["microsoft_teams_webhook"]
+        else:
+            raise AttributeError(
+                "'microsoft_teams_webhook' not present in config_file!"
+            )
+
+        if "channel_type" in config:
+            self.channel_type = config["channel_type"]
+        else:
+            raise AttributeError(
+                "'channel_type' not present in config_file!"
+            )
+
         if "trigger_interval" in config:
             self.trigger_interval = config["trigger_interval"]
 
@@ -79,4 +93,6 @@ class Parser:
             self.trigger_interval,
             self.slack_channel,
             self.slack_token,
+            self.webhook,
+            self.channel_type,
         )
