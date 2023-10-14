@@ -7,7 +7,7 @@ import ssl
 from os.path import abspath, dirname, join
 
 # Third party imports
-from slack import WebClient
+from slack.web.client import WebClient
 from src.collection import Collection
 from slack.errors import SlackApiError
 
