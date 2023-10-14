@@ -3,9 +3,8 @@ from os.path import abspath, dirname
 
 sys.path.append(dirname(dirname(abspath(__file__))))
 
-from src.sync_ends_service import SyncEnd  # noqa: E402
-from src.parser import Parser  # noqa: E402
-
+from sync_ends_service import SyncEnd  # noqa: E402
+from parser import Parser  # noqa: E402
 
 def main():
     """
@@ -30,11 +29,11 @@ def main():
         api_key, collection_name, trigger_interval, slack_channel, slack_token
     )
 
-    try:
-        sync_end.start()
-    except Exception as e:
-        print(e)
-
+    sync_end.start()
+    # try:
+    #     sync_end.start()
+    # except Exception as e:
+    #     print("Spam" + str(e))
 
 if __name__ == "__main__":
     main()

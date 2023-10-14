@@ -1,4 +1,4 @@
-from src.end_point import EndPoint
+from end_point import EndPoint
 
 
 class Collection:

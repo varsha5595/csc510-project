@@ -8,7 +8,7 @@ from os.path import abspath, dirname, join
 
 # Third party imports
 from slack import WebClient
-from src.collection import Collection
+from collection import Collection
 from slack.errors import SlackApiError
 
 ssl._create_default_https_context = ssl._create_unverified_context
