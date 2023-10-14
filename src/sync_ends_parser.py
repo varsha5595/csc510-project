@@ -50,6 +50,8 @@ class Parser:
                     raise AttributeError(
                         "'collection_name' not present in 'collections'!"
                     )
+                self.webhook = collection["microsoft_teams_webhook"]
+                self.channel_type = collection["channel_type"]
                 self.slack_channel = collection["slack_channel"]
             else:
                 raise AttributeError(
@@ -63,20 +65,6 @@ class Parser:
         else:
             raise AttributeError(
                 "'postman_api_key' not present in config_file!"
-            )
-
-        if "microsoft_teams_webhook" in config:
-            self.webhook = config["microsoft_teams_webhook"]
-        else:
-            raise AttributeError(
-                "'microsoft_teams_webhook' not present in config_file!"
-            )
-
-        if "channel_type" in config:
-            self.channel_type = config["channel_type"]
-        else:
-            raise AttributeError(
-                "'channel_type' not present in config_file!"
             )
 
         if "trigger_interval" in config:
