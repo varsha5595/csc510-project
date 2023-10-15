@@ -95,8 +95,8 @@ APIs schemas
     def post_data_to_email(self,data):
         smtp_server = 'smtp.gmail.com'
         smtp_port = 587  # Use the appropriate SMTP port
-        sender_email = 'gudhe_varun@srmap.edu.in'
-        sender_password = 'tjiv cxxw iyzs nuho'
+        sender_email = '*********'
+        sender_password = '*********'
         receiver_email = 'varundeepakchowdary@gmail.com'
         subject = 'Postman API Changes'
         
