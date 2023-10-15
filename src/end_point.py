@@ -14,7 +14,7 @@ class EndPoint:
     """
 
     def __init__(self, end_point_json):
-        self.id = end_point_json["_postman_id"]
+        self.id = end_point_json["id"]
         self.name = end_point_json["name"]
         self.authentication = end_point_json["request"].get("auth")
         self.method = end_point_json["request"]["method"]

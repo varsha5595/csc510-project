@@ -5,6 +5,9 @@ import os
 import time
 import ssl
 from os.path import abspath, dirname, join
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 # Third party imports
 from slack.web.client import WebClient
@@ -87,6 +90,40 @@ APIs schemas
         collection_schema_response = connection.getresponse()
         return json.loads(collection_schema_response.read())
 
+
+
+    def post_data_to_email(self,data):
+        smtp_server = 'smtp.gmail.com'
+        smtp_port = 587  # Use the appropriate SMTP port
+        sender_email = 'gudhe_varun@srmap.edu.in'
+        sender_password = 'tjiv cxxw iyzs nuho'
+        receiver_email = 'varundeepakchowdary@gmail.com'
+        subject = 'Postman API Changes'
+        
+        for x in data:
+            if x is not None and len(x) > 0:
+                msg = MIMEMultipart()
+                msg['From'] = sender_email
+                msg['To'] = receiver_email
+                msg['Subject'] = subject
+                message = x
+                msg.attach(MIMEText(message, 'plain'))
+                try:
+                    server = smtplib.SMTP(smtp_server, smtp_port)
+                    server.starttls()  # Enable TLS encryption
+                    server.login(sender_email, sender_password)
+
+                    # Send the email
+                    server.sendmail(sender_email, receiver_email, msg.as_string())
+
+                    print('Email sent successfully')
+                except Exception as e:
+                    print('Error sending email:', str(e))
+                finally:
+                    server.quit()  
+
+
+     
     def post_data_to_slack(self, data):
         """
         Posts the messages for APIs added, deleted and updated based on the \
@@ -370,6 +407,7 @@ schema fetched through the Postman API
 
             # post the difference to the slack
             self.post_data_to_slack(difference)
+            self.post_data_to_email(difference)
 
             # store new schema to the file
             self.store_file(new_collection_schema)
