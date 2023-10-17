@@ -4,12 +4,14 @@ import json
 import os
 import time
 import ssl
+import requests
 from os.path import abspath, dirname, join
 
 # Third party imports
 from slack import WebClient
 from collection import Collection
 from slack.errors import SlackApiError
+import pymsteams
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -39,12 +41,16 @@ APIs schemas
         trigger_interval,
         slack_channel,
         slack_token,
+        webhook,
+        channel_type,
     ):
         self.api_key = api_key
         self.collection_name = collection_name
         self.trigger_interval = trigger_interval
         self.slack_channel = slack_channel
         self.slack_token = slack_token
+        self.ms_teams_webhook = webhook
+        self.channel_type = channel_type
         self.collection_id = 0
         self.data_folder_path = join(dirname(abspath(__file__)), "data")
 
@@ -276,11 +282,11 @@ schema fetched through the Postman API
         filepath = join(self.data_folder_path, self.collection_id + ".txt")
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         if not os.path.exists(filepath):
-            with open(filepath, "w") as file:
+            with open(filepath, "w", encoding="utf-8") as file:
                 file.write('{"item":[]}')
 
         # the old (previous) collection schema is stored as a file in data/
-        file = open(filepath, "r")
+        file = open(filepath, "r", encoding="utf-8")
         old_collection_schema = json.load(file)
 
         # read the data from file and convert it to collection object
@@ -348,8 +354,21 @@ schema fetched through the Postman API
             new_collection : collection schema to be saved in the file
         """
         filepath = join(self.data_folder_path, self.collection_id + ".txt")
-        with open(filepath, "w") as file:
+        with open(filepath, "w", encoding="utf-8") as file:
             file.write(json.dumps(new_collection.get("collection")))
+
+    def post_data_to_teams(self, difference):
+        url = self.ms_teams_webhook  
+        for x in difference:
+            if x is not None and len(x) > 0:
+                message = {
+                    "text": x
+                }
+                headers = {
+                    'Content-type': 'application/json'
+                }
+                requests.post(url, headers=headers, data=json.dumps(message),timeout=10)
+                    
 
     def start(self):
         """
@@ -368,8 +387,17 @@ schema fetched through the Postman API
             # compute the difference with the previous schema
             difference = self.compute_difference(new_collection_schema)
 
-            # post the difference to the slack
-            self.post_data_to_slack(difference)
+            # post the difference to the specified messaging platform
+            match self.channel_type:
+                case "slack":
+                    self.post_data_to_slack(difference)
+                case "teams":
+                    self.post_data_to_teams(difference)
+                case "all":
+                    self.post_data_to_slack(difference)
+                    self.post_data_to_teams(difference)
+                case _:
+                    print("Please input a valid choice into the 'channel_type' field in your configuration file")
 
             # store new schema to the file
             self.store_file(new_collection_schema)

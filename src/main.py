@@ -1,10 +1,5 @@
-import sys
-from os.path import abspath, dirname
-
-sys.path.append(dirname(dirname(abspath(__file__))))
-
-from sync_ends_service import SyncEnd  # noqa: E402
-from parser import Parser  # noqa: E402
+from sync_ends_parser import Parser
+from sync_ends_service import SyncEnd
 
 def main():
     """
@@ -24,16 +19,24 @@ def main():
         trigger_interval,
         slack_channel,
         slack_token,
+        webhook,
+        channel_type
     ) = parser.get_arguments()
     sync_end = SyncEnd(
-        api_key, collection_name, trigger_interval, slack_channel, slack_token
+        api_key,
+        collection_name,
+        trigger_interval,
+        slack_channel,
+        slack_token,
+        webhook,
+        channel_type
     )
 
-    sync_end.start()
-    # try:
-    #     sync_end.start()
-    # except Exception as e:
-    #     print("Spam" + str(e))
+    try:
+        sync_end.start()
+    except Exception as excepion:
+        print(excepion)
+
 
 if __name__ == "__main__":
     main()
