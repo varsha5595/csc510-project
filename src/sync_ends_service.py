@@ -12,7 +12,7 @@ from email.mime.multipart import MIMEMultipart
 
 # Third party imports
 from slack.web.client import WebClient
-from src.collection import Collection
+from collection import Collection
 from slack.errors import SlackApiError
 import pymsteams
 
