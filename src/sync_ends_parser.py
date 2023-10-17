@@ -12,7 +12,7 @@ class Parser:
         parser : Instance of Parser class, needed to fetch CLI arguments
 
     The design of the CLI is:
-    
+
     """
 
     def __init__(self):
@@ -30,6 +30,9 @@ class Parser:
         self.slack_token = ""
         self.webhook = ""
         self.channel_type = ""
+        self.sender_email = ""
+        self.sender_pwd = ""
+        self.recipient_email = ""
         self.parser = parser
 
     def get_arguments(self):
@@ -53,6 +56,9 @@ class Parser:
                 self.webhook = collection["microsoft_teams_webhook"]
                 self.channel_type = collection["channel_type"]
                 self.slack_channel = collection["slack_channel"]
+                self.sender_email = collection["sender_email"]
+                self.sender_pwd = collection["sender_pwd"]
+                self.recipient_email = collection["recipient_email"]
             else:
                 raise AttributeError(
                     "No 'collections' details found in config_file!"
@@ -83,4 +89,7 @@ class Parser:
             self.slack_token,
             self.webhook,
             self.channel_type,
+            self.channel_type,
+            self.sender_email,
+            self.sender_pwd
         )

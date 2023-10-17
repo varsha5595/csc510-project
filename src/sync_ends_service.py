@@ -46,6 +46,9 @@ APIs schemas
         slack_token,
         webhook,
         channel_type,
+        sender_email,
+        sender_pwd,
+        recipient_email
     ):
         self.api_key = api_key
         self.collection_name = collection_name
@@ -54,6 +57,10 @@ APIs schemas
         self.slack_token = slack_token
         self.ms_teams_webhook = webhook
         self.channel_type = channel_type
+        self.sender_email = sender_email
+        self.sender_pwd = sender_pwd
+        self.recipient_email = recipient_email
+
         self.collection_id = 0
         self.data_folder_path = join(dirname(abspath(__file__)), "data")
 
@@ -99,11 +106,12 @@ APIs schemas
 
 
     def post_data_to_email(self,data):
+
         smtp_server = 'smtp.gmail.com'
         smtp_port = 587  # Use the appropriate SMTP port
-        sender_email = 'syncends@gmail.com'
-        sender_password = 'SyncEnds2023'
-        receiver_email = 'smaraba@ncsu.edu'
+        sender_email = self.sender_email
+        sender_password = self.sender_pwd
+        receiver_email = self.recipient_email
         subject = 'Postman API Changes'
 
         for x in data:
@@ -436,8 +444,9 @@ schema fetched through the Postman API
                 case _:
                     print("Please input a valid choice into the 'channel_type' field in your configuration file")
 
-            self.post_data_to_email(difference)
-
+            if self.sender_email and self.recipient_email:
+                print("Sending Email from "+self.sender_email+ " to "+ self.recipient_email)
+                self.post_data_to_email(difference)
             # store new schema to the file
             self.store_file(new_collection_schema)
 

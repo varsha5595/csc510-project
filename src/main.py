@@ -20,7 +20,10 @@ def main():
         slack_channel,
         slack_token,
         webhook,
-        channel_type
+        channel_type,
+        sender_email,
+        sender_pwd,
+        recipient_email
     ) = parser.get_arguments()
     sync_end = SyncEnd(
         api_key,
@@ -29,7 +32,10 @@ def main():
         slack_channel,
         slack_token,
         webhook,
-        channel_type
+        channel_type,
+        sender_email,
+        sender_pwd,
+        recipient_email
     )
 
     try:
