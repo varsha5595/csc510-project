@@ -1,5 +1,5 @@
+from sync_ends_parser import Parser
 from sync_ends_service import SyncEnd
-from parser import Parser
 
 def main():
     """

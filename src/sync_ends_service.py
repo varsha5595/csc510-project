@@ -393,6 +393,9 @@ schema fetched through the Postman API
                     self.post_data_to_slack(difference)
                 case "teams":
                     self.post_data_to_teams(difference)
+                case "all":
+                    self.post_data_to_slack(difference)
+                    self.post_data_to_teams(difference)
                 case _:
                     print("Please input a valid choice into the 'channel_type' field in your configuration file")
 
