@@ -6,9 +6,12 @@ import time
 import ssl
 import requests
 from os.path import abspath, dirname, join
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 # Third party imports
-from slack import WebClient
+from slack.web.client import WebClient
 from src.collection import Collection
 from slack.errors import SlackApiError
 import pymsteams
@@ -92,6 +95,40 @@ APIs schemas
         # fetch the response and load the API schema as a JSON
         collection_schema_response = connection.getresponse()
         return json.loads(collection_schema_response.read())
+
+
+
+    def post_data_to_email(self,data):
+        smtp_server = 'smtp.gmail.com'
+        smtp_port = 587  # Use the appropriate SMTP port
+        sender_email = '*********'
+        sender_password = '*********'
+        receiver_email = 'varundeepakchowdary@gmail.com'
+        subject = 'Postman API Changes'
+
+        for x in data:
+            if x is not None and len(x) > 0:
+                msg = MIMEMultipart()
+                msg['From'] = sender_email
+                msg['To'] = receiver_email
+                msg['Subject'] = subject
+                message = x
+                msg.attach(MIMEText(message, 'plain'))
+                try:
+                    server = smtplib.SMTP(smtp_server, smtp_port)
+                    server.starttls()  # Enable TLS encryption
+                    server.login(sender_email, sender_password)
+
+                    # Send the email
+                    server.sendmail(sender_email, receiver_email, msg.as_string())
+
+                    print('Email sent successfully')
+                except Exception as e:
+                    print('Error sending email:', str(e))
+                finally:
+                    server.quit()
+
+
 
     def post_data_to_slack(self, data):
         """
@@ -358,7 +395,7 @@ schema fetched through the Postman API
             file.write(json.dumps(new_collection.get("collection")))
 
     def post_data_to_teams(self, difference):
-        url = self.ms_teams_webhook  
+        url = self.ms_teams_webhook
         for x in difference:
             if x is not None and len(x) > 0:
                 message = {
@@ -368,7 +405,7 @@ schema fetched through the Postman API
                     'Content-type': 'application/json'
                 }
                 requests.post(url, headers=headers, data=json.dumps(message),timeout=10)
-                    
+
 
     def start(self):
         """
@@ -398,6 +435,8 @@ schema fetched through the Postman API
                     self.post_data_to_teams(difference)
                 case _:
                     print("Please input a valid choice into the 'channel_type' field in your configuration file")
+
+            self.post_data_to_email(difference)
 
             # store new schema to the file
             self.store_file(new_collection_schema)
