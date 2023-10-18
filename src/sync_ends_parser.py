@@ -89,7 +89,7 @@ class Parser:
             self.slack_token,
             self.webhook,
             self.channel_type,
-            self.channel_type,
             self.sender_email,
-            self.sender_pwd
+            self.sender_pwd,
+            self.recipient_email
         )

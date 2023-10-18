@@ -444,7 +444,7 @@ schema fetched through the Postman API
                 case _:
                     print("Please input a valid choice into the 'channel_type' field in your configuration file")
 
-            if self.sender_email and self.recipient_email:
+            if difference and self.sender_email and self.recipient_email:
                 print("Sending Email from "+self.sender_email+ " to "+ self.recipient_email)
                 self.post_data_to_email(difference)
             # store new schema to the file
