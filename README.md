@@ -107,7 +107,10 @@ config - specifies the configuration file used by the Sync Ends service
             "collection_name": "<d>",
             "slack_channel": "<e>",
             "microsoft_teams_webhook" : "<f>",
-            "channel_type": "<g>"
+            "channel_type": "<g>",
+            "sender_email": "<h>",
+            "sender_pwd": "<i>",
+            "recipient_email": "<j>"
         }
     ]
 }
@@ -119,7 +122,10 @@ where,
 - `d`: collection name from postman collections
 - `e`: slack channel in which notifications will be sent (must be a public channel)
 - `f`: Microsoft teams channel webhook url [Teams setup section](#step-2-alternate--create-a-microsoft-team-and-create-a-webhook-for-it)
-- `g`: string specifying which channel to send notifications to. (`slack`, `teams`, `all`)
+- `g`: string specifying which channel to send notifications to. (`slack`, `teams`, `email`, `slack_and_teams`, `slack_and_email`, `teams_and_email`, `all`)
+- `h`: email address to send email notification from
+- `i`: the app password generated for the senders gmail account
+- `j`: email address to send email notifications
 
 In the case where you only wish to send notifications to a slack channel or teams chat the fields for the other type can be left as empty quotes.
 
