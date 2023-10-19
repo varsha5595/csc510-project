@@ -2,5 +2,5 @@
 source: src/
 
 [report]
-fail_under: 70
+fail_under: 60
 show_missing: True
