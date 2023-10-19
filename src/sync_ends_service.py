@@ -120,7 +120,7 @@ APIs schemas
                 msg['To'] = receiver_email
                 msg['Subject'] = subject
                 message= message+"\n"+"\n"+x
-        if message is not None:
+        if message != "":
             msg.attach(MIMEText(message, 'plain'))
             try:
                 server = smtplib.SMTP(smtp_server, smtp_port)
@@ -438,15 +438,27 @@ schema fetched through the Postman API
                     self.post_data_to_slack(difference)
                 case "teams":
                     self.post_data_to_teams(difference)
+                case "email":
+                    self.post_data_to_email(difference)
+                case "slack_and_teams":
+                    self.post_data_to_slack(difference)
+                    self.post_data_to_teams(difference)
+                case "slack_and_email":
+                    self.post_data_to_slack(difference)
+                    self.post_data_to_email(difference)
+                case "teams_and_email":
+                    self.post_data_to_teams(difference)
+                    self.post_data_to_email(difference)
                 case "all":
                     self.post_data_to_slack(difference)
                     self.post_data_to_teams(difference)
+                    self.post_data_to_email(difference)
                 case _:
                     print("Please input a valid choice into the 'channel_type' field in your configuration file")
 
-            if difference and self.sender_email and self.recipient_email:
-                print("Sending Email from "+self.sender_email+ " to "+ self.recipient_email)
-                self.post_data_to_email(difference)
+            # if difference and self.sender_email and self.recipient_email:
+            #     print("Sending Email from "+self.sender_email+ " to "+ self.recipient_email)
+            #     self.post_data_to_email(difference)
             # store new schema to the file
             self.store_file(new_collection_schema)
 
