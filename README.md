@@ -194,6 +194,34 @@ This command is the entry point to a background process which fetches all the `P
 * Updating the authentication method in the API
 * Performing these steps quickly and in succession 
 
+### Experimentation Process
+The experimentation process for developers consists of them performing roughly these tasks:
+
+* Adding a new API request to the collection
+* Deleting a API from the collection
+* Updating the name of an API
+* Updating the URL of an API
+* Updating the API method (GET, POST, etc.) of an API
+* Updating the authentication method in the API
+* Performing these steps quickly and in succession
+* The experimentation process for testers(API consumers) consists of them simply noting these changes in a spreadsheet that can be shared with them. Their primary job will be to note * what changed in the APIs in the presence and absence of our Sync Ends service.
+
+#### Experimentation Measures
+Throught the experiments, the teams can take following quantitative and qualitative measures:
+
+#### Quantitative measures
+These measures can be used to compare the results between environment with and without Sync Ends.
+
+* Number of APIs changed by the developer
+* Number of APIs added by the developer
+* Number of APIs deleted by the developer
+* Time taken by API consumer (tester) to identify these change/addition/deletion (In presence of the Sync Ends system v/s Without the system)
+* Qualitative measures
+
+Apart from quantitative measures, these qualititive measures can be taken to identify the performance of the system:
+* How easy it is for API consumer to find the changes (In presence of the Sync Ends system v/s Without the system)
+* Can the API consumer get occupied in his personal work and still get to know about the API changes quickly?
+
 ## Congratulations
 ### **You just saved yourself from unwanted crashes**
 <img src="https://media.tenor.com/images/73cca45a93f91944b2c9fdd4b05c3c53/tenor.gif"/>
