@@ -75,8 +75,6 @@ Please have a look at the point descriptions of each function/class through this
 Sync ends is a productivity service that focuses on saving developer time by automating API changes to their consumers in real-time thus improving your team's productivity. 
 Consider an API consumer using multiple APIs in their system. In this ever-changing world, it is impossible for the consumer to be updated with each and every API change. This is the problem that Sync Ends service addresses. The service is easy to install and this reduces the communication overhead on side of the API devs. So avoid crashes and jump on the Sync Ends bandwagon! :)
 
-This version of sync ends is highly usable as it can be simply downloaded through PyPI. It is a single package which satisfies all your needs with clean documentation. Using  just a simple config file, you can start the service from terminal through our CLI interface. All your API's from the Postman collection will be fetched and their changes will be reflected as notifications in your slack channel.
-
 <img src="https://github.com/jaymodi98/Sync-Ends/blob/master/src/meme.jpg" width=40% />
 
 ```Transcript(Hindi to English) - API can change anytime```
@@ -86,10 +84,14 @@ This version of sync ends is highly usable as it can be simply downloaded throug
 
 ### How to use Sync Ends?
 #### Installation
+
+Clone the repo from the GitHub
+
+Run the following command from Directory that repo was cloned into
 ```
-pip install sync-ends
+pip install -r requirements.txt
 ```
-The code is deployed as a [python package on PyPI](https://pypi.org/project/sync-ends/) which is a single step installation process.
+
 
 #### Usage
 
