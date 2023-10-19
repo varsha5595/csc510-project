@@ -40,6 +40,13 @@ Sync Ends is an automated bridge to sync service owners and service consumers. E
         * [2a. Creating Microsoft Team](#2a-creating-microsoft-team)
         * [2b. Creating Webhook](#2b-creating-webhook)
     + [Actions reported by the Sync-Ends program](#actions-reported-by-the-sync-ends-program)
+    + [Experimentation Phase for Project 3](#experimentation-phase-for-project-3)
+      - [It vs Not It](#it-vs-not-it)
+      - [Idea for the Experimentation](#idea-for-the-experimentation)
+      - [Experimentation SetUp](#experimentation-setup)
+      - [Experimentation Process](#experimentation-process)
+      - [Experimentation Measures](#experimentation-measures)
+      - [Quantitative measures](#quantitative-measures)
   * [How to Contribute?](#how-to-contribute)
   * [License](#license)
 
@@ -124,7 +131,7 @@ where,
 - `f`: Microsoft teams channel webhook url [Teams setup section](#step-2-alternate--create-a-microsoft-team-and-create-a-webhook-for-it)
 - `g`: string specifying which channel to send notifications to. (`slack`, `teams`, `email`, `slack_and_teams`, `slack_and_email`, `teams_and_email`, `all`)
 - `h`: email address to send email notification from
-- `i`: the app password generated for the senders gmail account
+- `i`: the app password generated for the senders gmail account [Application password setup section](#step-2-alternate--create-application-password-for-gmail-account)
 - `j`: email address to send email notifications
 
 In the case where you only wish to send notifications to a slack channel or teams chat the fields for the other type can be left as empty quotes.
@@ -184,6 +191,14 @@ This command is the entry point to a background process which fetches all the `P
 5. Click configure on Incoming Webhook provide a name and click create
 6. Coppy the URL provided and paste it into the webhook field in the confguration JSON file
 
+#### Step 2 alternate : Create application password for gmail account
+1. Go to your Google Account.
+2. Select Security.
+3. Under "Signing in to Google," select 2-Step Verification.
+4. At the bottom of the page, select App passwords.
+5. Enter a name that helps you remember where you'll use the app password.
+6. Select Generate.
+
 ### Actions reported by the Sync-Ends program
 
 * Adding a new API request to the collection
@@ -194,7 +209,51 @@ This command is the entry point to a background process which fetches all the `P
 * Updating the authentication method in the API
 * Performing these steps quickly and in succession 
 
-### Experimentation Process
+### Experimentation Phase for Project 3
+Each experiment will involve 2 subjets:
+
+* One person will act as API Developer
+* 2nd person will act as API Consumer. (Also referred to as API Tester at some places)
+
+In the experiment phase, we will be planning to evaluate the performance improvement of the API consumer (tester) in a rapidly developing environment. The experiment is planned to be run in pairs where one person will act as a developer and the other will act as an API consumer (tester).
+
+* The job of the developer will be to change API schemas in Postman which mocks the behaviour that a change has been made in the serving of API in the actual codebase.
+* The job of the tester will be to monitor these changes and note them down which mocks the behaviour that the API consumer is now aware that a change needs to be made in the codebase where this API is used.
+
+#### It vs Not It
+In the presence of our Sync Ends service, once the developer makes a change in the APIs in the Postman collection, the changes will be directly fetched from Postman and a Slack message will be sent in the channel with a detailed diff notifying the API consumer of this change.
+
+In the absence of our service, the developer will have to manually notify changes to the API consumer and if the developer forgets to do so, the API consumer will be unaware of API changes and this would mock the fact that the API consumer will have a crash when their application tries to call the updated API with old parameters.
+
+#### Idea for the Experimentation
+The primary idea for the experiment is to provide the participants(lab rats) with a clear setup for interaction with the service. As we mentioned, the experiment is planned to be run in pairs. As a result, the team picking up this project will simply need to configure following things:
+
+* A general Postman account with a single collection but multiple APIs. (steps)
+  * The developer half of the lab rats will interact with this Postman account where they will change APIs and our Sync Ends service will take care of the rest.
+  * The login credentials and api key of the postman account will need to shared with the API Developers. So please create an account(s) keeping that in mind.
+* A Slack channel along with configuring a Slack Bot which interacts with our Sync Ends service. (steps)
+  * For the tester half of lab rats, they will need to be added to this channel.
+
+We leave it upto the team picking up this project to define whether they will add all pairs of participants in a common Slack channel or make multiple Slack channels for different experiments. The same goes for the Postman Collection part.
+
+The experiment will have two phases. (1) A pair of people NOT using our system and performing the experiment (2) The same pair of people now using our system and performing the experiment. This would ensure that the same group of people who experienced the absence can now, hopefully, understand the importance of the Sync Ends service and can benefit from it.
+
+To get an even better read on the effectiveness of the system, the roles of the developer and tester(API consumer) can be swapped and the experiment begin again so that both the lab rats can experience the halves and you can get a larger sample size to prove the validity of the observations.
+
+Rest Assured, the Experimentation Setup section defines clear and precise steps to get done with the setup part. In our view and based on our own preliminary trial, it will be easier for the team to just make a single Postman collection from the sample collection schema provided and add lab rats to and remove them from a common Slack channel. However, the final say is left upto the team conducting this experiment.
+
+#### Experimentation SetUp
+As mentioned above, the team needs to setup 3 things for the experiment: (1) a Postman collection (2) a Slack channel (3) a config json.
+
+The team will have to provide the config json file and a Postman account to each API developer so that they can:
+
+change the API schemas in the collection
+and the sync ends service which is run would parse the changes based on the parameters in the config file.
+The API developer will only need to have Python installed as our package is hosted on PyPI and will be able to access Web Postman. In the presence of our system, the developer won't have to be added to any Slack channels as that is handled by our service. However, in the absence of our system, the developer will need to have some way to communicate with API consumer, probably Slack and hence would need to be added the Slack channel where the API consumer is also added.
+
+The API consumer(tester) will only need to be added to the Slack channel and the tester's job is to simply identify changes in APIs through Slack messages or otherwise.
+
+#### Experimentation Process
 The experimentation process for developers consists of them performing roughly these tasks:
 
 * Adding a new API request to the collection
