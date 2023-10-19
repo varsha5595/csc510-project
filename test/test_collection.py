@@ -1,13 +1,18 @@
 import unittest
 from unittest.mock import Mock
-from src.collection import Collection
+import sys
+from os.path import dirname, abspath
 
+sys.path.append(dirname(dirname(abspath(__file__))))
+
+from src.collection import Collection
 
 class TestCollection(unittest.TestCase):
     def setUp(self):
         json_dict = {
             "info": {
                 "_postman_id": "1757f50c-60d1-4a48-a552-baa96d722e0f",
+                "id": "1757f50c-60d1-4a48-a552-baa96d722e0f",
                 "name": "Sample Server",
                 "description": "This collection contains sample APIs that can be used to test the Sync Ends service.",  # noqa: E501
                 "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",  # noqa: E501
@@ -16,6 +21,7 @@ class TestCollection(unittest.TestCase):
                 {
                     "name": "Get employee details",
                     "_postman_id": "385f7848-62db-4435-b7cf-820c3e7e5097",
+                    "id": "1757f50c-60d1-4a48-a552-baa96d722e0f",
                     "protocolProfileBehavior": {"disableBodyPruning": True},
                     "request": {
                         "method": "POST",
@@ -35,9 +41,8 @@ class TestCollection(unittest.TestCase):
         }
 
         self.collection = Collection(json_dict)
-
         self.endpoint = Mock()
-        self.endpoint.id = "385f7848-62db-4435-b7cf-820c3e7e5097"
+        self.endpoint.id = json_dict["info"]['id']
         self.endpoint.name = "Get employee details"
         self.endpoint.authentication = None
         self.endpoint.method = "POST"

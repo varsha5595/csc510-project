@@ -10,6 +10,11 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+from os.path import dirname,abspath
+import sys
+# Append src absolute file path for test cases to execute
+sys.path.append(dirname(abspath(__file__)))
+
 # Third party imports
 from slack import WebClient
 from collection import Collection

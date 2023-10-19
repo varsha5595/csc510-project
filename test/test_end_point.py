@@ -1,4 +1,9 @@
 import unittest
+import sys
+from os.path import dirname, abspath
+
+sys.path.append(dirname(dirname(abspath(__file__))))
+
 from src.end_point import EndPoint
 
 
@@ -6,7 +11,8 @@ class TestEndPoint(unittest.TestCase):
     def setUp(self):
         json_dict = {
             "name": "Get employee details",
-            "_postman_id": "385f7848-62db-4435-b7cf-820c3e7e5097",
+            "_postmian_id": "385f7848-62db-4435-b7cf-820c3e7e5097",
+            "id": "385f7848-62db-4435-b7cf-820c3e7e5097",
             "protocolProfileBehavior": {"disableBodyPruning": True},
             "request": {
                 "method": "POST",

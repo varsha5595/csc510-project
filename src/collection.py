@@ -1,3 +1,8 @@
+from os.path import dirname,abspath
+import sys
+# Append src absolute file path for test cases to execute
+sys.path.append(dirname(abspath(__file__)))
+
 from end_point import EndPoint
 
 

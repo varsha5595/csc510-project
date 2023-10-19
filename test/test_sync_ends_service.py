@@ -1,6 +1,7 @@
 import sys
 import unittest
 from unittest.mock import Mock, patch, mock_open
+import os
 from os.path import dirname, abspath
 
 sys.path.append(dirname(dirname(abspath(__file__))))
@@ -10,7 +11,16 @@ from src.sync_ends_service import SyncEnd  # noqa: E402
 class TestSyncEndsService(unittest.TestCase):
     def setUp(self):
         self.sync_end = SyncEnd(
-            "SAM-Key-123fg", "test server", 9, "sample channel", "123ff"
+        api_key = "SAM-Key-123fg",
+        collection_name = "test server",
+        trigger_interval = 9,
+        slack_channel = "sample channel",
+        slack_token = "123ff",
+        webhook = "sample MS teams webhook URL",
+        channel_type = "all",
+        sender_email = "example1@example.com",
+        sender_pwd = "example1",
+        recipient_email = "example2@example.com"
         )
 
         self.end_point_list = []
@@ -152,9 +162,9 @@ class TestSyncEndsService(unittest.TestCase):
             self.sync_end.store_file(collection_schema)
 
             file_path = (
-                dirname(dirname(abspath(__file__))) + "/src/data/custom_id.txt"
+                os.path.join(dirname(dirname(abspath(__file__))), "src","data","custom_id.txt")
             )
-            mocked_file.assert_called_once_with(file_path, "w")
+            mocked_file.assert_called_once_with(file_path, "w", encoding="utf-8")
             mocked_file().write.assert_called_once_with(
                 str(collection_schema["collection"]).replace("'", '"')
             )

@@ -8,7 +8,6 @@ sys.path.append(dirname(dirname(abspath(__file__))))
 
 import src.main as mn  # noqa: E402
 
-
 class TestParser(unittest.TestCase):
     def setUp(self):
         self.collection_name = "test server"
@@ -16,6 +15,12 @@ class TestParser(unittest.TestCase):
         self.trigger_interval = 15
         self.slack_channel = "sample channel"
         self.slack_token = "123ff"
+
+        self.webhook = "ms teams link"
+        self.sender_email = "example1@example.com"
+        self.sender_pwd = "example1"
+        self.recipient_email = "example2@example.com"
+        self.channel_type = "all"
 
     @patch("src.main.SyncEnd")
     @patch("src.main.Parser")
@@ -26,6 +31,11 @@ class TestParser(unittest.TestCase):
             self.trigger_interval,
             self.slack_channel,
             self.slack_token,
+            self.webhook,
+            self.channel_type,
+            self.sender_email,
+            self.sender_pwd,
+            self.recipient_email
         )
         mn.main()
 
@@ -38,6 +48,11 @@ class TestParser(unittest.TestCase):
             self.trigger_interval,
             self.slack_channel,
             self.slack_token,
+            self.webhook,
+            self.channel_type,
+            self.sender_email,
+            self.sender_pwd,
+            self.recipient_email
         )
         syncend.return_value.start.side_effect = Exception()
         mn.main()
