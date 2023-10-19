@@ -139,7 +139,7 @@ APIs schemas
             except Exception as e:
                 print('Error sending email:', str(e))
             finally:
-                server.quit()                      
+                server.quit()
 
 
 

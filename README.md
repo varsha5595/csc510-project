@@ -73,7 +73,7 @@ Sync Ends is an automated bridge to sync service owners and service consumers. E
 Please have a look at the point descriptions of each function/class through this [documentation file](https://github.com/jaymodi98/Sync-Ends/blob/master/docs/src/index.html) generated via `pdoc3`. To view this documentation, clone the repository and then open the linked file in the browser.
 
 ### Why use Sync Ends?
-Sync ends is a productivity service that focuses on saving developer time by automating API changes to their consumers in real-time thus improving your team's productivity. 
+Sync ends is a productivity service that focuses on saving developer time by automating API changes to their consumers in real-time thus improving your team's productivity.
 Consider an API consumer using multiple APIs in their system. In this ever-changing world, it is impossible for the consumer to be updated with each and every API change. This is the problem that Sync Ends service addresses. The service is easy to install and this reduces the communication overhead on side of the API devs. So avoid crashes and jump on the Sync Ends bandwagon! :)
 
 ### Questions or Issues with using Sync Ends
@@ -214,7 +214,7 @@ This command is the entry point to a background process which fetches all the `P
 * Updating the URL of an API
 * Updating the API method (GET, POST, etc.) of an API
 * Updating the authentication method in the API
-* Performing these steps quickly and in succession 
+* Performing these steps quickly and in succession
 
 ### Experimentation Phase for Project 3
 Each experiment will involve 2 subjets:
