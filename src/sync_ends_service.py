@@ -11,7 +11,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 # Third party imports
-from slack.web.client import WebClient
+from slack import WebClient
 from collection import Collection
 from slack.errors import SlackApiError
 import pymsteams
@@ -46,6 +46,9 @@ APIs schemas
         slack_token,
         webhook,
         channel_type,
+        sender_email,
+        sender_pwd,
+        recipient_email
     ):
         self.api_key = api_key
         self.collection_name = collection_name
@@ -54,6 +57,10 @@ APIs schemas
         self.slack_token = slack_token
         self.ms_teams_webhook = webhook
         self.channel_type = channel_type
+        self.sender_email = sender_email
+        self.sender_pwd = sender_pwd
+        self.recipient_email = recipient_email
+
         self.collection_id = 0
         self.data_folder_path = join(dirname(abspath(__file__)), "data")
 
@@ -101,32 +108,33 @@ APIs schemas
     def post_data_to_email(self,data):
         smtp_server = 'smtp.gmail.com'
         smtp_port = 587  # Use the appropriate SMTP port
-        sender_email = '*********'
-        sender_password = '*********'
-        receiver_email = 'varundeepakchowdary@gmail.com'
+        sender_email = self.sender_email
+        sender_password = self.sender_pwd
+        receiver_email = self.recipient_email
         subject = 'Postman API Changes'
-
+        message=""
         for x in data:
             if x is not None and len(x) > 0:
                 msg = MIMEMultipart()
                 msg['From'] = sender_email
                 msg['To'] = receiver_email
                 msg['Subject'] = subject
-                message = x
-                msg.attach(MIMEText(message, 'plain'))
-                try:
-                    server = smtplib.SMTP(smtp_server, smtp_port)
-                    server.starttls()  # Enable TLS encryption
-                    server.login(sender_email, sender_password)
+                message= message+"\n"+"\n"+x
+        if message is not None:
+            msg.attach(MIMEText(message, 'plain'))
+            try:
+                server = smtplib.SMTP(smtp_server, smtp_port)
+                server.starttls()  # Enable TLS encryption
+                server.login(sender_email, sender_password)
 
-                    # Send the email
-                    server.sendmail(sender_email, receiver_email, msg.as_string())
+                # Send the email
+                server.sendmail(sender_email, receiver_email, msg.as_string())
 
-                    print('Email sent successfully')
-                except Exception as e:
-                    print('Error sending email:', str(e))
-                finally:
-                    server.quit()
+                print('Email sent successfully')
+            except Exception as e:
+                print('Error sending email:', str(e))
+            finally:
+                server.quit()                      
 
 
 
@@ -436,8 +444,9 @@ schema fetched through the Postman API
                 case _:
                     print("Please input a valid choice into the 'channel_type' field in your configuration file")
 
-            self.post_data_to_email(difference)
-
+            if difference and self.sender_email and self.recipient_email:
+                print("Sending Email from "+self.sender_email+ " to "+ self.recipient_email)
+                self.post_data_to_email(difference)
             # store new schema to the file
             self.store_file(new_collection_schema)
 
