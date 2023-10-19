@@ -26,6 +26,7 @@ Sync Ends is an automated bridge to sync service owners and service consumers. E
   * [Documentation](#documentation)
     + [What is Sync Ends?](#what-is-sync-ends)
     + [Why use Sync Ends?](#why-use-sync-ends)
+    + [Questions or Issues with using Sync Ends](#questions-or-issues-with-using-sync-ends)
     + [How to use Sync Ends?](#how-to-use-sync-ends)
       - [Installation](#installation)
       - [Usage](#usage)
@@ -74,6 +75,10 @@ Please have a look at the point descriptions of each function/class through this
 ### Why use Sync Ends?
 Sync ends is a productivity service that focuses on saving developer time by automating API changes to their consumers in real-time thus improving your team's productivity. 
 Consider an API consumer using multiple APIs in their system. In this ever-changing world, it is impossible for the consumer to be updated with each and every API change. This is the problem that Sync Ends service addresses. The service is easy to install and this reduces the communication overhead on side of the API devs. So avoid crashes and jump on the Sync Ends bandwagon! :)
+
+### Questions or Issues with using Sync Ends
+
+Please contact syncends@gmail.com with and questions or issues you experiance while using out software.
 
 <img src="https://github.com/jaymodi98/Sync-Ends/blob/master/src/meme.jpg" width=40% />
 
