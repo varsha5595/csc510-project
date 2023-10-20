@@ -6,12 +6,12 @@ Software Engineering Project for CSC 510
 
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 ![GitHub](https://img.shields.io/badge/language-python-blue.svg)
-![GitHub contributors](https://img.shields.io/github/contributors/jaymodi98/Sync-Ends)
-[![Build Status](https://travis-ci.com/jaymodi98/Sync-Ends.svg?branch=master)](https://travis-ci.com/jaymodi98/Sync-Ends)
+![GitHub contributors](https://img.shields.io/github/contributors/smarabattula/Sync-Ends)
+[![Build Status](https://github.com/smarabattula/Sync-Ends/actions/workflows/main.yml/badge.svg?branch=master)
 <br>
 ![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/jaymodi98/Sync-Ends)
-![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/jaymodi98/Sync-Ends)
-[![codecov](https://codecov.io/gh/jaymodi98/Sync-Ends/branch/master/graph/badge.svg?token=DP2AWTXOXL)](undefined)<br>
+![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/smarabattula/Sync-Ends)
+[![codecov](https://codecov.io/gh/smarabattula/Sync-Ends/graph/badge.svg?token=M9XU4JMMLB)](https://codecov.io/gh/smarabattula/Sync-Ends)<br>
 [![DOI](https://zenodo.org/badge/300105279.svg)](https://zenodo.org/badge/latestdoi/300105279)
 ![YouTube Video Views](https://img.shields.io/youtube/views/1Pd3Enj13m8?style=social)
 
