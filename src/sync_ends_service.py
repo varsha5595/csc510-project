@@ -118,6 +118,7 @@ APIs schemas
         receiver_email = self.recipient_email
         subject = 'Postman API Changes'
         message=""
+        ret_msg = ""
         for x in data:
             if x is not None and len(x) > 0:
                 msg = MIMEMultipart()
@@ -134,13 +135,14 @@ APIs schemas
 
                 # Send the email
                 server.sendmail(sender_email, receiver_email, msg.as_string())
-
+                ret_msg = msg.as_string()
                 print('Email sent successfully')
             except Exception as e:
                 print('Error sending email:', str(e))
             finally:
                 server.quit()
-
+        # Added return to compare message body during testing
+        return ret_msg
 
 
     def post_data_to_slack(self, data):

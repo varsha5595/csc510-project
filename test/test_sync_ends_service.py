@@ -57,7 +57,63 @@ class TestSyncEndsService(unittest.TestCase):
         endpoint2.query_parameters = [{"key": "ep_id", "value": "2"}]
         self.end_point_list.append(endpoint2)
         self.common_end_point.append((endpoint1, endpoint2))
+        self.old_schema = {
+            "collection": {
+                "info": {
+                    "_postman_id": "old-collection-id",
+                    "id" : "old-collection-id"
+                },
+                "item": [
+                    {
+                        "name": "Endpoint 1",
+                        "id" : "old-collection-id",
 
+                        "request": {
+                            "method": "GET",
+                            "header": [],
+                            "url": {'raw': r'{{base_url}}/info?id=3','query': [{'key': 'id', 'value': '3'}]},
+                        }
+                    },
+                    {
+                        "name": "Endpoint 2",
+                        "id" : "old-collection-id",
+                        "request": {
+                            "method": "POST",
+                            "header": [],
+                            "url": {'raw': r'{{base_url}}/info?id=4','query': [{'key': 'id', 'value': '4'}]},
+                        }
+                    }
+                ]
+            }
+        }
+        self.new_schema = {
+            "collection": {
+                "info": {
+                    "_postman_id": "new-collection-id",
+                    "id" : "new-collection-id",
+                },
+                "item": [
+                    {
+                        "name": "Endpoint 1",
+                        "id" : "new-collection-id",
+                        "request": {
+                            "method": "GET",
+                            "header": [],
+                            "url": {'raw': r'{{base_url}}/info?id=3','query': [{'key': 'id', 'value': '3'}]},
+                        }
+                    },
+                    {
+                        "name": "Endpoint 3", # New endpoint
+                        "id" : "new-collection-id",
+                        "request": {
+                            "method": "PUT",  # Method changed
+                            "header": [],
+                            "url": {'raw': r'{{base_url}}/info?id=5','query': [{'key': 'id', 'value': '5'}]},  # URL changed
+                        }
+                    }
+                ]
+            }
+        }
     def test_get_newly_added_message(self):
         # Test when there are newly added endpoints.
 
@@ -198,104 +254,21 @@ class TestSyncEndsService(unittest.TestCase):
 
             sync_end = self.sync_end
 
-            data = ["New endpoint added.", "Endpoint deleted.", "Endpoint updated"]
-            sync_end.post_data_to_email(data)
-
-            expected_message = (
-            'Content-Type: multipart/mixed; boundary="===============3354826013420575687=="\n'
-            'MIME-Version: 1.0\n'
-            'From: example1@example.com\n'
-            'To: example2@example.com\n'
-            'Subject: Postman API Changes\n'
-            '\n'
-            '--===============3354826013420575687==\n'
-            'Content-Type: text/plain; charset="us-ascii"\n'
-            'MIME-Version: 1.0\n'
-            'Content-Transfer-Encoding: 7bit\n'
-            '\n'
-            'New endpoint added.\n\nEndpoint deleted.\n\nEndpoint updated\n'
-            '--===============3354826013420575687==--\n'
-        )
-
+            data = [
+            'Following end points are newly added in the collection :: \n\n\t1)  EndPoint Name: Endpoint 1\n\tURL: {{base_url}}/info?id=3\n\tRequest Method: GET\n\n\t2)  EndPoint Name: Endpoint 3\n\tURL: {{base_url}}/info?id=5\n\tRequest Method: PUT\n\n', 'Following end points are deleted from the collection :: \n\n\t1)  EndPoint Name: Endpoint 1\n\tURL: {{base_url}}/info?id=3\n\tRequest Method: GET\n\n\t2)  EndPoint Name: Endpoint 2\n\tURL: {{base_url}}/info?id=4\n\tRequest Method: POST\n\n', None
+            ]
+            email_body = sync_end.post_data_to_email(data)
             # Assertions to verify that email sending process is correctly called
             smtp_instance.login.assert_called_once_with(sync_end.sender_email, sync_end.sender_pwd)
             smtp_instance.sendmail.assert_has_calls([
-            call(sync_end.sender_email, sync_end.recipient_email, 'New endpoint added.'),
-            call(sync_end.sender_email, sync_end.recipient_email, 'Endpoint deleted.'),
-            call(sync_end.sender_email, sync_end.recipient_email, 'Endpoint updated')
+            call(sync_end.sender_email, sync_end.recipient_email, email_body),
             ])
-            smtp_instance.sendmail.assert_any_call(
-                sync_end.sender_email,
-                sync_end.recipient_email,
-                'New endpoint added.'
-            )
-            smtp_instance.sendmail.assert_any_call(
-                sync_end.sender_email,
-                sync_end.recipient_email,
-                'Endpoint deleted.'
-            )
-            smtp_instance.sendmail.assert_any_call(
-                sync_end.sender_email,
-                sync_end.recipient_email,
-                'Endpoint updated.'
-            )
 
     def test_compute_difference(self):
-        # Define the old schema and new schema as dictionaries
-        old_schema = {
-            "collection": {
-                "info": {
-                    "_postman_id": "old-collection-id",
-                    "id" : "old-collection-id"
-                },
-                "item": [
-                    {
-                        "name": "Endpoint 1",
-                        "id" : "old-collection-id",
-
-                        "request": {
-                            "method": "GET",
-                            "url": "http://example.com/api/endpoint1",
-                        }
-                    },
-                    {
-                        "name": "Endpoint 2",
-                        "id" : "old-collection-id",
-                        "request": {
-                            "method": "POST",
-                            "url": "http://example.com/api/endpoint2",
-                        }
-                    }
-                ]
-            }
-        }
-
-        new_schema = {
-            "collection": {
-                "info": {
-                    "_postman_id": "new-collection-id",
-                    "id" : "new-collection-id",
-                },
-                "item": [
-                    {
-                        "name": "Endpoint 1",
-                        "id" : "new-collection-id",
-                        "request": {
-                            "method": "GET",
-                            "url": "http://example.com/api/endpoint1",
-                        }
-                    },
-                    {
-                        "name": "Endpoint 3", # New endpoint
-                        "id" : "new-collection-id",
-                        "request": {
-                            "method": "PUT",  # Method changed
-                            "url": "http://example.com/api/endpoint3",  # URL changed
-                        }
-                    }
-                ]
-            }
-        }
+        # Define the old schema and new schema as dictionaries.
+        # DO NOT CHANGE FORMAT as Some formats are required by files
+        old_schema = self.old_schema
+        new_schema = self.new_schema
 
         # Create a SyncEnd instance and set the collection ID
         sync_end = SyncEnd(api_key="sample-api-key", collection_name="test_collection", trigger_interval=60,
@@ -305,30 +278,93 @@ class TestSyncEndsService(unittest.TestCase):
         sync_end.collection_id = "new-collection-id"
 
         # Mock the 'open' function to return the old schema when reading
-        print(json.dumps(old_schema))
-        with patch("builtins.open", mock_open(read_data=json.dumps(old_schema))):
+        with patch("builtins.open", mock_open(read_data=json.dumps(old_schema['collection']))):
             difference = sync_end.compute_difference(new_schema)
-
         # Define the expected difference based on the provided old and new schemas
         expected_difference = [
-            "Following end points are newly added in the collection :: \n\n"
-            "\t1)  EndPoint Name: Endpoint 3\n"
-            "\tURL: http://example.com/api/endpoint3\n"
-            "\tRequest Method: PUT\n\n",
-
-            "Following end points are deleted from the collection :: \n\n"
-            "\t1)  EndPoint Name: Endpoint 2\n"
-            "\tURL: http://example.com/api/endpoint2\n"
-            "\tRequest Method: POST\n\n",
-
-            "Following is the list of change in the existing end points ::\n\n"
-            "\tNew name: Endpoint 3\nOld name: Endpoint 2\n"
-            "\tNew URL: http://example.com/api/endpoint3\nOld URL: http://example.com/api/endpoint2\n"
-            "\t New HTTP method: PUT\nOld HTTP method: POST\n"
-        ]
+            'Following end points are newly added in the collection :: \n\n\t1)  EndPoint Name: Endpoint 1\n\tURL: {{base_url}}/info?id=3\n\tRequest Method: GET\n\n\t2)  EndPoint Name: Endpoint 3\n\tURL: {{base_url}}/info?id=5\n\tRequest Method: PUT\n\n', 'Following end points are deleted from the collection :: \n\n\t1)  EndPoint Name: Endpoint 1\n\tURL: {{base_url}}/info?id=3\n\tRequest Method: GET\n\n\t2)  EndPoint Name: Endpoint 2\n\tURL: {{base_url}}/info?id=4\n\tRequest Method: POST\n\n', None
+            ]
 
         # Check if the computed difference matches the expected difference
         self.assertEqual(difference, expected_difference)
+
+    @patch('http.client.HTTPSConnection', autospec=True)
+    def test_get_collection_schema_success(self, mock_connection):
+        # Mock the HTTP connection to return a successful response
+        api_key = "your_api_key"
+        collection_name = "your_collection_name"
+        mock_response = Mock()
+        #Sample postman API response for colelction. It has lots of other info as well!
+        mock_response.read.return_value = json.dumps({
+            "collections": [
+                {
+                    "uid": "collection_uid",
+                    "name": "your_collection_name"
+                }
+            ]
+        })
+
+        mock_connection.return_value.getresponse.return_value = mock_response
+
+        sync_end = SyncEnd(api_key, collection_name, 60, "slack_channel", "slack_token", "webhook", "all", "sender_email", "sender_pwd", "recipient_email")
+
+        collection_schema = sync_end.get_collection_schema()
+
+        # Ensure the correct HTTP request is made
+        mock_connection.assert_called_once_with("api.getpostman.com")
+
+        # Ensure the returned collection schema is as expected
+        expected_schema = {
+            "collections": [
+                {
+                    "uid": "collection_uid",
+                    "name": "your_collection_name"
+                }
+            ]
+        }
+        self.assertEqual(collection_schema, expected_schema)
+
+    @patch('requests.post')
+    def test_post_data_to_teams_success(self, mock_post):
+        # Mock the requests.post function
+        mock_response = Mock()
+        mock_response.status_code = 200  # Simulate a successful POST request
+        mock_post.return_value = mock_response
+
+        difference = ["Message 1", "Message 2", ""]
+
+        # Call the function you want to test
+        self.sync_end.post_data_to_teams(difference)
+
+        # Assertions
+        expected_url = self.sync_end.ms_teams_webhook
+        expected_headers = {'Content-type': 'application/json'}
+        expected_calls = [call(expected_url, headers=expected_headers, data='{"text": "Message 1"}', timeout=10),
+                          call(expected_url, headers=expected_headers, data='{"text": "Message 2"}', timeout=10)]
+
+        # Verify that requests.post was called with the expected arguments
+        mock_post.assert_has_calls(expected_calls, any_order=True)
+
+    @patch('requests.post')
+    def test_post_data_to_teams_empty_message(self, mock_post):
+        # Mock the requests.post function
+        mock_response = Mock()
+        mock_response.status_code = 200  # Simulate a successful POST request
+        mock_post.return_value = mock_response
+
+        difference = []
+
+        # Call the function you want to test
+        self.sync_end.post_data_to_teams(difference)
+
+        # Assertions
+        expected_url = self.sync_end.ms_teams_webhook
+        expected_headers = {'Content-type': 'application/json'}
+
+        # Verify that requests.post was not called because messages are empty
+        mock_post.assert_not_called()
+
+
 
 if __name__ == "__main__":
     unittest.main()
