@@ -10,7 +10,7 @@ Software Engineering Project for CSC 510
 [![Build Status](https://github.com/smarabattula/Sync-Ends/actions/workflows/main.yml/badge.svg?branch=master)
 <br>
 ![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/jaymodi98/Sync-Ends)
-![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/jaymodi98/Sync-Ends)
+![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/smarabattula/Sync-Ends)
 [![codecov](https://codecov.io/gh/smarabattula/Sync-Ends/graph/badge.svg?token=M9XU4JMMLB)](https://codecov.io/gh/smarabattula/Sync-Ends)<br>
 [![DOI](https://zenodo.org/badge/300105279.svg)](https://zenodo.org/badge/latestdoi/300105279)
 ![YouTube Video Views](https://img.shields.io/youtube/views/1Pd3Enj13m8?style=social)
