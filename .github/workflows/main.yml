@@ -28,16 +28,14 @@ jobs:
         flake8 --config .flake8
     - name: Run tests
       run: |
-        pip install flake8
-        flake8
-        python -m unittest discover -s test -p 'test_*.py'
+        coverage run -m unittest discover -s test -p 'test_*.py'
 
-    - name: Upload coverage results
-      run: |
-        pip install codecov
-        codecov -t e1b4e219-72c1-43bb-8bb8-fbf37b7c71f4  # Replace with your actual token
+    # - name: Upload coverage results
+    #   run: |
+    #     pip install codecov
+    #     codecov -t e1b4e219-72c1-43bb-8bb8-fbf37b7c71f4  # Replace with your actual token
 
-    # - name: Upload coverage reports to Codecov
-    #   uses: codecov/codecov-action@v3
-    #   env:
-    #     CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
