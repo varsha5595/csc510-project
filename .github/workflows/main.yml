@@ -1,21 +1,33 @@
-language: python
-python:
-  - "3.10"
-# command to install dependencies
-install:
-  - python setup.py install
-  - pip install coverage
-  - pip install codecov
-# command to run tests
-git:
-  depth: 50
+name: Python CI
+
+on: [push, pull_request]
+
 jobs:
-  include:
-  - name: "project-1"
-    python: "3.10"
-script:
-  # - python -m pytest --flake8
-  - flake8
-  - coverage run -m unittest discover -s test -p 'test_*.py'
-after_success:
-  - bash <(curl -s https://codecov.io/bash) -t a8f5c2fb-f071-46ce-9437-cb3bd9a43220
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 50
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.10
+
+    - name: Install dependencies
+      run: |
+        python setup.py install
+        pip install coverage
+        pip install codecov
+
+    - name: Run tests
+      run: |
+        flake8
+        coverage run -m unittest discover -s test -p 'test_*.py'
+
+    - name: Upload coverage results
+      run: codecov -t e1b4e219-72c1-43bb-8bb8-fbf37b7c71f4
+
