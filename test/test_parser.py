@@ -8,7 +8,7 @@ from unittest.mock import patch, mock_open
 
 sys.path.append(dirname(dirname(abspath(__file__))))
 
-from src.parser import Parser  # noqa: E402
+from src.sync_ends_parser import Parser  # noqa: E402
 
 
 class TestParser(unittest.TestCase):
@@ -19,14 +19,25 @@ class TestParser(unittest.TestCase):
         self.trigger_interval = 15
         self.slack_channel = "sample channel"
         self.slack_token = "123ff"
+        self.webhook = "ms teams link"
+        self.sender_email = "example1@example.com"
+        self.sender_pwd = "example1"
+        self.recipient_email = "example2@example.com"
+        self.channel_type = "all"
         self.good_config = {
+
             "postman_api_key": self.postman_api_key,
             "slack_token": self.slack_token,
             "trigger_interval": self.trigger_interval,
             "collections": [
                 {
+                    "channel_type": self.channel_type,
                     "collection_name": self.collection_name,
                     "slack_channel": self.slack_channel,
+                    "microsoft_teams_webhook" :  self.webhook,
+                    "sender_email": self.sender_email,
+                    "sender_pwd": self.sender_pwd,
+                    "recipient_email": self.recipient_email
                 }
             ],
         }
@@ -48,12 +59,24 @@ class TestParser(unittest.TestCase):
                 trigger_interval,
                 slack_channel,
                 slack_token,
+                webhook,
+                channel_type,
+                sender_email,
+                sender_pwd,
+                recipient_email
+
             ) = self.parser.get_arguments()
             self.assertEqual(collection_name, self.collection_name)
             self.assertEqual(postman_api_key, self.postman_api_key)
             self.assertEqual(trigger_interval, self.trigger_interval)
             self.assertEqual(slack_channel, self.slack_channel)
             self.assertEqual(slack_token, self.slack_token)
+
+            self.assertEqual(webhook, self.webhook)
+            self.assertEqual(channel_type, self.channel_type)
+            self.assertEqual(sender_email, self.sender_email)
+            self.assertEqual(sender_pwd, self.sender_pwd)
+            self.assertEqual(recipient_email, self.recipient_email)
 
     @patch(
         "argparse.ArgumentParser.parse_args",
@@ -76,6 +99,11 @@ class TestParser(unittest.TestCase):
                     trigger_interval,
                     slack_channel,
                     slack_token,
+                    webhook,
+                    channel_type,
+                    sender_email,
+                    sender_pwd,
+                    recipient_email
                 ) = self.parser.get_arguments()
 
     @patch(
@@ -99,6 +127,11 @@ class TestParser(unittest.TestCase):
                     trigger_interval,
                     slack_channel,
                     slack_token,
+                    webhook,
+                    channel_type,
+                    sender_email,
+                    sender_pwd,
+                    recipient_email
                 ) = self.parser.get_arguments()
 
     @patch(
@@ -122,6 +155,11 @@ class TestParser(unittest.TestCase):
                     trigger_interval,
                     slack_channel,
                     slack_token,
+                    webhook,
+                    channel_type,
+                    sender_email,
+                    sender_pwd,
+                    recipient_email
                 ) = self.parser.get_arguments()
 
     @patch(
@@ -145,6 +183,11 @@ class TestParser(unittest.TestCase):
                     trigger_interval,
                     slack_channel,
                     slack_token,
+                    webhook,
+                    channel_type,
+                    sender_email,
+                    sender_pwd,
+                    recipient_email
                 ) = self.parser.get_arguments()
 
     @patch(
@@ -168,6 +211,11 @@ class TestParser(unittest.TestCase):
                     trigger_interval,
                     slack_channel,
                     slack_token,
+                    webhook,
+                    channel_type,
+                    sender_email,
+                    sender_pwd,
+                    recipient_email
                 ) = self.parser.get_arguments()
 
 

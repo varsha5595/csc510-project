@@ -1,3 +1,9 @@
+import sys
+from os.path import dirname,abspath
+
+# Append src absolute file path for test cases to execute
+sys.path.append(dirname(abspath(__file__)))
+
 from sync_ends_parser import Parser
 from sync_ends_service import SyncEnd
 
