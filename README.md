@@ -6,8 +6,8 @@ Software Engineering Project for CSC 510
 
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 ![GitHub](https://img.shields.io/badge/language-python-blue.svg)
-![GitHub contributors](https://img.shields.io/github/contributors/jaymodi98/Sync-Ends)
-[![Build Status](https://travis-ci.com/jaymodi98/Sync-Ends.svg?branch=master)](https://travis-ci.com/jaymodi98/Sync-Ends)
+![GitHub contributors](https://img.shields.io/github/contributors/smarabattula/Sync-Ends)
+[![Build Status](https://github.com/smarabattula/Sync-Ends/actions/workflows/main.yml/badge.svg?branch=master)
 <br>
 ![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/jaymodi98/Sync-Ends)
 ![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/jaymodi98/Sync-Ends)
