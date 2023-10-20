@@ -1,0 +1,21 @@
+language: python
+python:
+  - "3.10"
+# command to install dependencies
+install:
+  - python setup.py install
+  - pip install coverage
+  - pip install codecov
+# command to run tests
+git:
+  depth: 50
+jobs:
+  include:
+  - name: "project-1"
+    python: "3.10"
+script:
+  # - python -m pytest --flake8
+  - flake8
+  - coverage run -m unittest discover -s test -p 'test_*.py'
+after_success:
+  - bash <(curl -s https://codecov.io/bash) -t a8f5c2fb-f071-46ce-9437-cb3bd9a43220
