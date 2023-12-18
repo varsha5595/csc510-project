@@ -2,9 +2,16 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.vscode/
+src/data/
+data/
+*.DS_Store
 
 # C extensions
 *.so
+
+# Postman Collection Files
+*.postman_collection.json
 
 # Distribution / packaging
 .Python
@@ -41,11 +48,11 @@ pip-delete-this-directory.txt
 htmlcov/
 .tox/
 .nox/
-.coverage
-.coverage.*
+# .coverage
+# .coverage.*
 .cache
 nosetests.xml
-coverage.xml
+# coverage.xml
 *.cover
 *.py,cover
 .hypothesis/
@@ -127,3 +134,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# application specific files
+*config.json
