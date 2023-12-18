@@ -7,13 +7,15 @@ Software Engineering Project for CSC 510
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 ![GitHub](https://img.shields.io/badge/language-python-blue.svg)
 ![GitHub contributors](https://img.shields.io/github/contributors/smarabattula/Sync-Ends)
-[![Build Status](https://github.com/smarabattula/Sync-Ends/actions/workflows/main.yml/badge.svg?branch=master)
+![Build Status](https://github.com/smarabattula/Sync-Ends/actions/workflows/main.yml/badge.svg?branch=master)
 <br>
-![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/jaymodi98/Sync-Ends)
+
+![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/smarabattula/Sync-Ends)
 ![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/smarabattula/Sync-Ends)
 [![codecov](https://codecov.io/gh/smarabattula/Sync-Ends/graph/badge.svg?token=M9XU4JMMLB)](https://codecov.io/gh/smarabattula/Sync-Ends)<br>
-[![DOI](https://zenodo.org/badge/300105279.svg)](https://zenodo.org/badge/latestdoi/300105279)
-![YouTube Video Views](https://img.shields.io/youtube/views/1Pd3Enj13m8?style=social)
+[![DOI](https://zenodo.org/badge/692902800.svg)](https://zenodo.org/doi/10.5281/zenodo.10403304)
+![YouTube Video Views](https://img.shields.io/youtube/views/96ne_ia4KjE?style=social)
+<!-- ![YouTube Video Views](https://img.shields.io/youtube/views/1Pd3Enj13m8?style=social) -->
 
 Sync Ends is an automated bridge to sync service owners and service consumers. Every team has a single Postman collection that they use to test their APIs and share it across in their documentations. The backend team has to register their service on our application and we take care of the rest. Everytime there is a change in the way the API is called, we parse the changes and inform the API consumers. This way all the team members are informed about the changes and know exactly what to edit in their codebase. The Slack framework lets you concentrate on the **core** functionality you want to build without worrying about integration overheads.
 
